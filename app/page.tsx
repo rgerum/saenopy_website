@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Download, Github, BookOpen, Heart, Mail } from "lucide-react"
+import {ArrowRight, Download, Github, BookOpen, Heart, Mail, Twitter, Linkedin, Globe} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -272,6 +272,98 @@ export default function Home() {
                       <Button variant="outline" className="w-full">
                         <Github className="mr-2 h-4 w-4" />
                         View on GitHub
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="team" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+          <div className="container px-4 md:px-6 mx-auto">
+            <div className="flex flex-col space-y-4 justify-center text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Meet the Team</h2>
+                <p className="text-muted-foreground md:text-xl">
+                  The brilliant minds behind Saenopy and its related projects.
+                </p>
+              </div>
+              <div className="mx-auto grid max-w-5xl items-stretch gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
+                <Card className="flex flex-col">
+                  <CardHeader className="pb-0">
+                    <CardTitle className="text-center">Richard Gerum</CardTitle>
+                    <CardDescription className="text-center">Lead Developer</CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center flex-grow pt-2">
+                    <p className="mb-4">
+                      Creator of Saenopy, pylustrator, and cameratransform. Specializes in scientific software
+                      development and data visualization.
+                    </p>
+                  </CardContent>
+                  <CardFooter className="flex justify-center gap-2 mt-auto">
+                    <Link href="https://github.com/rgerum/" target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="icon">
+                        <Github className="h-4 w-4" />
+                        <span className="sr-only">GitHub</span>
+                      </Button>
+                    </Link>
+                    <Link href="https://twitter.com/RichardGerum" target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="icon">
+                        <Twitter className="h-4 w-4" />
+                        <span className="sr-only">Twitter</span>
+                      </Button>
+                    </Link>
+                    <Link href="https://www.linkedin.com/in/richard-gerum-77bb3987/" target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="icon">
+                        <Linkedin className="h-4 w-4" />
+                        <span className="sr-only">LinkedIn</span>
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+                <Card className="flex flex-col">
+                  <CardHeader className="pb-0">
+                    <CardTitle className="text-center">Christoph Mark</CardTitle>
+                    <CardDescription className="text-center">Physicist & Developer</CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center flex-grow pt-2">
+                    <p className="mb-4">
+                      Physicist focused on time series analysis and complex systems. Creator of jointforces for
+                      analyzing multicellular aggregates.
+                    </p>
+                  </CardContent>
+                  <CardFooter className="flex justify-center gap-2 mt-auto">
+                    <Link href="https://github.com/christophmark/" target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="icon">
+                        <Github className="h-4 w-4" />
+                        <span className="sr-only">GitHub</span>
+                      </Button>
+                    </Link>
+                    <Link href="https://artifact-research.com" target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="icon">
+                        <Globe className="h-4 w-4" />
+                        <span className="sr-only">Website</span>
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+                <Card className="flex flex-col">
+                  <CardHeader className="pb-0">
+                    <CardTitle className="text-center">David Böhringer</CardTitle>
+                    <CardDescription className="text-center">Developer & Researcher</CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center flex-grow pt-2">
+                    <p className="mb-4">
+                      Developer of CompactionAnalyzer for fiber alignment analysis. Specializes in biophysical markers
+                      for cell contractility.
+                    </p>
+                  </CardContent>
+                  <CardFooter className="flex justify-center gap-2 mt-auto">
+                    <Link href="https://github.com/davidbhr/" target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="icon">
+                        <Github className="h-4 w-4" />
+                        <span className="sr-only">GitHub</span>
                       </Button>
                     </Link>
                   </CardFooter>
