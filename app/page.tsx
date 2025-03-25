@@ -4,6 +4,7 @@ import {ArrowRight, Download, Github, BookOpen, Heart, Mail, Twitter, Linkedin, 
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Home() {
@@ -291,17 +292,25 @@ export default function Home() {
               </div>
               <div className="mx-auto grid max-w-5xl items-stretch gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
                 <Card className="flex flex-col">
-                  <CardHeader className="pb-0">
-                    <CardTitle className="text-center">Richard Gerum</CardTitle>
-                    <CardDescription className="text-center">Lead Developer</CardDescription>
+                  <CardHeader>
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-20 w-20 border-4 border-background">
+                        <AvatarImage src="/richard-gerum.jpg" alt="Richard Gerum" />
+                        <AvatarFallback>RG</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <CardTitle className="text-left">Richard Gerum</CardTitle>
+                        <CardDescription className="text-left">Lead Developer</CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent className="text-center flex-grow pt-2">
-                    <p className="mb-4">
+                  <CardContent className="text-left flex-grow">
+                    <p>
                       Creator of Saenopy, pylustrator, and cameratransform. Specializes in scientific software
                       development and data visualization.
                     </p>
                   </CardContent>
-                  <CardFooter className="flex justify-center gap-2 mt-auto">
+                  <CardFooter className="flex gap-2 mt-auto">
                     <Link href="https://github.com/rgerum/" target="_blank" rel="noreferrer">
                       <Button variant="outline" size="icon">
                         <Github className="h-4 w-4" />
@@ -323,17 +332,25 @@ export default function Home() {
                   </CardFooter>
                 </Card>
                 <Card className="flex flex-col">
-                  <CardHeader className="pb-0">
-                    <CardTitle className="text-center">Christoph Mark</CardTitle>
-                    <CardDescription className="text-center">Physicist & Developer</CardDescription>
+                  <CardHeader>
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-20 w-20 border-4 border-background">
+                        <AvatarImage src="/christoph-mark.jpg" alt="Christoph Mark" />
+                        <AvatarFallback>CM</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <CardTitle className="text-left">Christoph Mark</CardTitle>
+                        <CardDescription className="text-left">Physicist & Developer</CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent className="text-center flex-grow pt-2">
-                    <p className="mb-4">
+                  <CardContent className="text-left flex-grow">
+                    <p>
                       Physicist focused on time series analysis and complex systems. Creator of jointforces for
                       analyzing multicellular aggregates.
                     </p>
                   </CardContent>
-                  <CardFooter className="flex justify-center gap-2 mt-auto">
+                  <CardFooter className="flex gap-2 mt-auto">
                     <Link href="https://github.com/christophmark/" target="_blank" rel="noreferrer">
                       <Button variant="outline" size="icon">
                         <Github className="h-4 w-4" />
@@ -349,17 +366,25 @@ export default function Home() {
                   </CardFooter>
                 </Card>
                 <Card className="flex flex-col">
-                  <CardHeader className="pb-0">
-                    <CardTitle className="text-center">David Böhringer</CardTitle>
-                    <CardDescription className="text-center">Developer & Researcher</CardDescription>
+                  <CardHeader>
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-20 w-20 border-4 border-background">
+                        <AvatarImage src="/David-Boehringer.jpg" alt="David Böhringer" />
+                        <AvatarFallback>DB</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <CardTitle className="text-left">David Böhringer</CardTitle>
+                        <CardDescription className="text-left">Developer & Researcher</CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent className="text-center flex-grow pt-2">
-                    <p className="mb-4">
+                  <CardContent className="text-left flex-grow">
+                    <p>
                       Developer of CompactionAnalyzer for fiber alignment analysis. Specializes in biophysical markers
                       for cell contractility.
                     </p>
                   </CardContent>
-                  <CardFooter className="flex justify-center gap-2 mt-auto">
+                  <CardFooter className="flex gap-2 mt-auto">
                     <Link href="https://github.com/davidbhr/" target="_blank" rel="noreferrer">
                       <Button variant="outline" size="icon">
                         <Github className="h-4 w-4" />
