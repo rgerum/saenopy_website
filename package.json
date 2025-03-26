@@ -6,9 +6,7 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "build": "pnpm run build:checkout && pnpm run build:docs && next build",
-    "build:checkout": "rm -rf saenopy && git init saenopy && cd saenopy && git remote add origin https://github.com/rgerum/saenopy.git && git fetch --depth=1 origin master && git checkout FETCH_HEAD",
-    "build:docs": "cd saenopy/docs && poetry install -E docs && poetry run make html && rm -rf ../../public/docs && mkdir ../../public/docs && cp -r build/html/* ../../public/docs/ && cd ../.. && rm -rf saenopy"
+    "build": "next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
