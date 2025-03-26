@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mesh &mdash; saenopy 1.0.6 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Material" href="material.html" />
+    <link rel="prev" title="Regularization Mode" href="regularization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            saenopy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundarycondition.html">Boundary Condition Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regularization.html">Regularization Mode</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mesh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mesh-definition">Mesh definition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#text-files">Text files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gmsh-file">Gmsh file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-inputs">Defining Inputs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#measured-displacement">Measured displacement</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="material.html">Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReadInData.html">Read Files with Pyhton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">saenopy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Mesh</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mesh.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mesh">
+<span id="sectionmesh"></span><h1>Mesh<a class="headerlink" href="#mesh" title="Permalink to this heading">¶</a></h1>
+<section id="mesh-definition">
+<h2>Mesh definition<a class="headerlink" href="#mesh-definition" title="Permalink to this heading">¶</a></h2>
+<p>Saenopy uses only thetrahedral meshes. The mesh is defined by the N nodes
+and by the connectivity of the nodes by M thetrahedra.</p>
+<section id="text-files">
+<h3>Text files<a class="headerlink" href="#text-files" title="Permalink to this heading">¶</a></h3>
+<div class="twocol docutils container">
+<div class="leftside docutils container">
+<p>Nodes are an Nx3 float array (three spatial dimensions). Units are in meters.</p>
+<p>Nodes can be loaded from a .txt file structured like this</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">nodes.txt</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="mf">0e-6</span> <span class="mf">0e-6</span> <span class="mf">0e-6</span>
+<span class="linenos">2</span><span class="mf">0e-6</span> <span class="mf">1e-6</span> <span class="mf">0e-6</span>
+<span class="linenos">3</span><span class="mf">1e-6</span> <span class="mf">1e-6</span> <span class="mf">0e-6</span>
+<span class="linenos">4</span><span class="mf">1e-6</span> <span class="mf">0e-6</span> <span class="mf">0e-6</span>
+<span class="linenos">5</span><span class="mf">0e-6</span> <span class="mf">0e-6</span> <span class="mf">1e-6</span>
+<span class="linenos">6</span><span class="mf">0e-6</span> <span class="mf">1e-6</span> <span class="mf">1e-6</span>
+<span class="linenos">7</span><span class="mf">1e-6</span> <span class="mf">1e-6</span> <span class="mf">1e-6</span>
+<span class="linenos">8</span><span class="mf">1e-6</span> <span class="mf">0e-6</span> <span class="mf">1e-6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="rightside docutils container">
+<p>Connectivity is an Mx4 integer array (reference the node indices of the 4 corners).</p>
+<p>The connectivity can be loaded from a .txt file structured like this</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">connectivity.txt</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="mi">0</span> <span class="mi">1</span> <span class="mi">3</span> <span class="mi">5</span>
+<span class="linenos">2</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">5</span>
+<span class="linenos">3</span><span class="mi">0</span> <span class="mi">5</span> <span class="mi">3</span> <span class="mi">4</span>
+<span class="linenos">4</span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">3</span> <span class="mi">7</span>
+<span class="linenos">5</span><span class="mi">5</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">6</span>
+<span class="linenos">6</span><span class="mi">3</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div style="clear: both;"></div><p>Both can be loaded using <cite>np.loadtxt</cite> and added to the solver using <code class="xref py py-meth docutils literal notranslate"><span class="pre">setNodes()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">setTetrahedra()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="linenos">2</span><span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solver</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># initialize the solver</span>
+<span class="linenos">5</span><span class="n">M</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+<span class="linenos">6</span><span class="c1"># load the nodes (units in meters)</span>
+<span class="linenos">7</span><span class="n">M</span><span class="o">.</span><span class="n">setNodes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;nodes.txt&quot;</span><span class="p">))</span>
+<span class="linenos">8</span><span class="c1"># load the connectivity</span>
+<span class="linenos">9</span><span class="n">M</span><span class="o">.</span><span class="n">setTetrahedra</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;connectivity.txt&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="gmsh-file">
+<h3>Gmsh file<a class="headerlink" href="#gmsh-file" title="Permalink to this heading">¶</a></h3>
+<p>If the mesh was created in gmsh, saenopy provides a loader to directly load files of the <a class="reference external" href="http://gmsh.info/">Gmsh format</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="c1"># load gmsh file and return a solver object with the mesh</span>
+<span class="linenos">4</span><span class="n">M</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">load_gmsh</span><span class="p">(</span><span class="s2">&quot;mesh.msh&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="defining-inputs">
+<h2>Defining Inputs<a class="headerlink" href="#defining-inputs" title="Permalink to this heading">¶</a></h2>
+<section id="boundary-conditions">
+<span id="sectionboundaryconditions"></span><h3>Boundary Conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this heading">¶</a></h3>
+<p>For using the <a class="reference internal" href="boundarycondition.html#sectionboundaryconditionmode"><span class="std std-ref">Boundary Condition Mode</span></a>, constraints for displacement (Nx3 array) and force (Nx3 array) have to be provided.
+For each node, either a displacement or a force needs to be given, the other has to be nan.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>For a fixed node</dt><dd><ul>
+<li><p>the displacement should be provided (3 float values, in meters)</p></li>
+<li><p>the force should left open (3 nan values)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>For a free node,</dt><dd><ul>
+<li><p>the displacement should be left open (3 nan values)</p></li>
+<li><p>the force should provided (3 float values, in Newtons).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="twocol docutils container">
+<div class="leftside docutils container">
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">constraint_displacement.txt</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span>
+<span class="linenos">2</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span>
+<span class="linenos">3</span><span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">4</span><span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">5</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span>
+<span class="linenos">6</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span>
+<span class="linenos">7</span><span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">8</span><span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="rightside docutils container">
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">constraint_force.txt</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">nan</span>      <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">2</span><span class="n">nan</span>      <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">3</span><span class="o">-</span><span class="mf">2.5e-12</span> <span class="mf">0.</span>  <span class="mf">0.</span>
+<span class="linenos">4</span><span class="o">-</span><span class="mf">2.5e-12</span> <span class="mf">0.</span>  <span class="mf">0.</span>
+<span class="linenos">5</span><span class="n">nan</span>      <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">6</span><span class="n">nan</span>      <span class="n">nan</span> <span class="n">nan</span>
+<span class="linenos">7</span><span class="o">-</span><span class="mf">2.5e-12</span> <span class="mf">0.</span>  <span class="mf">0.</span>
+<span class="linenos">8</span><span class="o">-</span><span class="mf">2.5e-12</span> <span class="mf">0.</span>  <span class="mf">0.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div style="clear: both;"></div><p>Both can be loaded using <cite>np.loadtxt</cite> and added to the solver using <code class="xref py py-meth docutils literal notranslate"><span class="pre">setBoundaryCondition()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># load the displacement constraints (in meters)</span>
+<span class="linenos">2</span><span class="n">node_displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;constraint_displacement.txt&quot;</span><span class="p">)</span>
+<span class="linenos">3</span><span class="c1"># load the force constraints (in Newton)</span>
+<span class="linenos">4</span><span class="n">node_force</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;constraint_force.txt&quot;</span><span class="p">)</span>
+<span class="linenos">5</span><span class="c1"># hand the boundary conditions to the solver</span>
+<span class="linenos">6</span><span class="n">M</span><span class="o">.</span><span class="n">setBoundaryCondition</span><span class="p">(</span><span class="n">node_displacement</span><span class="p">,</span> <span class="n">node_force</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="measured-displacement">
+<span id="sectionmeasureddisplacement"></span><h3>Measured displacement<a class="headerlink" href="#measured-displacement" title="Permalink to this heading">¶</a></h3>
+<p>For using <a class="reference internal" href="regularization.html#sectionregularizationmode"><span class="std std-ref">Regularization Mode</span></a>, the measured (or target) displacement (Nx3 array, in meters) has to be provided for
+all nodes.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">measured_displacement.txt</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="mi">0</span>       <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">2</span><span class="mi">0</span>       <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">3</span><span class="mf">0.01e-6</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">4</span><span class="mf">0.01e-6</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">5</span><span class="mi">0</span>       <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">6</span><span class="mf">0.01e-6</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">7</span><span class="mf">0.01e-6</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="linenos">8</span><span class="mi">0</span>       <span class="mi">0</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<p>It can be loaded using <cite>np.loadtxt</cite> and added to the solver using <code class="xref py py-meth docutils literal notranslate"><span class="pre">setTargetDisplacements()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">node_displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;measured_displacement.txt&quot;</span><span class="p">)</span>
+<span class="linenos">2</span><span class="n">M</span><span class="o">.</span><span class="n">setTargetDisplacements</span><span class="p">(</span><span class="n">node_displacement</span><span class="p">)</span>
+</pre></div>
+</div>
+<div id="root"></div>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@v0.158.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@v0.158.0/examples/jsm/"
+    }
+  }
+</script>
+<script type="module">
+  import { init } from "./_static/js/3d_viewer.mjs";
+  init({
+    path: "./_static/vector_data2",
+    scale: 1,
+    dom_node: document.getElementById("root"),
+    zoom: 1.5,
+    image: "z-pos",
+    mouse_control: false,
+    animations: [{type: "scroll-tilt"}]
+  });
+</script></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="regularization.html" class="btn btn-neutral float-left" title="Regularization Mode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="material.html" class="btn btn-neutral float-right" title="Material" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2023, Richard Gerum, David Böhringer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
