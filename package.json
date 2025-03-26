@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build": "pnpm run build:checkout && pnpm run build:docs && next build",
+    "build:checkout": "rm -rf saenopy && git init saenopy && cd saenopy && git remote add origin https://github.com/rgerum/saenopy.git && git fetch --depth=1 origin master && git checkout FETCH_HEAD",
+    "build:docs": "cd saenopy/docs && poetry install -E docs && poetry run make html && rm -rf ../../public/docs && mkdir ../../public/docs && cp -r build/html/* ../../public/docs/ && cd ../.. && rm -rf saenopy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -37,6 +39,7 @@
     "@radix-ui/react-toggle": "^1.1.2",
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
