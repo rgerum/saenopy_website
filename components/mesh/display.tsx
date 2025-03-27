@@ -14,10 +14,10 @@ export function DisplayMesh() {
       image: "z-pos",
       mouse_control: true,
       cube: "stack", // ["none", "stack", "field"]
-      cube_color: 0x000000,
+      cube_color: 0x90a8a6,
       logo_width: "0px",
       background: "transparent",
-      //animations: [{ type: "scroll-tilt" }],
+      animations: [{ type: "scroll-tilt" }],
     });
   }, [ref.current]);
   return <div ref={ref}></div>;

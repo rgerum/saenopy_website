@@ -1,12 +1,5 @@
-import styles from "./Colorbar.module.css";
 import { cmaps, valid_colormaps } from "./colormaps";
-
-function inject_style(style: string) {
-  var styles = document.createElement("style");
-  styles.setAttribute("type", "text/css");
-  styles.textContent = style;
-  document.head.appendChild(styles);
-}
+import { inject_style } from "./inject_style";
 
 function color_to_hex(color: number) {
   let hex = color.toString(16);
@@ -25,7 +18,7 @@ function colormap_to_gradient(colormap: number[]) {
 }
 
 export function add_colormap_gui(
-  parentDom: HTMLDivElement,
+  parentDom: HTMLCanvasElement,
   params: { cmap: valid_colormaps; ccs_prefix?: string },
 ) {
   const ccs_prefix = "saenopy_" + params.ccs_prefix;

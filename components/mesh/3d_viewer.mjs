@@ -3,50 +3,14 @@ import { OrbitControls } from "three/addons/controls/OrbitControls";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
-import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js";
-
 import { loadNpy } from "./load_numpy.js";
 import { cmaps } from "./colormaps.ts";
-import { add_colormap_gui } from "./Colorbar.tsx";
+import { add_colormap_gui } from "./Colorbar.ts";
 import { add_cube } from "./Cube.js";
-
-const zip_entries = {};
-async function get_file_from_zip(url, filename, return_type = "blob") {
-  if (zip_entries[url] === undefined) {
-    async function get_entries(url) {
-      let zipReader;
-      if (typeof url === "string") {
-        zipReader = new ZipReader(
-          new BlobReader(await (await fetch(url)).blob()),
-        );
-      } else {
-        zipReader = new ZipReader(new BlobReader(url));
-      }
-      const entries = await zipReader.getEntries();
-      const entry_map = {};
-      for (let entry of entries) {
-        console.log(entry.filename);
-
-        entry_map[entry.filename] = entry;
-      }
-      await zipReader.close();
-      return entry_map;
-    }
-    zip_entries[url] = get_entries(url);
-  }
-  const entry = (await zip_entries[url])[filename];
-  if (!entry) console.error("file", filename, "not found in", url);
-
-  if (entry.filename === filename) {
-    const blob = await entry.getData(new BlobWriter());
-    if (return_type === "url") return URL.createObjectURL(blob);
-    if (return_type === "texture")
-      return new THREE.TextureLoader().load(URL.createObjectURL(blob));
-    return blob;
-  }
-}
-
-const ccs_prefix = "saenopy_";
+import { get_file_from_zip } from "./get_file_from_zip.ts";
+import { add_logo } from "./Logo.ts";
+import { init_scene } from "@/components/mesh/Scene";
+import { inject_style } from "@/components/mesh/inject_style";
 
 // Arrowhead geometry (cone)
 const arrowheadGeometry = new THREE.ConeGeometry(0.5, 1, 6);
@@ -64,30 +28,9 @@ const arrowGeometry = mergeGeometries(
 arrowGeometry.rotateX(Math.PI / 2);
 arrowGeometry.translate(0, 0, 2);
 
-function inject_style(style) {
-  var styles = document.createElement("style");
-  styles.setAttribute("type", "text/css");
-  styles.textContent = style;
-  document.head.appendChild(styles);
-}
-
-function add_logo(parentDom, params) {
-  const logo = document.createElement("img");
-  logo.className = ccs_prefix + "logo";
-  logo.src =
-    "https://saenopy.readthedocs.io/en/latest/_static/img/Logo_black.png";
-  parentDom.appendChild(logo);
-  inject_style(`
-       .${ccs_prefix}logo {
-           position: absolute;
-           left: 0;
-           top: 0;
-           width: min(${params.logo_width}, 40%);
-       }`);
-}
-
 function add_drop_show(parentDom, params) {
   const dropshow = document.createElement("div");
+  const ccs_prefix = "saenopy_" + params.ccs_prefix;
   dropshow.className = ccs_prefix + "drop_show";
   dropshow.innerText = "drop .savenopy file";
   parentDom.appendChild(dropshow);
@@ -119,63 +62,7 @@ function add_drop_show(parentDom, params) {
        }`);
 }
 
-function init_scene(dom_elem) {
-  // if no element is defined, add a new one to the body
-  if (!dom_elem) {
-    dom_elem = document.createElement("canvas");
-    document.body.appendChild(dom_elem);
-  }
-  if (dom_elem.tagName !== "CANVAS") {
-    const canvas = document.createElement("canvas");
-    dom_elem.appendChild(canvas);
-    dom_elem = canvas;
-  }
-  dom_elem.style.display = "block";
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1500,
-  );
-  scene.camera = camera;
-  const renderer = new THREE.WebGLRenderer({
-    alpha: true,
-    canvas: dom_elem,
-    antialias: true,
-  });
-  //renderer.setSize(window.innerWidth, window.innerHeight);
-  //document.body.appendChild(renderer.domElement);
-  scene.renderer = renderer;
-  window.scene = scene;
-
-  function onWindowResize() {
-    let container = dom_elem.parentElement;
-    let width = container.clientWidth;
-    let height = container.clientHeight;
-    dom_elem.style.width = width;
-    dom_elem.style.height = height;
-
-    // Update camera aspect ratio
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    // Update renderer size
-    renderer.setSize(width, height);
-  }
-  scene.onWindowResize = onWindowResize;
-  document.onWindowResize = onWindowResize;
-  onWindowResize();
-  // Add a resize event listener
-  window.addEventListener("resize", onWindowResize, false);
-
-  return scene;
-}
-
-function set_camera(scene, r, theta_deg, phi_deg) {
-  let camera = scene.camera;
-
+function set_camera(scene, camera, r, theta_deg, phi_deg) {
   // Convert current camera position to spherical coordinates
   const currentSpherical = new THREE.Spherical().setFromVector3(
     camera.position,
@@ -291,7 +178,7 @@ async function add_image(scene, params) {
   return update;
 }
 
-async function add_test(scene, params) {
+async function add_test(scene, renderer, params) {
   const color = new THREE.Color();
 
   let count = 0;
@@ -313,7 +200,7 @@ async function add_test(scene, params) {
     const f = params.data.fields[params.field]?.factor || 1;
     return new THREE.Vector3(-y * f, z * f, -x * f);
   }
-  const colormap_update = add_colormap_gui(scene.renderer.domElement, params);
+  const colormap_update = add_colormap_gui(renderer.domElement, params);
 
   let scaleFactor = 1;
   let last_field = {};
@@ -489,8 +376,8 @@ function get_extend(nodes, offset) {
   return [min, max];
 }
 
-async function load_add_field(scene, params) {
-  const controls = await add_test(scene, params);
+async function load_add_field(scene, renderer, params) {
+  const controls = await add_test(scene, renderer, params);
   return controls.draw;
 }
 
@@ -564,10 +451,13 @@ export async function init(initial_params) {
   console.log("params", params);
 
   // Scene setup
-  const scene = init_scene(initial_params.dom_node, params);
+  const { scene, renderer, camera } = init_scene(
+    initial_params.dom_node,
+    params,
+  );
 
-  add_logo(scene.renderer.domElement.parentElement, params);
-  add_drop_show(scene.renderer.domElement.parentElement, params);
+  add_logo(renderer.domElement.parentElement, params);
+  add_drop_show(renderer.domElement.parentElement, params);
 
   const update_image =
     params.data.stacks && params.data.channels
@@ -577,24 +467,21 @@ export async function init(initial_params) {
   console.log("mouse", params.mouse_control);
   if (params.mouse_control) {
     console.log("mouse control");
-    const controlsCam = new OrbitControls(
-      scene.camera,
-      scene.renderer.domElement,
-    );
+    const controlsCam = new OrbitControls(camera, renderer.domElement);
     controlsCam.update();
     scene.controls = controlsCam;
   }
 
   //add_arrows();
   const update_field = params.data.fields
-    ? await load_add_field(scene, params)
+    ? await load_add_field(scene, renderer, params)
     : () => {};
   const update_cube = add_cube(scene, params);
 
   const radius = params.extent[0]
     ? params.extent[1] * 1e6 * 4
     : params.data.stacks.im_shape[0] * params.data.stacks.voxel_size[0] * 2;
-  set_camera(scene, radius / params.zoom, 30, 60);
+  set_camera(scene, camera, radius / params.zoom, 30, 60);
 
   async function update_all() {
     update_image();
@@ -602,10 +489,10 @@ export async function init(initial_params) {
     update_cube();
   }
   // Animation loop
-  animate(scene, params, update_all);
+  animate(scene, renderer, camera, params, update_all);
 
   if (params.show_controls) {
-    const gui = new GUI({ container: scene.renderer.domElement.parentElement });
+    const gui = new GUI({ container: renderer.domElement.parentElement });
     gui.domElement.classList.add("autoPlace");
     gui.domElement.style.position = "absolute";
     window.gui = gui;
@@ -635,18 +522,19 @@ export async function init(initial_params) {
 
     gui.close();
   }
-  add_drop(scene.renderer.domElement.parentElement, params, update_all);
+  add_drop(renderer.domElement.parentElement, params, update_all);
 }
 
 let animation_time = new Date();
-function animate(scene, params, update_all) {
-  requestAnimationFrame(() => animate(scene, params, update_all));
+function animate(scene, renderer, camera, params, update_all) {
+  requestAnimationFrame(() =>
+    animate(scene, renderer, camera, params, update_all),
+  );
 
   const current_time = new Date();
   const delta_t = (current_time - animation_time) / 1000;
   animation_time = current_time;
 
-  console.log("params animate", params.mouse_control);
   if (params.mouse_control) scene.controls.update();
   for (let animation of params.animations) {
     if (animation.type === "scanX") {
@@ -658,19 +546,19 @@ function animate(scene, params, update_all) {
     if (animation.type === "rotateX") {
       const campos = new THREE.Spherical().setFromVector3(camera.position);
       campos.theta += (((animation.speed || 10) * Math.PI) / 180) * delta_t;
-      scene.camera.position.setFromSpherical(campos);
-      scene.camera.lookAt(scene.position);
+      camera.position.setFromSpherical(campos);
+      camera.lookAt(scene.position);
     }
     if (animation.type === "scroll-tiltX") {
       if (
-        scene.renderer.domElement.getBoundingClientRect().top !==
+        renderer.domElement.getBoundingClientRect().top !==
         animation.last_top_pos
       ) {
         const factor =
-          (scene.renderer.domElement.getBoundingClientRect().top +
-            scene.renderer.domElement.getBoundingClientRect().height) /
+          (renderer.domElement.getBoundingClientRect().top +
+            renderer.domElement.getBoundingClientRect().height) /
           (window.innerHeight +
-            scene.renderer.domElement.getBoundingClientRect().height);
+            renderer.domElement.getBoundingClientRect().height);
         const top = animation.top || 120;
         const bottom = animation.bottom || 30;
         set_camera(
@@ -680,13 +568,13 @@ function animate(scene, params, update_all) {
           top * (1 - factor) + bottom * factor,
         );
         animation.last_top_pos =
-          scene.renderer.domElement.getBoundingClientRect().top;
+          renderer.domElement.getBoundingClientRect().top;
       }
     }
   }
 
   if (scene.light) {
-    const campos = new THREE.Spherical().setFromVector3(scene.camera.position);
+    const campos = new THREE.Spherical().setFromVector3(camera.position);
     const lightpos = new THREE.Spherical(
       campos.radius,
       campos.phi,
@@ -695,7 +583,7 @@ function animate(scene, params, update_all) {
     scene.light.position.setFromSpherical(lightpos);
   }
 
-  scene.renderer.render(scene, scene.camera);
+  renderer.render(scene, camera);
 }
 
 function add_drop(dropZone, params, update_all) {
