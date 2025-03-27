@@ -13,8 +13,12 @@ export function DisplayMesh() {
       zoom: 1.5,
       image: "z-pos",
       mouse_control: true,
+      cube: "stack", // ["none", "stack", "field"]
+      cube_color: 0x000000,
+      logo_width: "0px",
+      background: "transparent",
       //animations: [{ type: "scroll-tilt" }],
     });
   }, [ref.current]);
-  return <div ref={ref}>display</div>;
+  return <div ref={ref}></div>;
 }

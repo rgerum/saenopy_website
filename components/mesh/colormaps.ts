@@ -1,4 +1,5 @@
-export const cmaps = {
+export type valid_colormaps = "viridis" | "turbo";
+export const cmaps: Record<valid_colormaps, number[]> = {
   viridis: [
     0x440154, 0x440256, 0x450457, 0x450559, 0x46075a, 0x46085c, 0x460a5d,
     0x460b5e, 0x470d60, 0x470e61, 0x471063, 0x471164, 0x471365, 0x481467,

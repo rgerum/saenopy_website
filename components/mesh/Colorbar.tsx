@@ -1,32 +1,14 @@
 import styles from "./Colorbar.module.css";
-import { cmaps } from "./colormaps.js";
+import { cmaps, valid_colormaps } from "./colormaps";
 
-function inject_style(style) {
+function inject_style(style: string) {
   var styles = document.createElement("style");
   styles.setAttribute("type", "text/css");
   styles.textContent = style;
   document.head.appendChild(styles);
 }
 
-export function Colorbar({ title, colormap }) {
-  const ticks = [0, 1, 2, 3, 4];
-  return (
-    <div className={styles.colorbar}>
-      <div
-        className={styles.colorbar_gradient}
-        style={{ background: colormap_to_gradient(colormap.colors) }}
-      ></div>
-      <div className={styles.title}>{title}</div>
-      {ticks.map((v, i) => (
-        <div className={styles.tick} style={{ left: (i * 100) / 4 + "%" }}>
-          {((i / 4) * colormap.max).toFixed(1)}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function color_to_hex(color) {
+function color_to_hex(color: number) {
   let hex = color.toString(16);
   while (hex.length < 6) {
     hex = "0" + hex;
@@ -34,7 +16,7 @@ function color_to_hex(color) {
   return "#" + hex;
 }
 
-function colormap_to_gradient(colormap) {
+function colormap_to_gradient(colormap: number[]) {
   let gradient = [];
   for (let i = 0; i < colormap.length; i++) {
     gradient.push(color_to_hex(colormap[i]));
@@ -42,11 +24,14 @@ function colormap_to_gradient(colormap) {
   return "linear-gradient(90deg, " + gradient.join(", ") + ")";
 }
 
-export function add_colormap_gui(parentDom, params) {
+export function add_colormap_gui(
+  parentDom: HTMLDivElement,
+  params: { cmap: valid_colormaps; ccs_prefix?: string },
+) {
   const ccs_prefix = "saenopy_" + params.ccs_prefix;
   const colorbar = document.createElement("div");
   colorbar.className = ccs_prefix + "colorbar";
-  parentDom.parentElement.appendChild(colorbar);
+  if (parentDom.parentElement) parentDom.parentElement.appendChild(colorbar);
   const colorbar_gradient = document.createElement("div");
   colorbar_gradient.className = ccs_prefix + "colorbar_gradient";
   colorbar.appendChild(colorbar_gradient);
@@ -56,7 +41,7 @@ export function add_colormap_gui(parentDom, params) {
   colorbar_title.className = ccs_prefix + "title";
   colorbar.appendChild(colorbar_title);
 
-  const ticks = [];
+  const ticks: HTMLDivElement[] = [];
   function add_tick() {
     const colorbar_number = document.createElement("div");
     colorbar_number.innerText = "0";
@@ -69,8 +54,12 @@ export function add_colormap_gui(parentDom, params) {
     add_tick();
   }
 
-  let last_props = {};
-  function update(colormap, max, title) {
+  let last_props: { max: number; colormap: string; title: string } = {
+    max: 0,
+    colormap: "viridis",
+    title: "",
+  };
+  function update(colormap: string, max: number, title: string) {
     if (max !== last_props.max) {
       colorbar.style.display = max === 0 ? "none" : "block";
       for (let i = 0; i < ticks.length; i++) {

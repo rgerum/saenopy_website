@@ -1,20 +1,14 @@
 import * as THREE from "three";
-//import * as THREE from "https://unpkg.com/three@v0.158.0/build/three.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls";
-//import { OrbitControls } from "https://unpkg.com/three@v0.158.0/examples/jsm/controls/OrbitControls";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
-//import { mergeBufferGeometries } from "https://unpkg.com/three@v0.158.0/examples/jsm/utils/BufferGeometryUtils.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-//import { GUI } from "https://unpkg.com/three@v0.158.0/examples/jsm/libs/lil-gui.module.min.js";
-
-import { loadNpy } from "./load_numpy.js";
-import { cmaps } from "./colormaps.js";
-import { add_colormap_gui } from "./Colorbar.jsx";
 
 import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js";
-// Creates a ZipReader object reading the zip content via `zipFileReader`,
-// retrieves metadata (name, dates, etc.) of the first entry, retrieves its
-// content via `helloWorldWriter`, and closes the reader.
+
+import { loadNpy } from "./load_numpy.js";
+import { cmaps } from "./colormaps.ts";
+import { add_colormap_gui } from "./Colorbar.tsx";
+import { add_cube } from "./Cube.js";
 
 const zip_entries = {};
 async function get_file_from_zip(url, filename, return_type = "blob") {
@@ -70,21 +64,6 @@ const arrowGeometry = mergeGeometries(
 arrowGeometry.rotateX(Math.PI / 2);
 arrowGeometry.translate(0, 0, 2);
 
-function color_to_hex(color) {
-  let hex = color.toString(16);
-  while (hex.length < 6) {
-    hex = "0" + hex;
-  }
-  return "#" + hex;
-}
-function colormap_to_gradient(colormap) {
-  let gradient = [];
-  for (let i = 0; i < colormap.length; i++) {
-    gradient.push(color_to_hex(colormap[i]));
-  }
-  return "linear-gradient(90deg, " + gradient.join(", ") + ")";
-}
-
 function inject_style(style) {
   var styles = document.createElement("style");
   styles.setAttribute("type", "text/css");
@@ -138,101 +117,6 @@ function add_drop_show(parentDom, params) {
            opacity: 1;
            margin: 10px;
        }`);
-}
-
-function add_colormap_guiX(parentDom, params) {
-  const colorbar = document.createElement("div");
-  colorbar.className = ccs_prefix + "colorbar";
-  parentDom.parentElement.appendChild(colorbar);
-  const colorbar_gradient = document.createElement("div");
-  colorbar_gradient.className = ccs_prefix + "colorbar_gradient";
-  colorbar.appendChild(colorbar_gradient);
-  colorbar_gradient.style.background = colormap_to_gradient(cmaps[params.cmap]);
-
-  const colorbar_title = document.createElement("div");
-  colorbar_title.className = ccs_prefix + "title";
-  colorbar.appendChild(colorbar_title);
-
-  const ticks = [];
-  function add_tick() {
-    const colorbar_number = document.createElement("div");
-    colorbar_number.innerText = "0";
-    colorbar_number.style.left = "10%";
-    colorbar_number.className = ccs_prefix + "tick";
-    colorbar.appendChild(colorbar_number);
-    ticks.push(colorbar_number);
-  }
-  for (let i = 0; i < 5; i++) {
-    add_tick();
-  }
-
-  let last_props = {};
-  function update(colormap, max, title) {
-    if (max !== last_props.max) {
-      colorbar.style.display = max === 0 ? "none" : "block";
-      for (let i = 0; i < ticks.length; i++) {
-        ticks[i].style.left = (i / (ticks.length - 1)) * 100 + "%";
-        ticks[i].innerText = ((i / (ticks.length - 1)) * max).toFixed(1);
-      }
-      last_props.max = max;
-    }
-    if (colormap !== last_props.colormap) {
-      colorbar_gradient.style.background = colormap_to_gradient(
-        cmaps[params.cmap],
-      );
-      last_props.colormap = colormap;
-    }
-    if (title !== last_props.title) {
-      colorbar_title.innerText = title;
-      last_props.title = title;
-    }
-  }
-
-  inject_style(`
-         .${ccs_prefix}colorbar {
-            font-family: sans-serif;
-            position: absolute;
-            bottom: 30px;
-            left: 20px;
-            width: min(300px, 100% - 40px);
-            height: 20px;
-            background-color: white;   
-            color: white;         
-         }
-         .${ccs_prefix}colorbar .${ccs_prefix}colorbar_gradient {
-            width: 100%;
-            height: 20px;
-         }
-         .${ccs_prefix}colorbar .${ccs_prefix}title {
-            position: absolute;
-              left: 50%;
-              top: 0px;
-              text-align: center;
-              transform: translate(-50%, -100%);
-              white-space: nowrap;
-              padding-bottom: 5px;
-         }
-         .${ccs_prefix}colorbar .${ccs_prefix}tick {
-             position: absolute;
-             bottom: 0;
-             left: 0;
-             text-align: center;
-             --tick-height: 7px;
-             transform: translate(-50%, calc(100% + var(--tick-height)));
-         }
-         .${ccs_prefix}colorbar .${ccs_prefix}tick::before {
-             content: "";
-              width: 2px;
-              height: var(--tick-height);
-              display: block;
-              background: white;
-              position: absolute;
-              top: 0;
-              left: calc(50% - 1px);
-              transform: translateY(-100%);
-         }
-         `);
-  return update;
 }
 
 function init_scene(dom_elem) {
@@ -317,36 +201,6 @@ function set_camera(scene, r, theta_deg, phi_deg) {
 
   // Make the camera look at the scene center or any other point of interest
   camera.lookAt(scene.position);
-}
-
-function add_cube(scene, params) {
-  // Cube setup
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const wireframe = new THREE.EdgesGeometry(geometry);
-  const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-  let cube = new THREE.LineSegments(wireframe, material);
-  scene.add(cube);
-
-  function update_cube() {
-    if (params.cube === "field") {
-      cube.scale.x = params.extent[1] * 1e6 * 2;
-      cube.scale.y = params.extent[3] * 1e6 * 2;
-      cube.scale.z = params.extent[5] * 1e6 * 2;
-    } else if (params.cube === "stack") {
-      cube.scale.x =
-        params.data.stacks.im_shape[0] * params.data.stacks.voxel_size[0];
-      cube.scale.y =
-        params.data.stacks.im_shape[1] * params.data.stacks.voxel_size[1];
-      cube.scale.z =
-        params.data.stacks.im_shape[2] * params.data.stacks.voxel_size[2];
-    } else {
-      cube.scale.x = 0;
-      cube.scale.y = 0;
-      cube.scale.z = 0;
-    }
-  }
-  update_cube();
-  return update_cube;
 }
 
 function pad_zero(num, places) {
@@ -650,6 +504,7 @@ export async function init(initial_params) {
     cube: "field", // ["none", "stack", "field"]
     image: "z-pos", // ["none", "z-pos", "floor"]
     background: "black",
+    cube_color: 0x000000,
     height: "400px",
     width: "auto",
     logo_width: "200px",
