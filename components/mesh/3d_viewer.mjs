@@ -481,7 +481,7 @@ export async function init(initial_params) {
   const radius = params.extent[0]
     ? params.extent[1] * 1e6 * 4
     : params.data.stacks.im_shape[0] * params.data.stacks.voxel_size[0] * 2;
-  set_camera(scene, camera, radius / params.zoom, 30, 60);
+  set_camera(scene, camera, (radius / params.zoom) * 5, 30, 60);
 
   async function update_all() {
     update_image();
@@ -537,19 +537,19 @@ function animate(scene, renderer, camera, params, update_all) {
 
   if (params.mouse_control) scene.controls.update();
   for (let animation of params.animations) {
-    if (animation.type === "scanX") {
+    if (animation.type === "scan") {
       animation.z = animation.z || 0;
       animation.z += (animation.speed || 10) * delta_t;
       params.z = Math.floor(animation.z % params.data.stacks.z_slices_count);
       update_all();
     }
-    if (animation.type === "rotateX") {
+    if (animation.type === "rotate") {
       const campos = new THREE.Spherical().setFromVector3(camera.position);
       campos.theta += (((animation.speed || 10) * Math.PI) / 180) * delta_t;
       camera.position.setFromSpherical(campos);
       camera.lookAt(scene.position);
     }
-    if (animation.type === "scroll-tiltX") {
+    if (animation.type === "scroll-tilt") {
       if (
         renderer.domElement.getBoundingClientRect().top !==
         animation.last_top_pos
@@ -563,6 +563,7 @@ function animate(scene, renderer, camera, params, update_all) {
         const bottom = animation.bottom || 30;
         set_camera(
           scene,
+          camera,
           undefined,
           undefined,
           top * (1 - factor) + bottom * factor,

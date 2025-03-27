@@ -17,7 +17,9 @@ export function DisplayMesh() {
       cube_color: 0x90a8a6,
       logo_width: "0px",
       background: "transparent",
-      animations: [{ type: "scroll-tilt" }],
+      show_controls: false,
+      show_colormap: false,
+      animations: [{ type: "rotate" }],
     });
   }, [ref.current]);
   return <div ref={ref}></div>;
