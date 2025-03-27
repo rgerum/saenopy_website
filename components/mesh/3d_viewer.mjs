@@ -9,16 +9,12 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 import { loadNpy } from "./load_numpy.js";
 import { cmaps } from "./colormaps.js";
+import { add_colormap_gui } from "./Colorbar.jsx";
 
-import {
-  BlobWriter,
-  BlobReader,
-  ZipReader,
-} from "https://unpkg.com/@zip.js/zip.js/index.js";
+import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js";
 // Creates a ZipReader object reading the zip content via `zipFileReader`,
 // retrieves metadata (name, dates, etc.) of the first entry, retrieves its
 // content via `helloWorldWriter`, and closes the reader.
-
 
 const zip_entries = {};
 async function get_file_from_zip(url, filename, return_type = "blob") {
@@ -114,7 +110,7 @@ function add_logo(parentDom, params) {
 function add_drop_show(parentDom, params) {
   const dropshow = document.createElement("div");
   dropshow.className = ccs_prefix + "drop_show";
-  dropshow.innerText = "drop .savenopy file"
+  dropshow.innerText = "drop .savenopy file";
   parentDom.appendChild(dropshow);
   inject_style(`
         .${ccs_prefix}drop_show {
@@ -144,7 +140,7 @@ function add_drop_show(parentDom, params) {
        }`);
 }
 
-function add_colormap_gui(parentDom, params) {
+function add_colormap_guiX(parentDom, params) {
   const colorbar = document.createElement("div");
   colorbar.className = ccs_prefix + "colorbar";
   parentDom.parentElement.appendChild(colorbar);
@@ -473,7 +469,11 @@ async function add_test(scene, params) {
     let max_length = last_field.max_length || 0;
     let needs_update = false;
 
-    if (params.path !== last_field.path || params.field !== last_field.field || params.data.path !== last_field.data_path) {
+    if (
+      params.path !== last_field.path ||
+      params.field !== last_field.field ||
+      params.data.path !== last_field.data_path
+    ) {
       max_length = 0;
       arrows = [];
       last_field.path = params.path;
@@ -481,6 +481,7 @@ async function add_test(scene, params) {
       last_field.data_path = params.data.path;
       needs_update = true;
       if (params.field !== "none") {
+        console.log(params.data.path, params.data.fields[params.field].nodes);
         try {
           nodes = await loadNpy(
             await get_file_from_zip(
@@ -496,7 +497,16 @@ async function add_test(scene, params) {
               "blob",
             ),
           );
-        } catch (e) {}
+          console.log("nodes", nodes, "vectors", vectors);
+        } catch (e) {
+          nodes = await loadNpy(
+            params.data.path + "/" + params.data.fields[params.field].nodes,
+          );
+          vectors = await loadNpy(
+            params.data.path + "/" + params.data.fields[params.field].vectors,
+          );
+          console.log("could not load", e);
+        }
       }
 
       if (!nodes || !vectors) {
@@ -631,6 +641,7 @@ async function load_add_field(scene, params) {
 }
 
 export async function init(initial_params) {
+  console.log("init", initial_params);
   const params = {
     scale: 1,
     cmap: "turbo", // ["turbo", "viridis"]
@@ -687,6 +698,15 @@ export async function init(initial_params) {
     initial_params.dom_node.style.minHeight = params.height;
     initial_params.dom_node.style.width = params.width;
   }
+  console.log("load data", params.data === undefined);
+
+  if (1) {
+    const data = await (await fetch(initial_params.path + "/data.json")).json();
+    console.log("data", data);
+    params.data = data;
+    params.data.path = initial_params.path;
+  }
+  console.log("params", params);
 
   // Scene setup
   const scene = init_scene(initial_params.dom_node, params);
@@ -694,16 +714,18 @@ export async function init(initial_params) {
   add_logo(scene.renderer.domElement.parentElement, params);
   add_drop_show(scene.renderer.domElement.parentElement, params);
 
-  if (params.data === undefined) {
-    const data = await (await fetch(initial_params.path + "/data.json")).json();
-    params.data = data;
-  }
-  const update_image = params.data.stacks
-    ? await add_image(scene, params)
-    : () => {};
+  const update_image =
+    params.data.stacks && params.data.channels
+      ? await add_image(scene, params)
+      : () => {};
 
+  console.log("mouse", params.mouse_control);
   if (params.mouse_control) {
-    const controlsCam = new OrbitControls(scene.camera, scene.renderer.domElement);
+    console.log("mouse control");
+    const controlsCam = new OrbitControls(
+      scene.camera,
+      scene.renderer.domElement,
+    );
     controlsCam.update();
     scene.controls = controlsCam;
   }
@@ -769,21 +791,22 @@ function animate(scene, params, update_all) {
   const delta_t = (current_time - animation_time) / 1000;
   animation_time = current_time;
 
+  console.log("params animate", params.mouse_control);
   if (params.mouse_control) scene.controls.update();
   for (let animation of params.animations) {
-    if (animation.type === "scan") {
+    if (animation.type === "scanX") {
       animation.z = animation.z || 0;
       animation.z += (animation.speed || 10) * delta_t;
       params.z = Math.floor(animation.z % params.data.stacks.z_slices_count);
       update_all();
     }
-    if (animation.type === "rotate") {
+    if (animation.type === "rotateX") {
       const campos = new THREE.Spherical().setFromVector3(camera.position);
       campos.theta += (((animation.speed || 10) * Math.PI) / 180) * delta_t;
       scene.camera.position.setFromSpherical(campos);
       scene.camera.lookAt(scene.position);
     }
-    if (animation.type === "scroll-tilt") {
+    if (animation.type === "scroll-tiltX") {
       if (
         scene.renderer.domElement.getBoundingClientRect().top !==
         animation.last_top_pos
@@ -822,22 +845,22 @@ function animate(scene, params, update_all) {
 
 function add_drop(dropZone, params, update_all) {
   // Prevent default drag behaviors
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropZone.addEventListener(eventName, preventDefaults, false);
     document.body.addEventListener(eventName, preventDefaults, false);
   });
 
   // Highlight drop area when item is dragged over it
-  ['dragenter', 'dragover'].forEach(eventName => {
+  ["dragenter", "dragover"].forEach((eventName) => {
     dropZone.addEventListener(eventName, highlight, false);
   });
 
-  ['dragleave', 'drop'].forEach(eventName => {
+  ["dragleave", "drop"].forEach((eventName) => {
     dropZone.addEventListener(eventName, unhighlight, false);
   });
 
   // Handle dropped files
-  dropZone.addEventListener('drop', handleDrop, false);
+  dropZone.addEventListener("drop", handleDrop, false);
 
   function preventDefaults(e) {
     e.preventDefault();
@@ -845,11 +868,11 @@ function add_drop(dropZone, params, update_all) {
   }
 
   function highlight(e) {
-    dropZone.classList.add(ccs_prefix+'highlight');
+    dropZone.classList.add(ccs_prefix + "highlight");
   }
 
   function unhighlight(e) {
-    dropZone.classList.remove(ccs_prefix+'highlight');
+    dropZone.classList.remove(ccs_prefix + "highlight");
   }
 
   function handleDrop(e) {
@@ -860,17 +883,18 @@ function add_drop(dropZone, params, update_all) {
   }
 
   function handleFiles(files) {
-    ([...files]).forEach(loadFile);
+    [...files].forEach(loadFile);
+    init;
   }
 
   function loadFile(file) {
-    console.log("loadFile", file)
+    console.log("loadFile", file);
     params.data.path = file;
     update_all();
-    return
+    return;
     var reader = new FileReader();
     reader.readAsText(file); // Or readAsDataURL(file) for images
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       console.log(reader.result); // Do something with the file content
       // For example, display the file content in the drop zone
       dropZone.textContent = reader.result;
