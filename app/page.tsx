@@ -23,6 +23,16 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Saenopy - 3D traction force microscopy",
+  description:
+    "An open-source software for calculating 3D traction forces in cell mechanics research",
+  alternates: {
+    canonical: "https://saenopy.com",
+  },
+};
 
 export default function Home() {
   return (
