@@ -691,7 +691,7 @@ export default function Home() {
                   </li>
                 </ul>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="mailto:contact@example.com">
+                  <Link href="mailto:support@saenopy.com">
                     <Button size="lg" className="gap-1">
                       <Mail className="h-5 w-5" />
                       Contact Us
@@ -718,6 +718,13 @@ export default function Home() {
                 </p>
               </div>
               <div className="w-full max-w-sm space-y-2">
+                <Button className="w-full gap-1" asChild={true}>
+                  <Link href={"https://donate.stripe.com/dR6aGrepV6FT0lG144"}>
+                    <Heart className="h-5 w-5" />
+                    Donate
+                  </Link>
+                </Button>
+                {/*
                 <Tabs defaultValue="one-time" className="w-full">
                   <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="one-time">One-time</TabsTrigger>
@@ -732,9 +739,13 @@ export default function Home() {
                       <Button variant="outline">$100</Button>
                       <Button variant="outline">Custom</Button>
                     </div>
-                    <Button className="w-full gap-1">
-                      <Heart className="h-5 w-5" />
-                      Donate
+                    <Button className="w-full gap-1" asChild={true}>
+                      <Link
+                        href={"https://donate.stripe.com/dR6aGrepV6FT0lG144"}
+                      >
+                        <Heart className="h-5 w-5" />
+                        Donate
+                      </Link>
                     </Button>
                   </TabsContent>
                   <TabsContent value="monthly" className="space-y-4">
@@ -746,12 +757,16 @@ export default function Home() {
                       <Button variant="outline">$50</Button>
                       <Button variant="outline">Custom</Button>
                     </div>
-                    <Button className="w-full gap-1">
-                      <Heart className="h-5 w-5" />
-                      Subscribe
+                    <Button className="w-full gap-1" asChild={true}>
+                      <Link
+                        href={"https://donate.stripe.com/dR6aGrepV6FT0lG144"}
+                      >
+                        <Heart className="h-5 w-5" />
+                        Subscribe
+                      </Link>
                     </Button>
                   </TabsContent>
-                </Tabs>
+                </Tabs>*/}
                 <p className="text-xs text-muted-foreground">
                   Your support helps us continue to develop and maintain
                   Saenopy.
