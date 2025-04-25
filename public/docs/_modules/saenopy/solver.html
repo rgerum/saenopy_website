@@ -368,7 +368,7 @@
     <span class="n">material_model</span><span class="p">:</span> <span class="n">SemiAffineFiberMaterial</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the function specifying the material model</span>
     <span class="n">material_parameters</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">regularisation_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">regularisation_results</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">regularisation_parameters</span><span class="p">:</span> <span class="n">RegularisationParameterDict</span> <span class="o">=</span> <span class="kc">None</span> 
 
     <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1111,7 +1111,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">regularisation_results</span> <span class="o">=</span> <span class="n">relrec</span>
                 <span class="k">return</span> <span class="n">relrec</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">regularisation_results</span> <span class="o">=</span> <span class="n">relrec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regularisation_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">relrec</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">relrec</span></div>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_solve_regularization_cg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.33</span><span class="p">,</span> <span class="n">solver_precision</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-18</span><span class="p">):</span>
