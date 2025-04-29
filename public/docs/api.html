@@ -275,18 +275,6 @@ documentation of the Solver class and its methods.</p>
 <dd><p>Calculates the stiffness matrix K_ij, the force F_i and the energy E of each node.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.preprocessing">
-<span class="sig-name descname"><span class="pre">preprocessing</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#saenopy.solver.Solver.preprocessing" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>preprocessing = [</dt><dd><p>“load_stack”: [“1_*.tif”, “2_*.tif”, voxel_sixe],
-“3D_piv”: [overlap, windowsize, signoise, drifcorrection],
-“iterpolate_mesh”: [],</p>
-</dd>
-</dl>
-<p>]</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="saenopy.solver.Solver.set_beams">
 <span class="sig-name descname"><span class="pre">set_beams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/saenopy/solver.html#Solver.set_beams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_beams" title="Permalink to this definition">¶</a></dt>
@@ -479,7 +467,6 @@ displacement. Default 3e9</p></li>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#saenopy.solver.Solver"><code class="docutils literal notranslate"><span class="pre">Solver</span></code></a><ul>
 <li><a class="reference internal" href="#saenopy.solver.Solver.get_max_tet_stiffness"><code class="docutils literal notranslate"><span class="pre">Solver.get_max_tet_stiffness()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.preprocessing"><code class="docutils literal notranslate"><span class="pre">Solver.preprocessing</span></code></a></li>
 <li><a class="reference internal" href="#saenopy.solver.Solver.set_beams"><code class="docutils literal notranslate"><span class="pre">Solver.set_beams()</span></code></a></li>
 <li><a class="reference internal" href="#saenopy.solver.Solver.set_boundary_condition"><code class="docutils literal notranslate"><span class="pre">Solver.set_boundary_condition()</span></code></a></li>
 <li><a class="reference internal" href="#saenopy.solver.Solver.set_initial_displacements"><code class="docutils literal notranslate"><span class="pre">Solver.set_initial_displacements()</span></code></a></li>
