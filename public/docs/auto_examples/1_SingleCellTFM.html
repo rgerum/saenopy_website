@@ -268,7 +268,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="classic-tfm-liver-fibroblasts">
-<span id="sphx-glr-auto-examples-1-singlecelltfm-py"></span><h1>Classic TFM (liver fibroblasts)<a class="headerlink" href="#classic-tfm-liver-fibroblasts" title="Permalink to this heading">¶</a></h1>
+<span id="sectionexamplesinglecell"></span><span id="sphx-glr-auto-examples-1-singlecelltfm-py"></span><h1>Classic TFM (liver fibroblasts)<a class="headerlink" href="#classic-tfm-liver-fibroblasts" title="Permalink to this heading">¶</a></h1>
 <p>This example evaluates three hepatic stellate cells in 1.2mg/ml collagen with relaxed and deformed stacks. The relaxed stacks were recorded with cytochalasin D treatment of the cells.
 This example can also be evaluated with the graphical user interface.</p>
 <blockquote>
@@ -276,7 +276,7 @@ This example can also be evaluated with the graphical user interface.</p>
 <img alt="../_images/Liver_fibroblasts.png" src="../_images/Liver_fibroblasts.png" />
 </figure>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">13</span> <span class="kn">import</span><span class="w"> </span><span class="nn">saenopy</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">15</span> <span class="kn">import</span><span class="w"> </span><span class="nn">saenopy</span>
 </pre></div>
 </div>
 <section id="downloading-the-example-data-files">
@@ -309,8 +309,8 @@ state (“Deformed”) and once after relaxation with Cyto D as the reference st
         └── ...
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">51</span> <span class="c1"># download the data</span>
-<span class="linenos">52</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">load_example</span><span class="p">(</span><span class="s2">&quot;ClassicSingleCellTFM&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">53</span> <span class="c1"># download the data</span>
+<span class="linenos">54</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">load_example</span><span class="p">(</span><span class="s2">&quot;ClassicSingleCellTFM&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -322,15 +322,15 @@ We replace the number of the channels “ch00” with a channel placeholder “c
 the channels and which channel to use as the first channel where the deformations should be detected.
 We replace the number of the z slice “z000” with a z placeholder “z{z}” to indicate that this number refers to the
 z slice. We do the same for the deformed state and for the reference stack.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">65</span> <span class="c1"># load the relaxed and the contracted stack</span>
-<span class="linenos">66</span> <span class="c1"># {z} is the placeholder for the z stack</span>
-<span class="linenos">67</span> <span class="c1"># {c} is the placeholder for the channels</span>
-<span class="linenos">68</span> <span class="c1"># {t} is the placeholder for the time points</span>
-<span class="linenos">69</span> <span class="n">results</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">get_stacks</span><span class="p">(</span>
-<span class="linenos">70</span>     <span class="s1">&#39;1_ClassicSingleCellTFM/Deformed/Mark_and_Find_001/Pos*_S001_z</span><span class="si">{z}</span><span class="s1">_ch</span><span class="si">{c:00}</span><span class="s1">.tif&#39;</span><span class="p">,</span>
-<span class="linenos">71</span>     <span class="n">reference_stack</span><span class="o">=</span><span class="s1">&#39;1_ClassicSingleCellTFM/Relaxed/Mark_and_Find_001/Pos*_S001_z</span><span class="si">{z}</span><span class="s1">_ch</span><span class="si">{c:00}</span><span class="s1">.tif&#39;</span><span class="p">,</span>
-<span class="linenos">72</span>     <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;1_ClassicSingleCellTFM/example_output&#39;</span><span class="p">,</span>
-<span class="linenos">73</span>     <span class="n">voxel_size</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7211</span><span class="p">,</span> <span class="mf">0.7211</span><span class="p">,</span> <span class="mf">0.988</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">67</span> <span class="c1"># load the relaxed and the contracted stack</span>
+<span class="linenos">68</span> <span class="c1"># {z} is the placeholder for the z stack</span>
+<span class="linenos">69</span> <span class="c1"># {c} is the placeholder for the channels</span>
+<span class="linenos">70</span> <span class="c1"># {t} is the placeholder for the time points</span>
+<span class="linenos">71</span> <span class="n">results</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">get_stacks</span><span class="p">(</span>
+<span class="linenos">72</span>     <span class="s1">&#39;1_ClassicSingleCellTFM/Deformed/Mark_and_Find_001/Pos*_S001_z</span><span class="si">{z}</span><span class="s1">_ch</span><span class="si">{c:00}</span><span class="s1">.tif&#39;</span><span class="p">,</span>
+<span class="linenos">73</span>     <span class="n">reference_stack</span><span class="o">=</span><span class="s1">&#39;1_ClassicSingleCellTFM/Relaxed/Mark_and_Find_001/Pos*_S001_z</span><span class="si">{z}</span><span class="s1">_ch</span><span class="si">{c:00}</span><span class="s1">.tif&#39;</span><span class="p">,</span>
+<span class="linenos">74</span>     <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;1_ClassicSingleCellTFM/example_output&#39;</span><span class="p">,</span>
+<span class="linenos">75</span>     <span class="n">voxel_size</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7211</span><span class="p">,</span> <span class="mf">0.7211</span><span class="p">,</span> <span class="mf">0.988</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -362,33 +362,33 @@ for three example cells.</p>
 </tbody>
 </table>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 95</span> <span class="c1"># define the parameters for the piv deformation detection</span>
-<span class="linenos"> 96</span> <span class="n">piv_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;element_size&#39;</span><span class="p">:</span> <span class="mf">14.0</span><span class="p">,</span> <span class="s1">&#39;window_size&#39;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span> <span class="s1">&#39;signal_to_noise&#39;</span><span class="p">:</span> <span class="mf">1.3</span><span class="p">,</span> <span class="s1">&#39;drift_correction&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-<span class="linenos"> 97</span>
-<span class="linenos"> 98</span> <span class="c1"># iterate over all the results objects</span>
-<span class="linenos"> 99</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-<span class="linenos">100</span>     <span class="c1"># set the parameters</span>
-<span class="linenos">101</span>     <span class="n">result</span><span class="o">.</span><span class="n">piv_parameters</span> <span class="o">=</span> <span class="n">piv_parameters</span>
-<span class="linenos">102</span>     <span class="c1"># get count</span>
-<span class="linenos">103</span>     <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">)</span>
-<span class="linenos">104</span>     <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">stack_reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="linenos">105</span>         <span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
-<span class="linenos">106</span>     <span class="c1"># iterate over all stack pairs</span>
-<span class="linenos">107</span>     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
-<span class="linenos">108</span>         <span class="c1"># get two consecutive stacks</span>
-<span class="linenos">109</span>         <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">stack_reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="linenos">110</span>             <span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-<span class="linenos">111</span>         <span class="c1"># or reference stack and one from the list</span>
-<span class="linenos">112</span>         <span class="k">else</span><span class="p">:</span>
-<span class="linenos">113</span>             <span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stack_reference</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="linenos">114</span>         <span class="c1"># and calculate the displacement between them</span>
-<span class="linenos">115</span>         <span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">get_displacements_from_stacks</span><span class="p">(</span><span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span><span class="p">,</span>
-<span class="linenos">116</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">],</span>
-<span class="linenos">117</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;element_size&quot;</span><span class="p">],</span>
-<span class="linenos">118</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;signal_to_noise&quot;</span><span class="p">],</span>
-<span class="linenos">119</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;drift_correction&quot;</span><span class="p">])</span>
-<span class="linenos">120</span>     <span class="c1"># save the displacements</span>
-<span class="linenos">121</span>     <span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 97</span> <span class="c1"># define the parameters for the piv deformation detection</span>
+<span class="linenos"> 98</span> <span class="n">piv_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;element_size&#39;</span><span class="p">:</span> <span class="mf">14.0</span><span class="p">,</span> <span class="s1">&#39;window_size&#39;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span> <span class="s1">&#39;signal_to_noise&#39;</span><span class="p">:</span> <span class="mf">1.3</span><span class="p">,</span> <span class="s1">&#39;drift_correction&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="linenos"> 99</span>
+<span class="linenos">100</span> <span class="c1"># iterate over all the results objects</span>
+<span class="linenos">101</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+<span class="linenos">102</span>     <span class="c1"># set the parameters</span>
+<span class="linenos">103</span>     <span class="n">result</span><span class="o">.</span><span class="n">piv_parameters</span> <span class="o">=</span> <span class="n">piv_parameters</span>
+<span class="linenos">104</span>     <span class="c1"># get count</span>
+<span class="linenos">105</span>     <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">)</span>
+<span class="linenos">106</span>     <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">stack_reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">107</span>         <span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="linenos">108</span>     <span class="c1"># iterate over all stack pairs</span>
+<span class="linenos">109</span>     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+<span class="linenos">110</span>         <span class="c1"># get two consecutive stacks</span>
+<span class="linenos">111</span>         <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">stack_reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">112</span>             <span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+<span class="linenos">113</span>         <span class="c1"># or reference stack and one from the list</span>
+<span class="linenos">114</span>         <span class="k">else</span><span class="p">:</span>
+<span class="linenos">115</span>             <span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stack_reference</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">116</span>         <span class="c1"># and calculate the displacement between them</span>
+<span class="linenos">117</span>         <span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">get_displacements_from_stacks</span><span class="p">(</span><span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span><span class="p">,</span>
+<span class="linenos">118</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">],</span>
+<span class="linenos">119</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;element_size&quot;</span><span class="p">],</span>
+<span class="linenos">120</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;signal_to_noise&quot;</span><span class="p">],</span>
+<span class="linenos">121</span>                                                                    <span class="n">piv_parameters</span><span class="p">[</span><span class="s2">&quot;drift_correction&quot;</span><span class="p">])</span>
+<span class="linenos">122</span>     <span class="c1"># save the displacements</span>
+<span class="linenos">123</span>     <span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -416,22 +416,22 @@ size of deformation detection mesh here and keep the overall mesh size the same.
 </tbody>
 </table>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">140</span> <span class="c1"># define the parameters to generate the solver mesh and interpolate the piv mesh onto it</span>
-<span class="linenos">141</span> <span class="n">mesh_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;reference_stack&#39;</span><span class="p">:</span> <span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;element_size&#39;</span><span class="p">:</span> <span class="mf">14.0</span><span class="p">,</span> <span class="s1">&#39;mesh_size&#39;</span><span class="p">:</span> <span class="s1">&#39;piv&#39;</span><span class="p">}</span>
-<span class="linenos">142</span>
-<span class="linenos">143</span>
-<span class="linenos">144</span> <span class="c1"># iterate over all the results objects</span>
-<span class="linenos">145</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-<span class="linenos">146</span>     <span class="c1"># correct for the reference state</span>
-<span class="linenos">147</span>     <span class="n">displacement_list</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">subtract_reference_state</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">,</span> <span class="n">mesh_parameters</span><span class="p">[</span><span class="s2">&quot;reference_stack&quot;</span><span class="p">])</span>
-<span class="linenos">148</span>     <span class="c1"># set the parameters</span>
-<span class="linenos">149</span>     <span class="n">result</span><span class="o">.</span><span class="n">mesh_parameters</span> <span class="o">=</span> <span class="n">mesh_parameters</span>
-<span class="linenos">150</span>     <span class="c1"># iterate over all stack pairs</span>
-<span class="linenos">151</span>     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">)):</span>
-<span class="linenos">152</span>         <span class="c1"># and create the interpolated solver mesh</span>
-<span class="linenos">153</span>         <span class="n">result</span><span class="o">.</span><span class="n">solvers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">interpolate_mesh</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">displacement_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mesh_parameters</span><span class="p">)</span>
-<span class="linenos">154</span>     <span class="c1"># save the meshes</span>
-<span class="linenos">155</span>     <span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">142</span> <span class="c1"># define the parameters to generate the solver mesh and interpolate the piv mesh onto it</span>
+<span class="linenos">143</span> <span class="n">mesh_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;reference_stack&#39;</span><span class="p">:</span> <span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;element_size&#39;</span><span class="p">:</span> <span class="mf">14.0</span><span class="p">,</span> <span class="s1">&#39;mesh_size&#39;</span><span class="p">:</span> <span class="s1">&#39;piv&#39;</span><span class="p">}</span>
+<span class="linenos">144</span>
+<span class="linenos">145</span>
+<span class="linenos">146</span> <span class="c1"># iterate over all the results objects</span>
+<span class="linenos">147</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+<span class="linenos">148</span>     <span class="c1"># correct for the reference state</span>
+<span class="linenos">149</span>     <span class="n">displacement_list</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">subtract_reference_state</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">,</span> <span class="n">mesh_parameters</span><span class="p">[</span><span class="s2">&quot;reference_stack&quot;</span><span class="p">])</span>
+<span class="linenos">150</span>     <span class="c1"># set the parameters</span>
+<span class="linenos">151</span>     <span class="n">result</span><span class="o">.</span><span class="n">mesh_parameters</span> <span class="o">=</span> <span class="n">mesh_parameters</span>
+<span class="linenos">152</span>     <span class="c1"># iterate over all stack pairs</span>
+<span class="linenos">153</span>     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">)):</span>
+<span class="linenos">154</span>         <span class="c1"># and create the interpolated solver mesh</span>
+<span class="linenos">155</span>         <span class="n">result</span><span class="o">.</span><span class="n">solvers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">saenopy</span><span class="o">.</span><span class="n">interpolate_mesh</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mesh_piv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">displacement_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mesh_parameters</span><span class="p">)</span>
+<span class="linenos">156</span>     <span class="c1"># save the meshes</span>
+<span class="linenos">157</span>     <span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -484,28 +484,28 @@ size of deformation detection mesh here and keep the overall mesh size the same.
 </tbody>
 </table>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">187</span> <span class="c1"># define the parameters to generate the solver mesh and interpolate the piv mesh onto it</span>
-<span class="linenos">188</span> <span class="n">material_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="mf">6062.0</span><span class="p">,</span> <span class="s1">&#39;d_0&#39;</span><span class="p">:</span> <span class="mf">0.0025</span><span class="p">,</span> <span class="s1">&#39;lambda_s&#39;</span><span class="p">:</span> <span class="mf">0.0804</span><span class="p">,</span> <span class="s1">&#39;d_s&#39;</span><span class="p">:</span>  <span class="mf">0.03</span><span class="p">}</span>
-<span class="linenos">189</span> <span class="n">solve_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;step_size&#39;</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">,</span> <span class="s1">&#39;max_iterations&#39;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;rel_conv_crit&#39;</span><span class="p">:</span> <span class="mf">0.009</span><span class="p">}</span>
-<span class="linenos">190</span>
-<span class="linenos">191</span> <span class="c1"># iterate over all the results objects</span>
-<span class="linenos">192</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-<span class="linenos">193</span>     <span class="n">result</span><span class="o">.</span><span class="n">material_parameters</span> <span class="o">=</span> <span class="n">material_parameters</span>
-<span class="linenos">194</span>     <span class="n">result</span><span class="o">.</span><span class="n">solve_parameters</span> <span class="o">=</span> <span class="n">solve_parameters</span>
-<span class="linenos">195</span>     <span class="k">for</span> <span class="n">M</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">solvers</span><span class="p">:</span>
-<span class="linenos">196</span>         <span class="c1"># set the material model</span>
-<span class="linenos">197</span>         <span class="n">M</span><span class="o">.</span><span class="n">set_material_model</span><span class="p">(</span><span class="n">saenopy</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">SemiAffineFiberMaterial</span><span class="p">(</span>
-<span class="linenos">198</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">],</span>
-<span class="linenos">199</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;d_0&quot;</span><span class="p">],</span>
-<span class="linenos">200</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;lambda_s&quot;</span><span class="p">],</span>
-<span class="linenos">201</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;d_s&quot;</span><span class="p">],</span>
-<span class="linenos">202</span>         <span class="p">))</span>
-<span class="linenos">203</span>         <span class="c1"># find the regularized force solution</span>
-<span class="linenos">204</span>         <span class="n">M</span><span class="o">.</span><span class="n">solve_regularized</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">step_size</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;step_size&quot;</span><span class="p">],</span>
-<span class="linenos">205</span>                             <span class="n">max_iterations</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;max_iterations&quot;</span><span class="p">],</span>
-<span class="linenos">206</span>                             <span class="n">rel_conv_crit</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;rel_conv_crit&quot;</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">207</span>     <span class="c1"># save the forces</span>
-<span class="linenos">208</span>     <span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">189</span> <span class="c1"># define the parameters to generate the solver mesh and interpolate the piv mesh onto it</span>
+<span class="linenos">190</span> <span class="n">material_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="mf">6062.0</span><span class="p">,</span> <span class="s1">&#39;d_0&#39;</span><span class="p">:</span> <span class="mf">0.0025</span><span class="p">,</span> <span class="s1">&#39;lambda_s&#39;</span><span class="p">:</span> <span class="mf">0.0804</span><span class="p">,</span> <span class="s1">&#39;d_s&#39;</span><span class="p">:</span>  <span class="mf">0.03</span><span class="p">}</span>
+<span class="linenos">191</span> <span class="n">solve_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;step_size&#39;</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">,</span> <span class="s1">&#39;max_iterations&#39;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;rel_conv_crit&#39;</span><span class="p">:</span> <span class="mf">0.009</span><span class="p">}</span>
+<span class="linenos">192</span>
+<span class="linenos">193</span> <span class="c1"># iterate over all the results objects</span>
+<span class="linenos">194</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+<span class="linenos">195</span>     <span class="n">result</span><span class="o">.</span><span class="n">material_parameters</span> <span class="o">=</span> <span class="n">material_parameters</span>
+<span class="linenos">196</span>     <span class="n">result</span><span class="o">.</span><span class="n">solve_parameters</span> <span class="o">=</span> <span class="n">solve_parameters</span>
+<span class="linenos">197</span>     <span class="k">for</span> <span class="n">M</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">solvers</span><span class="p">:</span>
+<span class="linenos">198</span>         <span class="c1"># set the material model</span>
+<span class="linenos">199</span>         <span class="n">M</span><span class="o">.</span><span class="n">set_material_model</span><span class="p">(</span><span class="n">saenopy</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">SemiAffineFiberMaterial</span><span class="p">(</span>
+<span class="linenos">200</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">],</span>
+<span class="linenos">201</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;d_0&quot;</span><span class="p">],</span>
+<span class="linenos">202</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;lambda_s&quot;</span><span class="p">],</span>
+<span class="linenos">203</span>             <span class="n">material_parameters</span><span class="p">[</span><span class="s2">&quot;d_s&quot;</span><span class="p">],</span>
+<span class="linenos">204</span>         <span class="p">))</span>
+<span class="linenos">205</span>         <span class="c1"># find the regularized force solution</span>
+<span class="linenos">206</span>         <span class="n">M</span><span class="o">.</span><span class="n">solve_regularized</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">step_size</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;step_size&quot;</span><span class="p">],</span>
+<span class="linenos">207</span>                             <span class="n">max_iterations</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;max_iterations&quot;</span><span class="p">],</span>
+<span class="linenos">208</span>                             <span class="n">rel_conv_crit</span><span class="o">=</span><span class="n">solve_parameters</span><span class="p">[</span><span class="s2">&quot;rel_conv_crit&quot;</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">209</span>     <span class="c1"># save the forces</span>
+<span class="linenos">210</span>     <span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

@@ -18,6 +18,8 @@
 .. _sphx_glr_auto_examples_1_SingleCellTFM.py:
 
 
+.. _SectionExampleSingleCell:
+
 Classic TFM (liver fibroblasts)
 ===============================
 
@@ -27,17 +29,17 @@ This example can also be evaluated with the graphical user interface.
  .. figure:: ../images/Liver_fibroblasts.png
  
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-16
+.. GENERATED FROM PYTHON SOURCE LINES 14-18
 
 .. code-block:: default
-   :lineno-start: 13
+   :lineno-start: 15
 
 
     import saenopy
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-50
+.. GENERATED FROM PYTHON SOURCE LINES 20-52
 
 Downloading the example data files
 ----------------------------------
@@ -72,17 +74,17 @@ state ("Deformed") and once after relaxation with Cyto D as the reference state 
            └── ...
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-54
+.. GENERATED FROM PYTHON SOURCE LINES 52-56
 
 .. code-block:: default
-   :lineno-start: 51
+   :lineno-start: 53
 
 
     # download the data
     saenopy.load_example("ClassicSingleCellTFM")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-64
+.. GENERATED FROM PYTHON SOURCE LINES 57-66
 
 Loading the Stacks
 ------------------
@@ -94,10 +96,10 @@ the channels and which channel to use as the first channel where the deformation
 We replace the number of the z slice "z000" with a z placeholder "z{z}" to indicate that this number refers to the
 z slice. We do the same for the deformed state and for the reference stack.
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-75
+.. GENERATED FROM PYTHON SOURCE LINES 66-77
 
 .. code-block:: default
-   :lineno-start: 65
+   :lineno-start: 67
 
 
     # load the relaxed and the contracted stack
@@ -111,7 +113,7 @@ z slice. We do the same for the deformed state and for the reference stack.
         voxel_size=[0.7211, 0.7211, 0.988])
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 76-94
+.. GENERATED FROM PYTHON SOURCE LINES 78-96
 
 Detecting the Deformations
 --------------------------
@@ -132,10 +134,10 @@ for three example cells.
 +------------------+-------+
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-123
+.. GENERATED FROM PYTHON SOURCE LINES 96-125
 
 .. code-block:: default
-   :lineno-start: 95
+   :lineno-start: 97
 
 
     # define the parameters for the piv deformation detection
@@ -167,7 +169,7 @@ for three example cells.
         result.save()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-139
+.. GENERATED FROM PYTHON SOURCE LINES 126-141
 
 Generating the Finite Element Mesh
 ----------------------------------
@@ -185,10 +187,10 @@ size of deformation detection mesh here and keep the overall mesh size the same.
 +------------------+-------+
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 139-157
+.. GENERATED FROM PYTHON SOURCE LINES 141-159
 
 .. code-block:: default
-   :lineno-start: 140
+   :lineno-start: 142
 
 
     # define the parameters to generate the solver mesh and interpolate the piv mesh onto it
@@ -209,7 +211,7 @@ size of deformation detection mesh here and keep the overall mesh size the same.
         result.save()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 158-186
+.. GENERATED FROM PYTHON SOURCE LINES 160-188
 
 Calculating the Forces
 ----------------------
@@ -240,10 +242,10 @@ Define the material model and run the regularisation to fit the measured deforma
 +--------------------------+---------+
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 186-212
+.. GENERATED FROM PYTHON SOURCE LINES 188-214
 
 .. code-block:: default
-   :lineno-start: 187
+   :lineno-start: 189
 
 
     # define the parameters to generate the solver mesh and interpolate the piv mesh onto it
@@ -272,7 +274,7 @@ Define the material model and run the regularisation to fit the measured deforma
     
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 213-222
+.. GENERATED FROM PYTHON SOURCE LINES 215-224
 
 Display Results
 ----------------------
