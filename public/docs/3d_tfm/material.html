@@ -1,0 +1,728 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Regularization Mode" href="regularization.html" /><link rel="prev" title="Theory" href="theory.html" />
+
+    <!-- Generated with Sphinx 6.2.1 and Furo 2024.08.06 -->
+        <title>Material - saenopy 1.0.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=04c057b233f3c8d71940eee6080f658a04e2027d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=cf727022eb7470bc603c08d2e55c3247faec75c9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">saenopy 1.0.6 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">saenopy 1.0.6 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">3D TFM</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 3D TFM</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="parameters_piv.html">Detect Deformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_mesh.html">Create Finite Element Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_material.html">Material Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_regularisation.html">Regularisation Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="theory.html">Theory</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Theory</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Material</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regularization.html">Regularization Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="auto_examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/1_SingleCellTFM.html">Classic TFM (liver fibroblasts)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/2_DynamicalSingleCellTFM.html">Dynamic TFM (immune cells)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/3_BeadMeasurement.html">Microbeads to Detect Matrix Deformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/4_OrganoidTFM.html">Multicellular TFM (intestinal organoids)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/6_BrightfieldTFM.html">Brightfield TFM &amp; Cropped Input</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ReadInData.html">Read Files with Pyhton</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/3d_tfm/material.ipynb.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="Material">
+<span id="sectionmaterial"></span><h1>Material<a class="headerlink" href="#Material" title="Permalink to this heading">¶</a></h1>
+<p>The core of the saenopy package is its unique material model for fibered hydrogels, which is explained in the following section.</p>
+<section id="Semi-Affine-Fibers">
+<h2>Semi-Affine Fibers<a class="headerlink" href="#Semi-Affine-Fibers" title="Permalink to this heading">¶</a></h2>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/fiber.png"><img alt="../_images/fiber.png" src="../_images/fiber.png" style="width: 70%;" /></a>
+<figcaption>
+<p><span class="caption-text">The stiffness <span class="math notranslate nohighlight">\(\omega''(\lambda)\)</span> as a function of the strain. It is the second derivative of the energy function
+<span class="math notranslate nohighlight">\(\omega(\lambda)\)</span> of the material, which is used for the calculation as explained below.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The default material model is a semi-affine fiber material which is approximated by a mean field description.
+Semi-affine because the model material is not an affine material, but nevertheless shows some affine properties.
+The mean field description means that not individual fibers are simulated but the mean effect of them, as described below.</p>
+<p>The fibers are modeled to show different behavior in three strain regimes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>under compression (<span class="math notranslate nohighlight">\(-1 &lt; \lambda &lt; 0\)</span>) fibers buckle showing an exponential decay of the stiffness</p></li>
+<li><p>for small strains (<span class="math notranslate nohighlight">\(0&lt;\lambda&lt;\lambda_s\)</span>) fibers show a linear stiffness</p></li>
+<li><p>for larger strains (<span class="math notranslate nohighlight">\(\lambda_s&lt;\lambda\)</span>) fibers show strain stiffening with an exponential increase of the stiffness</p></li>
+</ul>
+</div></blockquote>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}w''(\lambda) = \begin{cases}
+k \exp\left(\frac{\lambda}{d_0}\right) &amp;\mbox{if } -1 \le \lambda &lt; 0 &amp; \mbox{buckling} \\
+k &amp; \mbox{if } 0 \le \lambda &lt; \lambda_s &amp; \mbox{linear} \\
+k \exp\left(\frac{\lambda-\lambda_s}{d_s}\right) &amp;\mbox{if } \lambda_s \le \lambda &amp; \mbox{stiffening} \\
+\end{cases}\end{split}\]</div>
+</div>
+<p>With the stiffness <span class="math notranslate nohighlight">\(k\)</span>, the buckling exponent <span class="math notranslate nohighlight">\(d_0\)</span>, the stiffening threshold <span class="math notranslate nohighlight">\(\lambda_s\)</span> and the stiffening exponent <span class="math notranslate nohighlight">\(d_s\)</span>.</p>
+<p>The energy function <span class="math notranslate nohighlight">\(w(\lambda)\)</span> is then used to calculate the energy stored in a tetrahedron with a deformation gradient
+<span class="math notranslate nohighlight">\(\mathbf{F}\)</span>, by applying the deformation gradient to a finite set of homogeneously distributed unit vectors <span class="math notranslate nohighlight">\(\vec{e_r}(\Omega)\)</span>.
+The strain <span class="math notranslate nohighlight">\(\lambda\)</span> of these vectors is used to calculate the energy <span class="math notranslate nohighlight">\(w\)</span> stored in this deformation.
+The energy density <span class="math notranslate nohighlight">\(W\)</span> is the average of the contributions of all these unit vectors <span class="math notranslate nohighlight">\(\vec{e_r}(\Omega)\)</span>;
+resulting in an average (mean field approach) of the energy over the full solid angle, assuming that possible fibers are distributed isotropically.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[W = \langle\omega(|\mathbf{F} \cdot \vec{e_r}(\Omega)|-1)\rangle_\Omega\]</div>
+</div>
+<p>With <span class="math notranslate nohighlight">\(\mathbf{F}\)</span> being the deformation gradient, <span class="math notranslate nohighlight">\(\vec{e_r}\)</span> a unit vector in a finite set of directions
+that approximate <span class="math notranslate nohighlight">\(\Omega\)</span> the solid angle,
+<span class="math notranslate nohighlight">\(\omega(\lambda)\)</span> the material’s energy function, <span class="math notranslate nohighlight">\(W\)</span> the energy density and
+<span class="math notranslate nohighlight">\(\langle \cdot \rangle_\Omega\)</span> denotes an average over the solid angle.</p>
+</section>
+<section id="Materials">
+<h2>Materials<a class="headerlink" href="#Materials" title="Permalink to this heading">¶</a></h2>
+<p>This section documents the class that represents this material.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="saenopy.materials.Material">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">saenopy.materials.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><a class="reference internal" href="../_modules/saenopy/materials.html#Material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.materials.Material" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base class for all material models.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="saenopy.materials.SemiAffineFiberMaterial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">saenopy.materials.</span></span><span class="sig-name descname"><span class="pre">SemiAffineFiberMaterial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/materials.html#SemiAffineFiberMaterial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.materials.SemiAffineFiberMaterial" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the default material of saenopy. The fibers show buckling (i.e. decaying stiffness) for
+-1 &lt; lambda &lt; 0, a linear stiffness response for small strains 0 &lt; lambda &lt; lambda_s, and strain stiffening for
+large strains lambda_s &lt; lambda.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – The stiffness of the material in the linear regime.</p></li>
+<li><p><strong>d_0</strong> (<em>float</em><em>, </em><em>optional</em>) – The decay parameter in the buckling regime. If omitted the material shows no buckling but has a linear response
+for compression.</p></li>
+<li><p><strong>lambda_s</strong> (<em>float</em><em>, </em><em>optional</em>) – The stretching where the strain stiffening starts. If omitted the material shows no strain stiffening.</p></li>
+<li><p><strong>d_s</strong> (<em>float</em><em>, </em><em>optional</em>) – The parameter specifying how strong the strain stiffening is. If omitted the material shows no strain
+stiffening.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="Defining-custom-materials">
+<h2>Defining custom materials<a class="headerlink" href="#Defining-custom-materials" title="Permalink to this heading">¶</a></h2>
+<p>To define a custom material, define a new class that is a subclass of <a class="reference internal" href="#saenopy.materials.Material" title="saenopy.materials.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">saenopy.materials.Material</span></code></a>. The class needs to define a function called <cite>stiffness</cite> to define the material model. Saenopy will call this function with an array of stretch values and the function has to an array of the corresponding stiffness values.</p>
+<p>This procedure is demonstrated in the following code example where a new material <cite>QuadracticMaterial</cite> is defined with a <cite>stiffness</cite> function that is linearly dependent on the stretch, i.e. resulting in a quadratic force response.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">saenopy.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">Material</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">class</span><span class="w"> </span><span class="nc">QuadracticMaterial</span><span class="p">(</span><span class="n">Material</span><span class="p">):</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos"> 5</span><span class="sd">    A custom material that has a quadratic force response.</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="sd">    Parameters</span>
+<span class="linenos"> 8</span><span class="sd">    ----------</span>
+<span class="linenos"> 9</span><span class="sd">    k : float</span>
+<span class="linenos">10</span><span class="sd">        The stiffness of the material.</span>
+<span class="linenos">11</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos">12</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<span class="linenos">13</span>        <span class="c1"># parameters</span>
+<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="k">def</span><span class="w"> </span><span class="nf">stiffness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="linenos">18</span>        <span class="c1"># the stiffness increases linearly, resulting in a quadratic force</span>
+<span class="linenos">19</span>        <span class="n">stiff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">*</span> <span class="n">s</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>        <span class="k">return</span> <span class="n">stiff</span>
+</pre></div>
+</div>
+<p>The newly defined material can be used with <code class="xref py py-meth docutils literal notranslate"><span class="pre">setMaterialModel()</span></code>.</p>
+</section>
+<section id="Macrorheology">
+<h2>Macrorheology<a class="headerlink" href="#Macrorheology" title="Permalink to this heading">¶</a></h2>
+<p>As the material model is based on microscopic parameters and not on macroscopic parameters (as e.g. the bulk stiffness), the material parameters cannot directly be measured using a rheometer. Instead the rheological experiments are “simulated” on the material model and the resulting curves can be used to fit the material parameters so that the the “simulated” rheological experiments on the material model fit the measured rheological response of the material.</p>
+<p>Here, we describe three different rheological experiments that can be simulated on the material model.</p>
+<ul class="simple">
+<li><p>Shear Rheometer</p></li>
+<li><p>Stretch Thinning</p></li>
+<li><p>Extensional Rheometer</p></li>
+</ul>
+<p>The stretch experiment is needed to reliably fit later on the buckling of the material and either the Shear Rheometer or the Extensional Rheometer experiment can be used to fit the fiber stiffness and the strain stiffening.</p>
+<p>This section first describes the functions that simulate these experiments on the material model and the next section explains how these functions can be used to fit the material parameters from experimental data.</p>
+<section id="Shear-Rheometer">
+<h3>Shear Rheometer<a class="headerlink" href="#Shear-Rheometer" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">macro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">saenopy.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">SemiAffineFiberMaterial</span>
+
+<span class="n">material</span> <span class="o">=</span> <span class="n">SemiAffineFiberMaterial</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mf">0.0004</span><span class="p">,</span> <span class="mf">0.0075</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
+
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">macro</span><span class="o">.</span><span class="n">get_shear_rheometer_stress</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">material</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;strain&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;shear stress [Pa]&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SemiAffineFiberMaterial(k=900, d0=0.0004, lambda_s=0.0075, ds=0.033)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/3d_tfm_material_6_1.png" src="../_images/3d_tfm_material_6_1.png" />
+</div>
+</div>
+</section>
+<section id="Stretcher">
+<h3>Stretcher<a class="headerlink" href="#Stretcher" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">macro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">saenopy.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">SemiAffineFiberMaterial</span>
+
+<span class="n">material</span> <span class="o">=</span> <span class="n">SemiAffineFiberMaterial</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mf">0.0004</span><span class="p">,</span> <span class="mf">0.0075</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
+
+<span class="n">lambda_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">lambda_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span>
+
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">macro</span><span class="o">.</span><span class="n">get_stretch_thinning</span><span class="p">(</span><span class="n">lambda_h</span><span class="p">,</span> <span class="n">lambda_v</span><span class="p">,</span> <span class="n">material</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;horizontal stretch&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;vertical contraction&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SemiAffineFiberMaterial(k=900, d0=0.0004, lambda_s=0.0075, ds=0.033)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/3d_tfm_material_9_1.png" src="../_images/3d_tfm_material_9_1.png" />
+</div>
+</div>
+</section>
+<section id="Extensional-Rheometer">
+<h3>Extensional Rheometer<a class="headerlink" href="#Extensional-Rheometer" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">macro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">saenopy.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">SemiAffineFiberMaterial</span><span class="p">,</span> <span class="n">LinearMaterial</span>
+
+<span class="n">material</span> <span class="o">=</span> <span class="n">SemiAffineFiberMaterial</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mf">0.0004</span><span class="p">,</span> <span class="mf">0.0075</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
+
+<span class="n">epsilon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.17</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">macro</span><span class="o">.</span><span class="n">get_extensional_rheometer_stress</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">material</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;strain&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;stress [Pa]&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SemiAffineFiberMaterial(k=900, d0=0.0004, lambda_s=0.0075, ds=0.033)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/3d_tfm_material_12_1.png" src="../_images/3d_tfm_material_12_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Fitting-material-parameters">
+<h2>Fitting material parameters<a class="headerlink" href="#Fitting-material-parameters" title="Permalink to this heading">¶</a></h2>
+<p>To fit the parameters of the material model for the use withe saenopy four parameters are needed, as explained above.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">macro</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># example data, stress-strain curves for collagen of three different concentrations</span>
+<span class="n">data0_6</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">4.27e-06</span><span class="p">,</span><span class="o">-</span><span class="mf">2.26e-03</span><span class="p">],[</span><span class="mf">1.89e-02</span><span class="p">,</span><span class="mf">5.90e-01</span><span class="p">],[</span><span class="mf">3.93e-02</span><span class="p">,</span><span class="mf">1.08e+00</span><span class="p">],[</span><span class="mf">5.97e-02</span><span class="p">,</span><span class="mf">1.57e+00</span><span class="p">],[</span><span class="mf">8.01e-02</span><span class="p">,</span><span class="mf">2.14e+00</span><span class="p">],[</span><span class="mf">1.00e-01</span><span class="p">,</span><span class="mf">2.89e+00</span><span class="p">],[</span><span class="mf">1.21e-01</span><span class="p">,</span><span class="mf">3.83e+00</span><span class="p">],[</span><span class="mf">1.41e-01</span><span class="p">,</span><span class="mf">5.09e+00</span><span class="p">],[</span><span class="mf">1.62e-01</span><span class="p">,</span><span class="mf">6.77e+00</span><span class="p">],[</span><span class="mf">1.82e-01</span><span class="p">,</span><span class="mf">8.94e+00</span><span class="p">],[</span><span class="mf">2.02e-01</span><span class="p">,</span><span class="mf">1.17e+01</span><span class="p">],[</span><span class="mf">2.23e-01</span><span class="p">,</span><span class="mf">1.49e+01</span><span class="p">],[</span><span class="mf">2.43e-01</span><span class="p">,</span><span class="mf">1.86e+01</span><span class="p">],[</span><span class="mf">2.63e-01</span><span class="p">,</span><span class="mf">2.28e+01</span><span class="p">],[</span><span class="mf">2.84e-01</span><span class="p">,</span><span class="mf">2.71e+01</span><span class="p">]])</span>
+<span class="n">data1_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.22e-05</span><span class="p">,</span><span class="o">-</span><span class="mf">1.61e-01</span><span class="p">],[</span><span class="mf">1.71e-02</span><span class="p">,</span><span class="mf">2.57e+00</span><span class="p">],[</span><span class="mf">3.81e-02</span><span class="p">,</span><span class="mf">4.69e+00</span><span class="p">],[</span><span class="mf">5.87e-02</span><span class="p">,</span><span class="mf">6.34e+00</span><span class="p">],[</span><span class="mf">7.92e-02</span><span class="p">,</span><span class="mf">7.93e+00</span><span class="p">],[</span><span class="mf">9.96e-02</span><span class="p">,</span><span class="mf">9.56e+00</span><span class="p">],[</span><span class="mf">1.20e-01</span><span class="p">,</span><span class="mf">1.14e+01</span><span class="p">],[</span><span class="mf">1.40e-01</span><span class="p">,</span><span class="mf">1.35e+01</span><span class="p">],[</span><span class="mf">1.61e-01</span><span class="p">,</span><span class="mf">1.62e+01</span><span class="p">],[</span><span class="mf">1.81e-01</span><span class="p">,</span><span class="mf">1.97e+01</span><span class="p">],[</span><span class="mf">2.02e-01</span><span class="p">,</span><span class="mf">2.41e+01</span><span class="p">],[</span><span class="mf">2.22e-01</span><span class="p">,</span><span class="mf">2.95e+01</span><span class="p">],[</span><span class="mf">2.42e-01</span><span class="p">,</span><span class="mf">3.63e+01</span><span class="p">],[</span><span class="mf">2.63e-01</span><span class="p">,</span><span class="mf">4.43e+01</span><span class="p">],[</span><span class="mf">2.83e-01</span><span class="p">,</span><span class="mf">5.36e+01</span><span class="p">],[</span><span class="mf">3.04e-01</span><span class="p">,</span><span class="mf">6.37e+01</span><span class="p">],[</span><span class="mf">3.24e-01</span><span class="p">,</span><span class="mf">7.47e+01</span><span class="p">],[</span><span class="mf">3.44e-01</span><span class="p">,</span><span class="mf">8.61e+01</span><span class="p">],[</span><span class="mf">3.65e-01</span><span class="p">,</span><span class="mf">9.75e+01</span><span class="p">],[</span><span class="mf">3.85e-01</span><span class="p">,</span><span class="mf">1.10e+02</span><span class="p">],[</span><span class="mf">4.06e-01</span><span class="p">,</span><span class="mf">1.22e+02</span><span class="p">],[</span><span class="mf">4.26e-01</span><span class="p">,</span><span class="mf">1.33e+02</span><span class="p">]])</span>
+<span class="n">data2_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">2.02e-05</span><span class="p">,</span><span class="o">-</span><span class="mf">6.50e-02</span><span class="p">],[</span><span class="mf">1.59e-02</span><span class="p">,</span><span class="mf">8.46e+00</span><span class="p">],[</span><span class="mf">3.76e-02</span><span class="p">,</span><span class="mf">1.68e+01</span><span class="p">],[</span><span class="mf">5.82e-02</span><span class="p">,</span><span class="mf">2.43e+01</span><span class="p">],[</span><span class="mf">7.86e-02</span><span class="p">,</span><span class="mf">3.34e+01</span><span class="p">],[</span><span class="mf">9.90e-02</span><span class="p">,</span><span class="mf">4.54e+01</span><span class="p">],[</span><span class="mf">1.19e-01</span><span class="p">,</span><span class="mf">6.11e+01</span><span class="p">],[</span><span class="mf">1.40e-01</span><span class="p">,</span><span class="mf">8.16e+01</span><span class="p">],[</span><span class="mf">1.60e-01</span><span class="p">,</span><span class="mf">1.06e+02</span><span class="p">],[</span><span class="mf">1.80e-01</span><span class="p">,</span><span class="mf">1.34e+02</span><span class="p">],[</span><span class="mf">2.01e-01</span><span class="p">,</span><span class="mf">1.65e+02</span><span class="p">],[</span><span class="mf">2.21e-01</span><span class="p">,</span><span class="mf">1.96e+02</span><span class="p">],[</span><span class="mf">2.41e-01</span><span class="p">,</span><span class="mf">2.26e+02</span><span class="p">]])</span>
+
+<span class="c1"># hold the buckling parameter constant, as it cannot be determined well with shear experiments</span>
+<span class="n">d_s0</span> <span class="o">=</span> <span class="mf">0.003</span>
+<span class="c1"># minimize 3 shear rheometer experiments with different collagen concentration and, therefore, different k1 parameters</span>
+<span class="c1"># but keep the other parameters the same</span>
+<span class="n">parameters</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="n">macro</span><span class="o">.</span><span class="n">minimize</span><span class="p">([</span>
+        <span class="p">[</span><span class="n">macro</span><span class="o">.</span><span class="n">get_shear_rheometer_stress</span><span class="p">,</span> <span class="n">data0_6</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d_s0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">])],</span>
+        <span class="p">[</span><span class="n">macro</span><span class="o">.</span><span class="n">get_shear_rheometer_stress</span><span class="p">,</span> <span class="n">data1_2</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">d_s0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">])],</span>
+        <span class="p">[</span><span class="n">macro</span><span class="o">.</span><span class="n">get_shear_rheometer_stress</span><span class="p">,</span> <span class="n">data2_4</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">d_s0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">])],</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">1800</span><span class="p">,</span> <span class="mi">12000</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">],</span>
+<span class="p">)</span>
+
+
+
+<span class="c1"># print the resulting parameters</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="c1"># and plot the results</span>
+<span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+u:\dropbox\software-github\saenopy\real\saenopy\macro.py:469: RuntimeWarning: invalid value encountered in log
+  cost = np.nansum((np.log(stretchy2) - np.log(sheary)) ** 2 * weights)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[6.81340555e+02 2.92017024e+03 1.10147721e+04 2.93635523e-02
+ 8.06826765e-02]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/3d_tfm_material_15_2.png" src="../_images/3d_tfm_material_15_2.png" />
+</div>
+</div>
+<p>To fit all parameters, experiments of different types should be combined, e.g. a shear rheological experiment and a stretching experiment.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">saenopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">macro</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># example data, stress-strain curves and a stretch experiment</span>
+<span class="n">shear</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">7.50e-03</span><span class="p">,</span><span class="mf">2.78e-01</span><span class="p">],[</span><span class="mf">1.25e-02</span><span class="p">,</span><span class="mf">4.35e-01</span><span class="p">],[</span><span class="mf">1.75e-02</span><span class="p">,</span><span class="mf">6.44e-01</span><span class="p">],[</span><span class="mf">2.25e-02</span><span class="p">,</span><span class="mf">7.86e-01</span><span class="p">],[</span><span class="mf">2.75e-02</span><span class="p">,</span><span class="mf">9.98e-01</span><span class="p">],[</span><span class="mf">3.25e-02</span><span class="p">,</span><span class="mf">1.13e+00</span><span class="p">],[</span><span class="mf">3.75e-02</span><span class="p">,</span><span class="mf">1.52e+00</span><span class="p">],[</span><span class="mf">4.25e-02</span><span class="p">,</span><span class="mf">1.57e+00</span><span class="p">],[</span><span class="mf">4.75e-02</span><span class="p">,</span><span class="mf">1.89e+00</span><span class="p">],[</span><span class="mf">5.25e-02</span><span class="p">,</span><span class="mf">2.10e+00</span><span class="p">],[</span><span class="mf">5.75e-02</span><span class="p">,</span><span class="mf">2.46e+00</span><span class="p">],[</span><span class="mf">6.25e-02</span><span class="p">,</span><span class="mf">2.67e+00</span><span class="p">],[</span><span class="mf">6.75e-02</span><span class="p">,</span><span class="mf">3.15e+00</span><span class="p">],[</span><span class="mf">7.25e-02</span><span class="p">,</span><span class="mf">3.13e+00</span><span class="p">],[</span><span class="mf">7.75e-02</span><span class="p">,</span><span class="mf">3.83e+00</span><span class="p">],[</span><span class="mf">8.25e-02</span><span class="p">,</span><span class="mf">4.32e+00</span><span class="p">],[</span><span class="mf">8.75e-02</span><span class="p">,</span><span class="mf">4.35e+00</span><span class="p">],[</span><span class="mf">9.25e-02</span><span class="p">,</span><span class="mf">4.78e+00</span><span class="p">],[</span><span class="mf">9.75e-02</span><span class="p">,</span><span class="mf">5.45e+00</span><span class="p">],[</span><span class="mf">1.02e-01</span><span class="p">,</span><span class="mf">5.87e+00</span><span class="p">],[</span><span class="mf">1.07e-01</span><span class="p">,</span><span class="mf">6.16e+00</span><span class="p">],[</span><span class="mf">1.13e-01</span><span class="p">,</span><span class="mf">6.89e+00</span><span class="p">],[</span><span class="mf">1.17e-01</span><span class="p">,</span><span class="mf">7.89e+00</span><span class="p">],[</span><span class="mf">1.22e-01</span><span class="p">,</span><span class="mf">8.28e+00</span><span class="p">],[</span><span class="mf">1.28e-01</span><span class="p">,</span><span class="mf">9.13e+00</span><span class="p">],[</span><span class="mf">1.33e-01</span><span class="p">,</span><span class="mf">1.06e+01</span><span class="p">],[</span><span class="mf">1.38e-01</span><span class="p">,</span><span class="mf">1.10e+01</span><span class="p">],[</span><span class="mf">1.42e-01</span><span class="p">,</span><span class="mf">1.27e+01</span><span class="p">],[</span><span class="mf">1.47e-01</span><span class="p">,</span><span class="mf">1.39e+01</span><span class="p">],[</span><span class="mf">1.52e-01</span><span class="p">,</span><span class="mf">1.53e+01</span><span class="p">],[</span><span class="mf">1.58e-01</span><span class="p">,</span><span class="mf">1.62e+01</span><span class="p">],[</span><span class="mf">1.63e-01</span><span class="p">,</span><span class="mf">1.78e+01</span><span class="p">],[</span><span class="mf">1.68e-01</span><span class="p">,</span><span class="mf">1.89e+01</span><span class="p">],[</span><span class="mf">1.72e-01</span><span class="p">,</span><span class="mf">2.03e+01</span><span class="p">],[</span><span class="mf">1.77e-01</span><span class="p">,</span><span class="mf">2.13e+01</span><span class="p">],[</span><span class="mf">1.82e-01</span><span class="p">,</span><span class="mf">2.23e+01</span><span class="p">],[</span><span class="mf">1.88e-01</span><span class="p">,</span><span class="mf">2.38e+01</span><span class="p">],[</span><span class="mf">1.93e-01</span><span class="p">,</span><span class="mf">2.56e+01</span><span class="p">],[</span><span class="mf">1.98e-01</span><span class="p">,</span><span class="mf">2.78e+01</span><span class="p">],[</span><span class="mf">2.03e-01</span><span class="p">,</span><span class="mf">3.02e+01</span><span class="p">],[</span><span class="mf">2.07e-01</span><span class="p">,</span><span class="mf">3.28e+01</span><span class="p">],[</span><span class="mf">2.12e-01</span><span class="p">,</span><span class="mf">3.55e+01</span><span class="p">],[</span><span class="mf">2.17e-01</span><span class="p">,</span><span class="mf">3.83e+01</span><span class="p">],[</span><span class="mf">2.23e-01</span><span class="p">,</span><span class="mf">4.13e+01</span><span class="p">],[</span><span class="mf">2.28e-01</span><span class="p">,</span><span class="mf">4.48e+01</span><span class="p">],[</span><span class="mf">2.33e-01</span><span class="p">,</span><span class="mf">4.86e+01</span><span class="p">],[</span><span class="mf">2.37e-01</span><span class="p">,</span><span class="mf">5.27e+01</span><span class="p">],[</span><span class="mf">2.42e-01</span><span class="p">,</span><span class="mf">5.64e+01</span><span class="p">],[</span><span class="mf">2.47e-01</span><span class="p">,</span><span class="mf">6.08e+01</span><span class="p">],[</span><span class="mf">2.53e-01</span><span class="p">,</span><span class="mf">6.48e+01</span><span class="p">],[</span><span class="mf">2.58e-01</span><span class="p">,</span><span class="mf">6.93e+01</span><span class="p">],[</span><span class="mf">2.63e-01</span><span class="p">,</span><span class="mf">7.44e+01</span><span class="p">],[</span><span class="mf">2.68e-01</span><span class="p">,</span><span class="mf">7.89e+01</span><span class="p">],[</span><span class="mf">2.73e-01</span><span class="p">,</span><span class="mf">8.40e+01</span><span class="p">],[</span><span class="mf">2.78e-01</span><span class="p">,</span><span class="mf">8.91e+01</span><span class="p">],[</span><span class="mf">2.82e-01</span><span class="p">,</span><span class="mf">9.41e+01</span><span class="p">],[</span><span class="mf">2.87e-01</span><span class="p">,</span><span class="mf">1.01e+02</span><span class="p">],[</span><span class="mf">2.92e-01</span><span class="p">,</span><span class="mf">1.07e+02</span><span class="p">],[</span><span class="mf">2.97e-01</span><span class="p">,</span><span class="mf">1.12e+02</span><span class="p">],[</span><span class="mf">3.02e-01</span><span class="p">,</span><span class="mf">1.19e+02</span><span class="p">],[</span><span class="mf">3.07e-01</span><span class="p">,</span><span class="mf">1.25e+02</span><span class="p">],[</span><span class="mf">3.12e-01</span><span class="p">,</span><span class="mf">1.32e+02</span><span class="p">],[</span><span class="mf">3.18e-01</span><span class="p">,</span><span class="mf">1.39e+02</span><span class="p">],[</span><span class="mf">3.23e-01</span><span class="p">,</span><span class="mf">1.45e+02</span><span class="p">],[</span><span class="mf">3.28e-01</span><span class="p">,</span><span class="mf">1.53e+02</span><span class="p">],[</span><span class="mf">3.33e-01</span><span class="p">,</span><span class="mf">1.60e+02</span><span class="p">],[</span><span class="mf">3.38e-01</span><span class="p">,</span><span class="mf">1.67e+02</span><span class="p">],[</span><span class="mf">3.43e-01</span><span class="p">,</span><span class="mf">1.76e+02</span><span class="p">],[</span><span class="mf">3.47e-01</span><span class="p">,</span><span class="mf">1.83e+02</span><span class="p">],[</span><span class="mf">3.52e-01</span><span class="p">,</span><span class="mf">1.90e+02</span><span class="p">],[</span><span class="mf">3.57e-01</span><span class="p">,</span><span class="mf">1.99e+02</span><span class="p">],[</span><span class="mf">3.62e-01</span><span class="p">,</span><span class="mf">2.06e+02</span><span class="p">],[</span><span class="mf">3.67e-01</span><span class="p">,</span><span class="mf">2.15e+02</span><span class="p">],[</span><span class="mf">3.72e-01</span><span class="p">,</span><span class="mf">2.23e+02</span><span class="p">],[</span><span class="mf">3.78e-01</span><span class="p">,</span><span class="mf">2.31e+02</span><span class="p">],[</span><span class="mf">3.83e-01</span><span class="p">,</span><span class="mf">2.40e+02</span><span class="p">],[</span><span class="mf">3.88e-01</span><span class="p">,</span><span class="mf">2.48e+02</span><span class="p">],[</span><span class="mf">3.93e-01</span><span class="p">,</span><span class="mf">2.56e+02</span><span class="p">],[</span><span class="mf">3.98e-01</span><span class="p">,</span><span class="mf">2.56e+02</span><span class="p">],[</span><span class="mf">4.03e-01</span><span class="p">,</span><span class="mf">2.73e+02</span><span class="p">],[</span><span class="mf">4.07e-01</span><span class="p">,</span><span class="mf">2.77e+02</span><span class="p">],[</span><span class="mf">4.12e-01</span><span class="p">,</span><span class="mf">2.86e+02</span><span class="p">],[</span><span class="mf">4.17e-01</span><span class="p">,</span><span class="mf">2.97e+02</span><span class="p">],[</span><span class="mf">4.22e-01</span><span class="p">,</span><span class="mf">3.08e+02</span><span class="p">],[</span><span class="mf">4.27e-01</span><span class="p">,</span><span class="mf">3.15e+02</span><span class="p">],[</span><span class="mf">4.32e-01</span><span class="p">,</span><span class="mf">3.25e+02</span><span class="p">],[</span><span class="mf">4.38e-01</span><span class="p">,</span><span class="mf">3.33e+02</span><span class="p">],[</span><span class="mf">4.43e-01</span><span class="p">,</span><span class="mf">3.39e+02</span><span class="p">],[</span><span class="mf">4.48e-01</span><span class="p">,</span><span class="mf">3.51e+02</span><span class="p">],[</span><span class="mf">4.53e-01</span><span class="p">,</span><span class="mf">3.59e+02</span><span class="p">],[</span><span class="mf">4.58e-01</span><span class="p">,</span><span class="mf">3.69e+02</span><span class="p">],[</span><span class="mf">4.63e-01</span><span class="p">,</span><span class="mf">3.76e+02</span><span class="p">],[</span><span class="mf">4.68e-01</span><span class="p">,</span><span class="mf">3.83e+02</span><span class="p">],[</span><span class="mf">4.72e-01</span><span class="p">,</span><span class="mf">3.93e+02</span><span class="p">],[</span><span class="mf">4.77e-01</span><span class="p">,</span><span class="mf">3.97e+02</span><span class="p">],[</span><span class="mf">4.82e-01</span><span class="p">,</span><span class="mf">4.04e+02</span><span class="p">],[</span><span class="mf">4.87e-01</span><span class="p">,</span><span class="mf">4.13e+02</span><span class="p">],[</span><span class="mf">4.92e-01</span><span class="p">,</span><span class="mf">4.18e+02</span><span class="p">],[</span><span class="mf">4.97e-01</span><span class="p">,</span><span class="mf">4.31e+02</span><span class="p">],[</span><span class="mf">5.02e-01</span><span class="p">,</span><span class="mf">4.38e+02</span><span class="p">],[</span><span class="mf">5.07e-01</span><span class="p">,</span><span class="mf">4.25e+02</span><span class="p">],[</span><span class="mf">5.12e-01</span><span class="p">,</span><span class="mf">4.48e+02</span><span class="p">],[</span><span class="mf">5.17e-01</span><span class="p">,</span><span class="mf">4.49e+02</span><span class="p">],[</span><span class="mf">5.22e-01</span><span class="p">,</span><span class="mf">4.56e+02</span><span class="p">],[</span><span class="mf">5.27e-01</span><span class="p">,</span><span class="mf">4.66e+02</span><span class="p">],[</span><span class="mf">5.32e-01</span><span class="p">,</span><span class="mf">4.70e+02</span><span class="p">],[</span><span class="mf">5.37e-01</span><span class="p">,</span><span class="mf">4.76e+02</span><span class="p">],[</span><span class="mf">5.42e-01</span><span class="p">,</span><span class="mf">4.82e+02</span><span class="p">],[</span><span class="mf">5.47e-01</span><span class="p">,</span><span class="mf">4.89e+02</span><span class="p">],[</span><span class="mf">5.52e-01</span><span class="p">,</span><span class="mf">4.99e+02</span><span class="p">],[</span><span class="mf">5.57e-01</span><span class="p">,</span><span class="mf">5.01e+02</span><span class="p">],[</span><span class="mf">5.62e-01</span><span class="p">,</span><span class="mf">5.06e+02</span><span class="p">],[</span><span class="mf">5.68e-01</span><span class="p">,</span><span class="mf">5.14e+02</span><span class="p">],[</span><span class="mf">5.73e-01</span><span class="p">,</span><span class="mf">5.15e+02</span><span class="p">],[</span><span class="mf">5.78e-01</span><span class="p">,</span><span class="mf">5.21e+02</span><span class="p">],[</span><span class="mf">5.83e-01</span><span class="p">,</span><span class="mf">5.28e+02</span><span class="p">],[</span><span class="mf">5.88e-01</span><span class="p">,</span><span class="mf">5.30e+02</span><span class="p">],[</span><span class="mf">5.93e-01</span><span class="p">,</span><span class="mf">5.38e+02</span><span class="p">],[</span><span class="mf">5.98e-01</span><span class="p">,</span><span class="mf">5.40e+02</span><span class="p">],[</span><span class="mf">6.03e-01</span><span class="p">,</span><span class="mf">5.41e+02</span><span class="p">],[</span><span class="mf">6.08e-01</span><span class="p">,</span><span class="mf">5.38e+02</span><span class="p">],[</span><span class="mf">6.13e-01</span><span class="p">,</span><span class="mf">5.39e+02</span><span class="p">],[</span><span class="mf">6.18e-01</span><span class="p">,</span><span class="mf">5.50e+02</span><span class="p">],[</span><span class="mf">6.23e-01</span><span class="p">,</span><span class="mf">5.56e+02</span><span class="p">],[</span><span class="mf">6.27e-01</span><span class="p">,</span><span class="mf">5.59e+02</span><span class="p">],[</span><span class="mf">6.32e-01</span><span class="p">,</span><span class="mf">5.68e+02</span><span class="p">],[</span><span class="mf">6.37e-01</span><span class="p">,</span><span class="mf">5.69e+02</span><span class="p">],[</span><span class="mf">6.42e-01</span><span class="p">,</span><span class="mf">5.70e+02</span><span class="p">],[</span><span class="mf">6.47e-01</span><span class="p">,</span><span class="mf">5.79e+02</span><span class="p">],[</span><span class="mf">6.52e-01</span><span class="p">,</span><span class="mf">5.78e+02</span><span class="p">],[</span><span class="mf">6.57e-01</span><span class="p">,</span><span class="mf">5.80e+02</span><span class="p">],[</span><span class="mf">6.62e-01</span><span class="p">,</span><span class="mf">5.83e+02</span><span class="p">],[</span><span class="mf">6.67e-01</span><span class="p">,</span><span class="mf">5.83e+02</span><span class="p">],[</span><span class="mf">6.72e-01</span><span class="p">,</span><span class="mf">5.89e+02</span><span class="p">],[</span><span class="mf">6.77e-01</span><span class="p">,</span><span class="mf">5.86e+02</span><span class="p">],[</span><span class="mf">6.82e-01</span><span class="p">,</span><span class="mf">5.88e+02</span><span class="p">],[</span><span class="mf">6.88e-01</span><span class="p">,</span><span class="mf">5.91e+02</span><span class="p">],[</span><span class="mf">6.93e-01</span><span class="p">,</span><span class="mf">5.86e+02</span><span class="p">],[</span><span class="mf">6.98e-01</span><span class="p">,</span><span class="mf">5.91e+02</span><span class="p">],[</span><span class="mf">7.03e-01</span><span class="p">,</span><span class="mf">5.91e+02</span><span class="p">],[</span><span class="mf">7.08e-01</span><span class="p">,</span><span class="mf">5.87e+02</span><span class="p">],[</span><span class="mf">7.13e-01</span><span class="p">,</span><span class="mf">5.89e+02</span><span class="p">],[</span><span class="mf">7.18e-01</span><span class="p">,</span><span class="mf">5.88e+02</span><span class="p">],[</span><span class="mf">7.23e-01</span><span class="p">,</span><span class="mf">5.89e+02</span><span class="p">],[</span><span class="mf">7.28e-01</span><span class="p">,</span><span class="mf">5.89e+02</span><span class="p">],[</span><span class="mf">7.33e-01</span><span class="p">,</span><span class="mf">5.81e+02</span><span class="p">],[</span><span class="mf">7.38e-01</span><span class="p">,</span><span class="mf">5.85e+02</span><span class="p">],[</span><span class="mf">7.43e-01</span><span class="p">,</span><span class="mf">5.86e+02</span><span class="p">],[</span><span class="mf">7.48e-01</span><span class="p">,</span><span class="mf">5.78e+02</span><span class="p">],[</span><span class="mf">7.52e-01</span><span class="p">,</span><span class="mf">5.78e+02</span><span class="p">],[</span><span class="mf">7.57e-01</span><span class="p">,</span><span class="mf">5.79e+02</span><span class="p">],[</span><span class="mf">7.62e-01</span><span class="p">,</span><span class="mf">5.76e+02</span><span class="p">],[</span><span class="mf">7.67e-01</span><span class="p">,</span><span class="mf">5.74e+02</span><span class="p">],[</span><span class="mf">7.72e-01</span><span class="p">,</span><span class="mf">5.70e+02</span><span class="p">],[</span><span class="mf">7.77e-01</span><span class="p">,</span><span class="mf">5.73e+02</span><span class="p">],[</span><span class="mf">7.82e-01</span><span class="p">,</span><span class="mf">5.70e+02</span><span class="p">],[</span><span class="mf">7.87e-01</span><span class="p">,</span><span class="mf">5.66e+02</span><span class="p">],[</span><span class="mf">7.92e-01</span><span class="p">,</span><span class="mf">5.69e+02</span><span class="p">],[</span><span class="mf">7.97e-01</span><span class="p">,</span><span class="mf">5.59e+02</span><span class="p">],[</span><span class="mf">8.02e-01</span><span class="p">,</span><span class="mf">5.50e+02</span><span class="p">],[</span><span class="mf">8.07e-01</span><span class="p">,</span><span class="mf">5.52e+02</span><span class="p">],[</span><span class="mf">8.12e-01</span><span class="p">,</span><span class="mf">5.52e+02</span><span class="p">],[</span><span class="mf">8.18e-01</span><span class="p">,</span><span class="mf">5.59e+02</span><span class="p">],[</span><span class="mf">8.23e-01</span><span class="p">,</span><span class="mf">5.58e+02</span><span class="p">],[</span><span class="mf">8.28e-01</span><span class="p">,</span><span class="mf">5.57e+02</span><span class="p">],[</span><span class="mf">8.33e-01</span><span class="p">,</span><span class="mf">5.59e+02</span><span class="p">],[</span><span class="mf">8.38e-01</span><span class="p">,</span><span class="mf">5.53e+02</span><span class="p">],[</span><span class="mf">8.43e-01</span><span class="p">,</span><span class="mf">5.55e+02</span><span class="p">],[</span><span class="mf">8.48e-01</span><span class="p">,</span><span class="mf">5.56e+02</span><span class="p">],[</span><span class="mf">8.53e-01</span><span class="p">,</span><span class="mf">5.49e+02</span><span class="p">],[</span><span class="mf">8.58e-01</span><span class="p">,</span><span class="mf">5.50e+02</span><span class="p">],[</span><span class="mf">8.63e-01</span><span class="p">,</span><span class="mf">5.47e+02</span><span class="p">],[</span><span class="mf">8.68e-01</span><span class="p">,</span><span class="mf">5.22e+02</span><span class="p">],[</span><span class="mf">8.73e-01</span><span class="p">,</span><span class="mf">5.44e+02</span><span class="p">],[</span><span class="mf">8.77e-01</span><span class="p">,</span><span class="mf">5.36e+02</span><span class="p">],[</span><span class="mf">8.82e-01</span><span class="p">,</span><span class="mf">5.38e+02</span><span class="p">],[</span><span class="mf">8.87e-01</span><span class="p">,</span><span class="mf">5.33e+02</span><span class="p">],[</span><span class="mf">8.92e-01</span><span class="p">,</span><span class="mf">5.28e+02</span><span class="p">],[</span><span class="mf">8.97e-01</span><span class="p">,</span><span class="mf">5.30e+02</span><span class="p">],[</span><span class="mf">9.02e-01</span><span class="p">,</span><span class="mf">5.23e+02</span><span class="p">],[</span><span class="mf">9.07e-01</span><span class="p">,</span><span class="mf">5.22e+02</span><span class="p">],[</span><span class="mf">9.12e-01</span><span class="p">,</span><span class="mf">5.18e+02</span><span class="p">],[</span><span class="mf">9.17e-01</span><span class="p">,</span><span class="mf">5.12e+02</span><span class="p">],[</span><span class="mf">9.22e-01</span><span class="p">,</span><span class="mf">5.11e+02</span><span class="p">],[</span><span class="mf">9.27e-01</span><span class="p">,</span><span class="mf">5.05e+02</span><span class="p">],[</span><span class="mf">9.32e-01</span><span class="p">,</span><span class="mf">5.03e+02</span><span class="p">],[</span><span class="mf">9.38e-01</span><span class="p">,</span><span class="mf">4.99e+02</span><span class="p">],[</span><span class="mf">9.43e-01</span><span class="p">,</span><span class="mf">4.88e+02</span><span class="p">],[</span><span class="mf">9.48e-01</span><span class="p">,</span><span class="mf">4.86e+02</span><span class="p">],[</span><span class="mf">9.53e-01</span><span class="p">,</span><span class="mf">4.82e+02</span><span class="p">],[</span><span class="mf">9.58e-01</span><span class="p">,</span><span class="mf">4.73e+02</span><span class="p">],[</span><span class="mf">9.63e-01</span><span class="p">,</span><span class="mf">4.70e+02</span><span class="p">],[</span><span class="mf">9.68e-01</span><span class="p">,</span><span class="mf">4.61e+02</span><span class="p">],[</span><span class="mf">9.73e-01</span><span class="p">,</span><span class="mf">4.56e+02</span><span class="p">],[</span><span class="mf">9.78e-01</span><span class="p">,</span><span class="mf">4.51e+02</span><span class="p">],[</span><span class="mf">9.83e-01</span><span class="p">,</span><span class="mf">4.41e+02</span><span class="p">],[</span><span class="mf">9.88e-01</span><span class="p">,</span><span class="mf">4.36e+02</span><span class="p">],[</span><span class="mf">9.93e-01</span><span class="p">,</span><span class="mf">4.22e+02</span><span class="p">],[</span><span class="mf">9.98e-01</span><span class="p">,</span><span class="mf">4.09e+02</span><span class="p">],[</span><span class="mf">1.00e+00</span><span class="p">,</span><span class="mf">4.07e+02</span><span class="p">]])[:</span><span class="mi">50</span><span class="p">]</span>
+<span class="n">stretch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">9.33e-01</span><span class="p">,</span><span class="mf">1.02e+00</span><span class="p">],[</span><span class="mf">9.40e-01</span><span class="p">,</span><span class="mf">1.01e+00</span><span class="p">],[</span><span class="mf">9.47e-01</span><span class="p">,</span><span class="mf">1.02e+00</span><span class="p">],[</span><span class="mf">9.53e-01</span><span class="p">,</span><span class="mf">1.02e+00</span><span class="p">],[</span><span class="mf">9.60e-01</span><span class="p">,</span><span class="mf">1.02e+00</span><span class="p">],[</span><span class="mf">9.67e-01</span><span class="p">,</span><span class="mf">1.01e+00</span><span class="p">],[</span><span class="mf">9.73e-01</span><span class="p">,</span><span class="mf">1.01e+00</span><span class="p">],[</span><span class="mf">9.80e-01</span><span class="p">,</span><span class="mf">1.01e+00</span><span class="p">],[</span><span class="mf">9.87e-01</span><span class="p">,</span><span class="mf">1.01e+00</span><span class="p">],[</span><span class="mf">9.93e-01</span><span class="p">,</span><span class="mf">1.00e+00</span><span class="p">],[</span><span class="mf">1.00e+00</span><span class="p">,</span><span class="mf">1.00e+00</span><span class="p">],[</span><span class="mf">1.01e+00</span><span class="p">,</span><span class="mf">9.89e-01</span><span class="p">],[</span><span class="mf">1.01e+00</span><span class="p">,</span><span class="mf">9.70e-01</span><span class="p">],[</span><span class="mf">1.02e+00</span><span class="p">,</span><span class="mf">9.41e-01</span><span class="p">],[</span><span class="mf">1.03e+00</span><span class="p">,</span><span class="mf">9.00e-01</span><span class="p">],[</span><span class="mf">1.03e+00</span><span class="p">,</span><span class="mf">8.46e-01</span><span class="p">],[</span><span class="mf">1.04e+00</span><span class="p">,</span><span class="mf">7.76e-01</span><span class="p">],[</span><span class="mf">1.05e+00</span><span class="p">,</span><span class="mf">6.89e-01</span><span class="p">],[</span><span class="mf">1.05e+00</span><span class="p">,</span><span class="mf">6.02e-01</span><span class="p">],[</span><span class="mf">1.06e+00</span><span class="p">,</span><span class="mf">5.17e-01</span><span class="p">],[</span><span class="mf">1.07e+00</span><span class="p">,</span><span class="mf">4.39e-01</span><span class="p">],[</span><span class="mf">1.07e+00</span><span class="p">,</span><span class="mf">3.74e-01</span><span class="p">],[</span><span class="mf">1.08e+00</span><span class="p">,</span><span class="mf">3.17e-01</span><span class="p">],[</span><span class="mf">1.09e+00</span><span class="p">,</span><span class="mf">2.72e-01</span><span class="p">],[</span><span class="mf">1.09e+00</span><span class="p">,</span><span class="mf">2.30e-01</span><span class="p">],[</span><span class="mf">1.10e+00</span><span class="p">,</span><span class="mf">2.02e-01</span><span class="p">]])</span>
+
+<span class="c1"># fit all 4 parameters simultaneously to two experiments</span>
+<span class="n">parameters</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="n">macro</span><span class="o">.</span><span class="n">minimize</span><span class="p">([</span>
+        <span class="p">[</span><span class="n">macro</span><span class="o">.</span><span class="n">get_shear_rheometer_stress</span><span class="p">,</span> <span class="n">shear</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">])],</span>
+        <span class="p">[</span><span class="n">macro</span><span class="o">.</span><span class="n">get_stretch_thinning</span><span class="p">,</span> <span class="n">stretch</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">])],</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mf">0.0004</span><span class="p">,</span> <span class="mf">0.075</span><span class="p">,</span> <span class="mf">0.33</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># print the resulting parameters</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="c1"># and plot the results</span>
+<span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[9.01527313e+02 9.67595545e-04 6.00863532e-03 3.28366376e-02]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/3d_tfm_material_17_1.png" src="../_images/3d_tfm_material_17_1.png" />
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="regularization.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Regularization Mode</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="theory.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Theory</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2019-2023, Richard Gerum, David Böhringer
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Material</a><ul>
+<li><a class="reference internal" href="#Semi-Affine-Fibers">Semi-Affine Fibers</a></li>
+<li><a class="reference internal" href="#Materials">Materials</a><ul>
+<li><a class="reference internal" href="#saenopy.materials.Material"><code class="docutils literal notranslate"><span class="pre">Material</span></code></a></li>
+<li><a class="reference internal" href="#saenopy.materials.SemiAffineFiberMaterial"><code class="docutils literal notranslate"><span class="pre">SemiAffineFiberMaterial</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Defining-custom-materials">Defining custom materials</a></li>
+<li><a class="reference internal" href="#Macrorheology">Macrorheology</a><ul>
+<li><a class="reference internal" href="#Shear-Rheometer">Shear Rheometer</a></li>
+<li><a class="reference internal" href="#Stretcher">Stretcher</a></li>
+<li><a class="reference internal" href="#Extensional-Rheometer">Extensional Rheometer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Fitting-material-parameters">Fitting material parameters</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/jquery.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

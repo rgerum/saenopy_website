@@ -2,10 +2,11 @@
 <html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Theory" href="theory.html" /><link rel="prev" title="Material Parameters" href="parameters_material.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2024.08.06 -->
-        <title>Overview: module code - saenopy 1.0.6 documentation</title>
+        <title>Regularisation Parameters - saenopy 1.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=04c057b233f3c8d71940eee6080f658a04e2027d" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -181,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -202,31 +203,31 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../3d_tfm/index.html">3D TFM</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 3D TFM</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../3d_tfm/interface.html">Interface</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_piv.html">Detect Deformations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_mesh.html">Create Finite Element Mesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_material.html">Material Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_regularisation.html">Regularisation Parameters</a></li>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">3D TFM</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 3D TFM</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="parameters.html">Parameters</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="parameters_piv.html">Detect Deformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_mesh.html">Create Finite Element Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_material.html">Material Parameters</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Regularisation Parameters</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/theory.html">Theory</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Theory</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/material.html">Material</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/regularization.html">Regularization Mode</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="theory.html">Theory</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Theory</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="material.html">Material</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regularization.html">Regularization Mode</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/auto_examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/1_SingleCellTFM.html">Classic TFM (liver fibroblasts)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/2_DynamicalSingleCellTFM.html">Dynamic TFM (immune cells)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/3_BeadMeasurement.html">Microbeads to Detect Matrix Deformations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/4_OrganoidTFM.html">Multicellular TFM (intestinal organoids)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/6_BrightfieldTFM.html">Brightfield TFM &amp; Cropped Input</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="auto_examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/1_SingleCellTFM.html">Classic TFM (liver fibroblasts)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/2_DynamicalSingleCellTFM.html">Dynamic TFM (immune cells)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/3_BeadMeasurement.html">Microbeads to Detect Matrix Deformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/4_OrganoidTFM.html">Multicellular TFM (intestinal organoids)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/6_BrightfieldTFM.html">Brightfield TFM &amp; Cropped Input</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/ReadInData.html">Read Files with Pyhton</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ReadInData.html">Read Files with Pyhton</a></li>
 </ul>
 </li>
 </ul>
@@ -250,7 +251,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/3d_tfm/parameters_regularisation.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
@@ -259,23 +266,76 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>All modules for which code is available</h1>
-<ul><li><a href="saenopy/materials.html">saenopy.materials</a></li>
-<li><a href="saenopy/solver.html">saenopy.solver</a></li>
-</ul>
+          <section id="regularisation-parameters">
+<h1>Regularisation Parameters<a class="headerlink" href="#regularisation-parameters" title="Permalink to this heading">¶</a></h1>
+<section id="alpha">
+<h2>alpha<a class="headerlink" href="#alpha" title="Permalink to this heading">¶</a></h2>
+<p>How much to regularise the forces.
+This is the most important parameter of the regularisation step.</p>
+<p>A <strong>low alpha</strong> value results in a good fit of the measured
+deformations but can lead to more higher forces and thus increases the chance to obtain spurious forces that only explain
+the measurement noise from measuring the displacement field.</p>
+<p>A <strong>high alpha</strong> value makes the regularisation procedure focus more on obtaining small
+forces then to match the measured deformation field well. This can lead to a weak force field.</p>
+<figure class="align-default">
+<img alt="../_images/different_alphas.png" src="../_images/different_alphas.png" />
+</figure>
+</section>
+<section id="step-size">
+<h2>step size<a class="headerlink" href="#step-size" title="Permalink to this heading">¶</a></h2>
+<p>The step size of one regularisation step. In case everything would be completely linear without material or geometrical
+non-linearities, a stepper of 1 would result in a perfect fit within one iteration. Small stepper values increase the
+number of iterations needed to find a solution.</p>
+</section>
+<section id="max-iterations">
+<h2>max iterations<a class="headerlink" href="#max-iterations" title="Permalink to this heading">¶</a></h2>
+<p>The maximum number of iterations after which to stop the fitting procedure if the rel. conv. crit. did not terminate the
+iteration earlier.</p>
+</section>
+<section id="rel-conv-crit">
+<h2>rel. conv. crit.<a class="headerlink" href="#rel-conv-crit" title="Permalink to this heading">¶</a></h2>
+<p>The relative convergence criterion. If the standard deviation of the energy of the last 6 iterations divided my the mean
+does not exceed this value, the fitting procedure is considered converged and iterations are stopped.</p>
+</section>
+<section id="prev-t-as-start">
+<h2>prev_t_as_start<a class="headerlink" href="#prev-t-as-start" title="Permalink to this heading">¶</a></h2>
+<p>Optional for time lapse series: If enabled, the deformation field of the previous time step is used as the starting point
+for the force reconstruction of the following time step. This can be useful for force reconstruction of spheroids and organoids
+that gradually increase their force over time. Here the option can speed up the convergence process by a factor of 5-50.</p>
+</section>
+</section>
+
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="theory.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Theory</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="parameters_material.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Material Parameters</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -294,8 +354,31 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Regularisation Parameters</a><ul>
+<li><a class="reference internal" href="#alpha">alpha</a></li>
+<li><a class="reference internal" href="#step-size">step size</a></li>
+<li><a class="reference internal" href="#max-iterations">max iterations</a></li>
+<li><a class="reference internal" href="#rel-conv-crit">rel. conv. crit.</a></li>
+<li><a class="reference internal" href="#prev-t-as-start">prev_t_as_start</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

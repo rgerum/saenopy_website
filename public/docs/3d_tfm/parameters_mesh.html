@@ -2,10 +2,11 @@
 <html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Material Parameters" href="parameters_material.html" /><link rel="prev" title="Detect Deformations" href="parameters_piv.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2024.08.06 -->
-        <title>Overview: module code - saenopy 1.0.6 documentation</title>
+        <title>Create Finite Element Mesh - saenopy 1.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=04c057b233f3c8d71940eee6080f658a04e2027d" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -181,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -202,31 +203,31 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../3d_tfm/index.html">3D TFM</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 3D TFM</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../3d_tfm/interface.html">Interface</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_piv.html">Detect Deformations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_mesh.html">Create Finite Element Mesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_material.html">Material Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/parameters_regularisation.html">Regularisation Parameters</a></li>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">3D TFM</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 3D TFM</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="parameters.html">Parameters</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="parameters_piv.html">Detect Deformations</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Create Finite Element Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_material.html">Material Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_regularisation.html">Regularisation Parameters</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/theory.html">Theory</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Theory</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/material.html">Material</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/regularization.html">Regularization Mode</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="theory.html">Theory</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Theory</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="material.html">Material</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regularization.html">Regularization Mode</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/auto_examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/1_SingleCellTFM.html">Classic TFM (liver fibroblasts)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/2_DynamicalSingleCellTFM.html">Dynamic TFM (immune cells)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/3_BeadMeasurement.html">Microbeads to Detect Matrix Deformations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/4_OrganoidTFM.html">Multicellular TFM (intestinal organoids)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/auto_examples/6_BrightfieldTFM.html">Brightfield TFM &amp; Cropped Input</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="auto_examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/1_SingleCellTFM.html">Classic TFM (liver fibroblasts)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/2_DynamicalSingleCellTFM.html">Dynamic TFM (immune cells)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/3_BeadMeasurement.html">Microbeads to Detect Matrix Deformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/4_OrganoidTFM.html">Multicellular TFM (intestinal organoids)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_examples/6_BrightfieldTFM.html">Brightfield TFM &amp; Cropped Input</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/ReadInData.html">Read Files with Pyhton</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="ReadInData.html">Read Files with Pyhton</a></li>
 </ul>
 </li>
 </ul>
@@ -250,7 +251,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/3d_tfm/parameters_mesh.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
@@ -259,23 +266,84 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>All modules for which code is available</h1>
-<ul><li><a href="saenopy/materials.html">saenopy.materials</a></li>
-<li><a href="saenopy/solver.html">saenopy.solver</a></li>
+          <section id="create-finite-element-mesh">
+<h1>Create Finite Element Mesh<a class="headerlink" href="#create-finite-element-mesh" title="Permalink to this heading">¶</a></h1>
+<section id="reference-stack">
+<h2>reference stack<a class="headerlink" href="#reference-stack" title="Permalink to this heading">¶</a></h2>
+<p>This parameter can have values depending on the type of experiment. If the experiment has a
+specified reference stack (with the relaxed cell) the appropriate option will be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>reference stack</p></li>
 </ul>
+</div></blockquote>
+<p>If the measurement is a time series, it is also possible to set a single time point as the reference state
+(e.g. after cell seeding or relaxation) using the “reference stack” option. Further options are to calculate the
+deformations and forces beetween consecutive stacks at each time step (“next”), or to locally accumulate the
+deformations over time at each voxel and calculate the cumulated forces at each time step (“cumul.”). Furthermore, if
+the matrix is in an undeformed state for most of the time (e.g. moving cells imaged over a long periods of time),
+the median state over subsequent stacks can be calculated and used as a reference stack (“median”).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>reference stack</p></li>
+<li><p>next</p></li>
+<li><p>median</p></li>
+<li><p>cumul.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="mesh-element-size">
+<h2>mesh element size<a class="headerlink" href="#mesh-element-size" title="Permalink to this heading">¶</a></h2>
+<p>The element size for the mesh to which the mesh from the PIV step will be interpolated.
+Smaller element sizes will produce a finer mesh, which will capture more detail of the deformation field, but will take longer to
+calculate in the Fit Forces step. To reduce the loss of information when interpolating to a new mesh, it may
+be beneficial to use the same mesh size as the final mesh or an integral multiple of it.</p>
+<figure class="align-default">
+<img alt="../_images/mesh_size.png" src="../_images/mesh_size.png" />
+</figure>
+</section>
+<section id="mesh-size-same">
+<h2>mesh size same<a class="headerlink" href="#mesh-size-same" title="Permalink to this heading">¶</a></h2>
+<p>Whether to use the same mesh size as the piv mesh. If unchecked, a custom mesh size can be specified. Smaller mesh sizes
+then the PIV mesh would cut off information. Larger mesh sizes can be good if the piv mesh is very small and the spatial
+decay of the deformation field is not well captured. Larger mesh sizes can lead to more accurate force reconstructions.</p>
+<figure class="align-default">
+<img alt="../_images/mesh_total_size.png" src="../_images/mesh_total_size.png" />
+</figure>
+</section>
+</section>
+
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="parameters_material.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Material Parameters</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="parameters_piv.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Detect Deformations</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -294,8 +362,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Create Finite Element Mesh</a><ul>
+<li><a class="reference internal" href="#reference-stack">reference stack</a></li>
+<li><a class="reference internal" href="#mesh-element-size">mesh element size</a></li>
+<li><a class="reference internal" href="#mesh-size-same">mesh size same</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
