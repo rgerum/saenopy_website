@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -252,10 +252,8 @@
 <li class="toctree-l3"><a class="reference internal" href="parameters_orientation.html">Orientation</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">Theory</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Theory</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Theory</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -294,7 +292,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -302,8 +300,39 @@
         <article role="main" id="furo-main-content">
           <section id="theory">
 <h1>Theory<a class="headerlink" href="#theory" title="Permalink to this heading">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">CompactionAnalyzer</span></code> is a Python package that quantifies the amount of <strong>fiber alignment</strong> and <strong>fiber density</strong> around contractile cells embedded in fibrous matrices.
+These features can serve as <strong>proxy measures of contractile force</strong>, or can also be used for other applications such as matrix remodeling assessment.</p>
+<p>Unlike traditional traction force microscopy (TFM), this method does not rely on <strong>rheological characterization of the matrix</strong>.
+Instead, mechanical forces are inferred from the <strong>geometry of gel deformation</strong> and can be compared <strong>relatively between conditions</strong>, such as drug-treated versus control cells within the same matrix.</p>
+<p>Key advantages include:</p>
+<ul class="simple">
+<li><p><strong>No material calibration</strong>: The method quantifies normalized fiber alignment and density between cells.</p></li>
+<li><p><strong>Broad applicability</strong>: Compatible with a variety of biopolymer matrices such as collagen, or fibrin.</p></li>
+<li><p><strong>Fast imaging &amp; analysis workflow</strong>: Typically uses 2D <strong>maximum-intensity projections</strong> around the cells in 3D gels (instead of full 3D image stacks).</p></li>
+</ul>
+<figure class="align-default">
+<img alt="../_images/fiber_image.jpg" src="../_images/fiber_image.jpg" />
+</figure>
+<section id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Z-stacks of the fluorescently labeled cell and the surrounding fibrous matrix are acquired and maximum-intensity projections are generated around the cell surface</p></li>
+<li><p>The <strong>cell area is segmented</strong> from the projected cell image</p></li>
+<li><p>Local <strong>fiber alignment</strong> is computed using structure tensor analysis on the projected matrix image, and fiber orientations are transformed relative to the <strong>radial direction from the cell center</strong>.</p></li>
+<li><p><strong>Fiber density</strong> is calculated in concentric zones around the cell and normalized to background levels.</p></li>
+<li><p>These normalized alignment and density values can be interpreted as <strong>relative indicators of contractile force</strong>,</p></li>
+</ul>
+<blockquote>
+<div><p>under the assumption that increased alignment and densification correspond to stronger matrix compaction.</p>
+</div></blockquote>
+<p>This approach enables <strong>fast and calibration-free quantification</strong> of cell-induced matrix remodeling and force output in 3D environments.</p>
+<p>Further details are described in:</p>
+<ul class="simple">
+<li><p><strong>Publication</strong>: Böhringer et al., <em>Fiber alignment in 3D collagen networks as a biophysical marker for cell contractility</em> (2023)
+<a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0945053X23001166?via%3Dihub">DOI: https://doi.org/10.1016/j.matbio.2023.11.004</a></p></li>
+<li><p><strong>Github Repository</strong>: <a class="reference external" href="https://github.com/davidbhr/CompactionAnalyzer">https://github.com/davidbhr/CompactionAnalyzer</a></p></li>
+</ul>
+</section>
 </section>
 
         </article>
@@ -349,8 +378,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Theory</a><ul>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
