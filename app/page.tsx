@@ -288,9 +288,9 @@ export default function Home() {
                   Integrations
                 </h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                  Aside from Saenopy's main use for 3D traction force
+                    {`Aside from Saenopy's main use for 3D traction force
                   microscopy, we provide integrations to related methods to
-                  assess cellular forces.
+                  assess cellular forces.`}
                 </p>
               </div>
               <div className="mx-auto flex max-w-5xl items-stretch gap-6 py-12 flex-col">
@@ -308,10 +308,10 @@ export default function Home() {
                         spheroids) embedded in 3D biopolymer networks.
                       </p>
                       <p className="text-sm text-muted-foreground mt-4">
-                        Mark C., Grundy T., Strissel P., et al. (2020).
+                          {`Mark C., Grundy T., Strissel P., et al. (2020).
                         "Collective forces of tumor spheroids in
                         three-dimensional biopolymer networks". In eLife
-                        9:e51912.
+                        9:e51912.`}
                       </p>
                     </CardContent>
                     <CardFooter className="mt-auto">
@@ -344,10 +344,10 @@ export default function Home() {
                         properties are not available.
                       </p>
                       <p className="text-sm text-muted-foreground mt-4">
-                        Böhringer D., Bauer A., Moravec I., et al. (2023).
+                          {`Böhringer D., Bauer A., Moravec I., et al. (2023).
                         "Fiber alignment in 3D collagen networks as a
                         biophysical marker for cell contractility". Matrix
-                        Biology, 124, pp.39-48.
+                        Biology, 124, pp.39-48.`}
                       </p>
                     </CardContent>
                     <CardFooter className="mt-auto">
@@ -381,10 +381,10 @@ export default function Home() {
                         surface.
                       </p>
                       <p className="text-sm text-muted-foreground mt-4">
-                        Bauer A., Prechová M., Fischer L., et al. (2021).
+                          {/*Bauer A., Prechová M., Fischer L., et al. (2021).
                         "pyTFM: A tool for traction force and monolayer stress
                         microscopy". PLoS computational biology, 17(6),
-                        e1008364.
+                        e1008364.*/}
                       </p>
                     </CardContent>
                     <CardFooter className="mt-auto">

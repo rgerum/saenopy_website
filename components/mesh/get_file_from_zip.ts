@@ -1,6 +1,12 @@
 import { BlobReader, BlobWriter, Entry, ZipReader } from "@zip.js/zip.js";
 import * as THREE from "three";
 
+// Narrow an Entry to a file entry (has getData)
+type FileEntry = Entry & { getData: (writer: BlobWriter, options?: unknown) => Promise<Blob> };
+function isFileEntry(e: Entry): e is FileEntry {
+  return typeof (e as any)?.getData === "function";
+}
+
 const zip_entries: Record<string, Promise<Record<string, Entry>>> = {};
 
 export async function get_texture_from_zip(url: string, filename: string) {
@@ -35,8 +41,8 @@ export async function get_file_from_zip(url: string, filename: string) {
   const entry = (await zip_entries[url])[filename];
   if (!entry) console.error("file", filename, "not found in", url);
 
-  if (entry.filename === filename) {
-    if (!entry.getData) throw new Error();
+  if (entry?.filename === filename) {
+    if (!isFileEntry(entry)) throw new Error(`"${filename}" in ${url} is not a file entry (likely a directory)`);
     const blob = await entry.getData(new BlobWriter());
     //if (return_type === "url") return URL.createObjectURL(blob);
     //if (return_type === "texture")

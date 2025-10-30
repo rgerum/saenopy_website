@@ -21,6 +21,6 @@ export function DisplayMesh() {
       show_colormap: false,
       animations: [{ type: "rotate" }],
     });
-  }, [ref.current]);
+  }); //, [ref.current]
   return <div ref={ref}></div>;
 }
