@@ -385,6 +385,19 @@
     <span class="n">connections</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">connections_valid</span> <span class="o">=</span> <span class="kc">False</span>
 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;forces_border&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
+            <span class="n">forces</span> <span class="o">=</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;forces&quot;</span><span class="p">)</span>
+            <span class="n">regularisation_mask</span> <span class="o">=</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regularisation_mask&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">forces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">regularisation_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;forces_border&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">forces</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;forces_border&quot;</span><span class="p">][</span><span class="n">regularisation_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;forces&quot;</span><span class="p">][</span><span class="o">~</span><span class="n">regularisation_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;forces_border&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data_dict</span><span class="p">)</span>
+
 <span class="k">class</span><span class="w"> </span><span class="nc">RegularisationParameterDict</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
     <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">solver_precision</span><span class="p">:</span> <span class="nb">float</span>
