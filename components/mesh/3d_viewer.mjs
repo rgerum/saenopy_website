@@ -11,6 +11,7 @@ import { get_file_from_zip } from "./get_file_from_zip.ts";
 import { add_logo } from "./Logo.ts";
 import { init_scene } from "@/components/mesh/Scene";
 import { inject_style } from "@/components/mesh/inject_style";
+import { loadFieldBundle } from "./field_bundle.ts";
 
 // Arrowhead geometry (cone)
 const arrowheadGeometry = new THREE.ConeGeometry(0.5, 1, 6);
@@ -221,8 +222,12 @@ async function add_test(scene, renderer, params) {
       last_field.field = params.field;
       last_field.data_path = params.data.path;
       needs_update = true;
-      if (params.field !== "none") {
-        console.log(params.data.path, params.data.fields[params.field].nodes);
+      const field_def = params.data.fields[params.field];
+      if (params.field !== "none" && field_def?.preloaded) {
+        // bundle fields are already decoded into memory
+        nodes = field_def.preloaded.nodes;
+        vectors = field_def.preloaded.vectors;
+      } else if (params.field !== "none") {
         try {
           nodes = await loadNpy(
             await get_file_from_zip(
@@ -238,7 +243,6 @@ async function add_test(scene, renderer, params) {
               "blob",
             ),
           );
-          console.log("nodes", nodes, "vectors", vectors);
         } catch (e) {
           nodes = await loadNpy(
             params.data.path + "/" + params.data.fields[params.field].nodes,
@@ -246,7 +250,7 @@ async function add_test(scene, renderer, params) {
           vectors = await loadNpy(
             params.data.path + "/" + params.data.fields[params.field].vectors,
           );
-          console.log("could not load", e);
+          console.error("could not load field from zip", e);
         }
       }
 
@@ -382,8 +386,8 @@ async function load_add_field(scene, renderer, params) {
 }
 
 export async function init(initial_params) {
-  console.log("init", initial_params);
   const params = {
+    ccs_prefix: "",
     scale: 1,
     cmap: "turbo", // ["turbo", "viridis"]
     field: "fitted deformations", // fitted deformations
@@ -440,15 +444,39 @@ export async function init(initial_params) {
     initial_params.dom_node.style.minHeight = params.height;
     initial_params.dom_node.style.width = params.width;
   }
-  console.log("load data", params.data === undefined);
-
-  if (1) {
+  if (params.bundle) {
+    const bundle = await loadFieldBundle(params.bundle);
+    params.bundle_stats = {
+      transferBytes: bundle.transferBytes,
+      rawBytes: bundle.rawBytes,
+      baselineBytes: bundle.baselineBytes,
+      fields: Object.fromEntries(
+        Object.entries(bundle.fields).map(([name, f]) => [
+          name,
+          { count: f.count, total: f.total, unit: f.unit, max: f.max * f.factor },
+        ]),
+      ),
+    };
+    params.data = {
+      path: params.bundle,
+      fields: Object.fromEntries(
+        Object.entries(bundle.fields).map(([name, f]) => [
+          name,
+          { unit: f.unit, factor: f.factor, preloaded: f },
+        ]),
+      ),
+    };
+    if (!params.data.fields[params.field]) {
+      params.field = Object.keys(params.data.fields)[0];
+    }
+  } else {
     const data = await (await fetch(initial_params.path + "/data.json")).json();
-    console.log("data", data);
     params.data = data;
     params.data.path = initial_params.path;
   }
-  console.log("params", params);
+
+  // the caller may have unmounted while the field data was still loading
+  if (params.signal?.aborted) return () => {};
 
   // Scene setup
   const { scene, renderer, camera } = init_scene(
@@ -464,9 +492,7 @@ export async function init(initial_params) {
       ? await add_image(scene, params)
       : () => {};
 
-  console.log("mouse", params.mouse_control);
   if (params.mouse_control) {
-    console.log("mouse control");
     const controlsCam = new OrbitControls(camera, renderer.domElement);
     controlsCam.update();
     scene.controls = controlsCam;
@@ -478,7 +504,7 @@ export async function init(initial_params) {
     : () => {};
   const update_cube = add_cube(scene, params);
 
-  const radius = params.extent[0]
+  const radius = params.data.fields
     ? params.extent[1] * 1e6 * 4
     : params.data.stacks.im_shape[0] * params.data.stacks.voxel_size[0] * 2;
   set_camera(scene, camera, (radius / params.zoom) * 5, 30, 60);
@@ -523,10 +549,21 @@ export async function init(initial_params) {
     gui.close();
   }
   add_drop(renderer.domElement.parentElement, params, update_all);
+
+  if (params.on_ready) params.on_ready(params);
+
+  return function dispose() {
+    params.disposed = true;
+    scene.controls?.dispose();
+    renderer.dispose();
+    const container = initial_params.dom_node;
+    if (container) container.replaceChildren();
+  };
 }
 
 let animation_time = new Date();
 function animate(scene, renderer, camera, params, update_all) {
+  if (params.disposed || params.signal?.aborted) return;
   requestAnimationFrame(() =>
     animate(scene, renderer, camera, params, update_all),
   );
@@ -588,6 +625,7 @@ function animate(scene, renderer, camera, params, update_all) {
 }
 
 function add_drop(dropZone, params, update_all) {
+  const ccs_prefix = "saenopy_" + params.ccs_prefix;
   // Prevent default drag behaviors
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropZone.addEventListener(eventName, preventDefaults, false);
@@ -632,7 +670,6 @@ function add_drop(dropZone, params, update_all) {
   }
 
   function loadFile(file) {
-    console.log("loadFile", file);
     params.data.path = file;
     update_all();
     return;

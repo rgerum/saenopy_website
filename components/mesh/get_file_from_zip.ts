@@ -29,8 +29,6 @@ export async function get_file_from_zip(url: string, filename: string) {
       const entries = await zipReader.getEntries();
       const entry_map: Record<string, Entry> = {};
       for (let entry of entries) {
-        console.log(entry.filename);
-
         entry_map[entry.filename] = entry;
       }
       await zipReader.close();

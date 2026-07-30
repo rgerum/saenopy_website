@@ -2,25 +2,83 @@
 import React from "react";
 import { init } from "./3d_viewer.mjs";
 
-export function DisplayMesh() {
+export interface ViewerStats {
+  transferBytes: number;
+  rawBytes: number;
+  baselineBytes: number;
+  fields: Record<
+    string,
+    { count: number; total: number; unit: string; max: number }
+  >;
+}
+
+export interface DisplayMeshProps {
+  /** path to a bundle produced by scripts/export_field_bundle.py */
+  bundle?: string;
+  /** legacy path to a folder holding data.json plus .npy files */
+  path?: string;
+  field?: string;
+  scale?: number;
+  zoom?: number;
+  cmap?: string;
+  cube?: "none" | "stack" | "field";
+  cube_color?: number;
+  background?: string;
+  height?: string;
+  logo_width?: string;
+  mouse_control?: boolean;
+  show_controls?: boolean;
+  show_colormap?: boolean;
+  animations?: { type: string; speed?: number }[];
+  className?: string;
+  onStats?: (stats: ViewerStats) => void;
+}
+
+export function DisplayMesh({
+  className,
+  onStats,
+  height = "400px",
+  ...options
+}: DisplayMeshProps) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const onStatsRef = React.useRef(onStats);
   React.useEffect(() => {
-    if (!ref.current) return;
+    onStatsRef.current = onStats;
+  }, [onStats]);
+
+  // serialised so a caller passing inline objects does not restart the viewer
+  const key = JSON.stringify(options);
+
+  React.useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    const controller = new AbortController();
+    let dispose: (() => void) | undefined;
+
     init({
-      path: "docs/_static/vector_data2",
-      scale: 1,
-      dom_node: ref.current,
-      zoom: 1.5,
-      image: "z-pos",
-      mouse_control: true,
-      cube: "stack", // ["none", "stack", "field"]
-      cube_color: 0x90a8a6,
-      logo_width: "0px",
-      background: "transparent",
-      show_controls: false,
-      show_colormap: false,
-      animations: [{ type: "rotate" }],
-    });
-  }); //, [ref.current]
-  return <div ref={ref}></div>;
+      ...JSON.parse(key),
+      height,
+      dom_node: node,
+      signal: controller.signal,
+      on_ready: (params: { bundle_stats?: ViewerStats }) => {
+        if (params.bundle_stats) onStatsRef.current?.(params.bundle_stats);
+      },
+    })
+      .then((d: () => void) => {
+        dispose = d;
+        if (controller.signal.aborted) d();
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) console.error("3D viewer failed", error);
+      });
+
+    return () => {
+      controller.abort();
+      dispose?.();
+      node.replaceChildren();
+    };
+  }, [key, height]);
+
+  return <div ref={ref} className={className} />;
 }

@@ -103,7 +103,19 @@ export default function Home() {
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                     Calculate 3D Traction Forces with Saenopy
                   </h1>
-                  <DisplayMesh />
+                  <DisplayMesh
+                    bundle="/data/hero-forces.sfb.gz"
+                    field="fitted forces"
+                    height="320px"
+                    zoom={1.5}
+                    cube="field"
+                    cube_color={0x90a8a6}
+                    background="transparent"
+                    logo_width="0px"
+                    show_controls={false}
+                    show_colormap={false}
+                    animations={[{ type: "rotate" }]}
+                  />
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     An open-source software for calculating 3D traction forces
                     in cell mechanics research, backed by a Nature Physics
