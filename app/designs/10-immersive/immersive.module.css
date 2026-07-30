@@ -12,8 +12,7 @@
   --sans:
     var(--font-immersive-display), ui-sans-serif, system-ui, "Helvetica Neue",
     sans-serif;
-  --mono:
-    var(--font-immersive-mono), ui-monospace, "SFMono-Regular", monospace;
+  --mono: var(--font-immersive-mono), ui-monospace, "SFMono-Regular", monospace;
 
   position: relative;
   min-height: 100svh;
@@ -30,16 +29,13 @@
 
 /* ---------------------------------------------------------------- the field */
 
+/* Push the rotating field off the type: down the frame on narrow viewports,
+   sideways on wide ones. A transform keeps the canvas at full resolution. */
 .scene {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-}
-
-/* Push the rotating field off the type: down the frame on narrow viewports,
-   sideways on wide ones. A transform keeps the canvas at full resolution. */
-.scene {
   transform: translateY(20%);
 }
 
@@ -85,7 +81,11 @@
       rgba(var(--void), 0.28) 60%,
       rgba(var(--void), 0) 76%
     ),
-    linear-gradient(to top, rgba(var(--void), 0.9) 0%, rgba(var(--void), 0) 24%),
+    linear-gradient(
+      to top,
+      rgba(var(--void), 0.9) 0%,
+      rgba(var(--void), 0) 24%
+    ),
     radial-gradient(
       125% 90% at 50% 66%,
       rgba(var(--void), 0) 24%,
@@ -260,7 +260,6 @@
 .panels {
   position: relative;
   z-index: 2;
-  margin-top: -600svh; /* TEMP */
 }
 
 /* narrow: type in the top half, field below it */
@@ -288,6 +287,24 @@
     opacity 850ms cubic-bezier(0.22, 0.7, 0.2, 1),
     transform 850ms cubic-bezier(0.22, 0.7, 0.2, 1),
     filter 850ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+/* Narrow viewports cannot move the type sideways out of the field, so the
+   copy carries its own full-bleed scrim that fades out above and below it. */
+@media (max-width: 1023px) {
+  .panelBody {
+    padding: 1.25rem;
+    margin: -1.25rem;
+    width: calc(100% + 2.5rem);
+    max-width: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--void), 0) 0%,
+      rgba(var(--void), 0.78) 10%,
+      rgba(var(--void), 0.78) 84%,
+      rgba(var(--void), 0) 100%
+    );
+  }
 }
 
 @media (min-width: 1024px) {

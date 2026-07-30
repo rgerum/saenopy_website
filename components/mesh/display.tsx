@@ -59,8 +59,10 @@ export interface DisplayMeshProps {
 
 interface LiveParams {
   frame: number;
+  field: string;
   time_points?: number;
   bundle_stats?: ViewerStats;
+  data?: { fields: Record<string, unknown> };
 }
 
 export function DisplayMesh({
@@ -68,6 +70,7 @@ export function DisplayMesh({
   onStats,
   height = "400px",
   frame = 0,
+  field,
   ...options
 }: DisplayMeshProps) {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -80,9 +83,12 @@ export function DisplayMesh({
   // without tearing down the WebGL context and re-decoding the bundle
   const live = React.useRef<{ params: LiveParams; redraw: () => void } | null>(null);
   const wantedFrame = React.useRef(frame);
+  const wantedField = React.useRef(field);
 
   // serialised so a caller passing inline objects does not restart the viewer.
-  // `frame` is deliberately not part of this — it is applied in place below.
+  // `frame` and `field` are deliberately not part of this: every field of a
+  // bundle is already decoded in memory, so both are applied in place below
+  // rather than by rebuilding the WebGL context and re-fetching.
   const key = JSON.stringify(options);
 
   React.useEffect(() => {
@@ -97,6 +103,7 @@ export function DisplayMesh({
       ...JSON.parse(key),
       height,
       frame: wantedFrame.current,
+      field: wantedField.current,
       dom_node: node,
       signal: controller.signal,
       on_ready: (params: LiveParams, redraw: () => void) => {
@@ -129,6 +136,20 @@ export function DisplayMesh({
     current.params.frame = ((frame % count) + count) % count;
     current.redraw();
   }, [frame]);
+
+  React.useEffect(() => {
+    wantedField.current = field;
+    const current = live.current;
+    if (!current || !field || current.params.field === field) return;
+    // silently ignoring an unknown field would leave the colour bar labelled
+    // with one quantity while showing another
+    if (!current.params.data?.fields[field]) {
+      console.warn(`3D viewer: bundle has no field "${field}"`);
+      return;
+    }
+    current.params.field = field;
+    current.redraw();
+  }, [field]);
 
   // the height is reserved here as well as inside the viewer, so a figure does
   // not reflow while its bundle is still loading

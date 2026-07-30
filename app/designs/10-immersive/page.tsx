@@ -7,12 +7,14 @@
  * moves through full-height panels: the field stays, the words change, and the
  * field itself shifts underneath them. Closer to a title sequence than a page.
  *
- * Legibility over a moving WebGL scene is solved three ways at once:
- *   1. the field is pushed off-centre to the right on wide viewports, so the
- *      type column sits on quiet pixels rather than on live arrows,
+ * Legibility over a moving WebGL scene is solved four ways at once:
+ *   1. composition — the field is transformed sideways on wide viewports and
+ *      downwards on narrow ones, so the type never sits on the busy region,
  *   2. a fixed scrim layer (directional gradient + vignette + top/bottom rails)
- *      sits between the canvas and the copy,
- *   3. the headline and lead carry their own text shadows as a backstop.
+ *      sits between the canvas and the copy, cut to match that composition,
+ *   3. below 1024px the copy also carries its own full-bleed backing scrim,
+ *      because there is nowhere sideways to move the field to,
+ *   4. the headline and lead carry their own text shadows as a backstop.
  *
  * Only two WebGL contexts ever exist: the scene is double-buffered so a new
  * dataset can load behind the current one and cross-fade in, instead of the
@@ -493,113 +495,113 @@ export default function ImmersivePage() {
         {PANELS.map((panel, i) => {
           const Heading = i === 0 ? "h1" : "h2";
           return (
-          <section
-            key={panel.id}
-            id={panel.id}
-            data-panel={i}
-            ref={(el) => {
-              panelRefs.current[i] = el;
-            }}
-            className={styles.panel}
-          >
-            <div
-              className={`${styles.panelBody} ${i === active ? styles.panelBodyOn : ""}`}
+            <section
+              key={panel.id}
+              id={panel.id}
+              data-panel={i}
+              ref={(el) => {
+                panelRefs.current[i] = el;
+              }}
+              className={styles.panel}
             >
-              <p className={styles.eyebrow}>{panel.eyebrow}</p>
-
-              <Heading
-                className={`${styles.headline} ${
-                  panel.variant === "wordmark"
-                    ? styles.wordmark
-                    : panel.variant === "mega"
-                      ? styles.mega
-                      : ""
-                }`}
+              <div
+                className={`${styles.panelBody} ${i === active ? styles.panelBodyOn : ""}`}
               >
-                {panel.headline}
-              </Heading>
+                <p className={styles.eyebrow}>{panel.eyebrow}</p>
 
-              <p className={styles.lead}>{panel.lead}</p>
+                <Heading
+                  className={`${styles.headline} ${
+                    panel.variant === "wordmark"
+                      ? styles.wordmark
+                      : panel.variant === "mega"
+                        ? styles.mega
+                        : ""
+                  }`}
+                >
+                  {panel.headline}
+                </Heading>
 
-              {panel.id === "burst" && <ForceSpark />}
+                <p className={styles.lead}>{panel.lead}</p>
 
-              {panel.bullets && (
-                <ul className={styles.bullets}>
-                  {panel.bullets.map((line) => (
-                    <li key={line}>
-                      <span>—</span>
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-              )}
+                {panel.id === "burst" && <ForceSpark />}
 
-              {panel.note && <p className={styles.note}>{panel.note}</p>}
-
-              {panel.id === "open" && (
-                <p className={styles.cue}>
-                  <span className={styles.cueLine} />
-                  Scroll
-                </p>
-              )}
-
-              {panel.id === "work" && (
-                <>
-                  <ul className={styles.services}>
-                    {SERVICES.map((service) => (
-                      <li key={service}>{service}</li>
+                {panel.bullets && (
+                  <ul className={styles.bullets}>
+                    {panel.bullets.map((line) => (
+                      <li key={line}>
+                        <span>—</span>
+                        {line}
+                      </li>
                     ))}
                   </ul>
+                )}
 
-                  <div className={styles.actions}>
-                    <a
-                      className={`${styles.btn} ${styles.btnPrimary}`}
-                      href={LINKS.contact}
-                    >
-                      Start a conversation
-                      <ArrowRight size={14} aria-hidden="true" />
-                    </a>
-                    <a
-                      className={styles.btn}
-                      href={LINKS.github}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Source
-                    </a>
-                    <a
-                      className={styles.btn}
-                      href={LINKS.docs}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Documentation
-                    </a>
-                  </div>
+                {panel.note && <p className={styles.note}>{panel.note}</p>}
 
-                  <div className={styles.placeholder}>
-                    <span className={styles.placeholderTag}>
-                      {PLACEHOLDERS.note}
-                    </span>
-                    <ul className={styles.placeholderList}>
-                      {PLACEHOLDERS.panels.map((p) => (
-                        <li key={p.title}>{p.title}</li>
+                {panel.id === "open" && (
+                  <p className={styles.cue}>
+                    <span className={styles.cueLine} />
+                    Scroll
+                  </p>
+                )}
+
+                {panel.id === "work" && (
+                  <>
+                    <ul className={styles.services}>
+                      {SERVICES.map((service) => (
+                        <li key={service}>{service}</li>
                       ))}
                     </ul>
-                  </div>
 
-                  <p className={styles.cite}>
-                    {PAPER.shortAuthors}{" "}
-                    <span className={styles.citeTitle}>{PAPER.title}</span>{" "}
-                    {PAPER.journal} {PAPER.year}.{" "}
-                    <a href={PAPER.url} target="_blank" rel="noreferrer">
-                      doi:{PAPER.doi}
-                    </a>
-                  </p>
-                </>
-              )}
-            </div>
-          </section>
+                    <div className={styles.actions}>
+                      <a
+                        className={`${styles.btn} ${styles.btnPrimary}`}
+                        href={LINKS.contact}
+                      >
+                        Start a conversation
+                        <ArrowRight size={14} aria-hidden="true" />
+                      </a>
+                      <a
+                        className={styles.btn}
+                        href={LINKS.github}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Source
+                      </a>
+                      <a
+                        className={styles.btn}
+                        href={LINKS.docs}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Documentation
+                      </a>
+                    </div>
+
+                    <div className={styles.placeholder}>
+                      <span className={styles.placeholderTag}>
+                        {PLACEHOLDERS.note}
+                      </span>
+                      <ul className={styles.placeholderList}>
+                        {PLACEHOLDERS.panels.map((p) => (
+                          <li key={p.title}>{p.title}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <p className={styles.cite}>
+                      {PAPER.shortAuthors}{" "}
+                      <span className={styles.citeTitle}>{PAPER.title}</span>{" "}
+                      {PAPER.journal} {PAPER.year}.{" "}
+                      <a href={PAPER.url} target="_blank" rel="noreferrer">
+                        doi:{PAPER.doi}
+                      </a>
+                    </p>
+                  </>
+                )}
+              </div>
+            </section>
           );
         })}
       </div>

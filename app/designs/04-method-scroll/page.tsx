@@ -83,7 +83,7 @@ const STEPS: Step[] = [
     io: "in: measured deformations → out: fitted deformations",
     paragraphs: [
       "Biopolymer networks are not linearly elastic. Collagen, fibrin and Matrigel buckle under compression and stiffen as they are strained, and a linear model gets the forces wrong by a wide margin in exactly the regime a cell works in. Saenopy carries a non-linear material model of the fibre network instead.",
-      "Under that model the solver looks for a deformation field that the material could genuinely produce and that stays as close as possible to what was measured. The result is the fitted deformation field now on the left. How closely it reproduces step 02 is the honest check on the whole reconstruction.",
+      "Under that model the solver looks for a deformation field that the material could genuinely produce and that stays as close as possible to what was measured. The result is the fitted deformation field now in the figure. How closely it reproduces step 02 is the honest check on the whole reconstruction.",
     ],
     readout: [
       { k: "field", v: "fitted deformations" },
@@ -238,28 +238,23 @@ export default function MethodScrollPage() {
 
   const step = STEPS[active];
 
-  // One viewer, one WebGL context. `shown` is the field it currently holds and
-  // `busy` is true while a field is being loaded; a new field is only handed to
-  // the viewer once the previous one has finished, so a fast scroll can never
-  // tear down a load that is still in flight. Step 01 has no field of its own
-  // and simply keeps whatever is loaded behind the schematic.
+  // One viewer, one WebGL context, held for the whole pipeline: the bundle
+  // carries all three fields, so a step change only swaps which one is drawn.
+  // Step 01 has no field of its own and keeps the last one behind the schematic.
   const [shown, setShown] = React.useState<string>(FIELDS[0]);
-  const [busy, setBusy] = React.useState(true);
-  const target = step.field ?? shown;
+  const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    if (busy || shown === target) return;
-    setShown(target);
-    setBusy(true);
-  }, [busy, shown, target]);
+    if (step.field) setShown(step.field);
+  }, [step.field]);
 
-  const onReady = React.useCallback(() => setBusy(false), []);
+  const onReady = React.useCallback(() => setLoaded(true), []);
 
   // a missed callback must not leave the panel dark for good
   React.useEffect(() => {
-    const timer = window.setTimeout(() => setBusy(false), 4000);
+    const timer = window.setTimeout(() => setLoaded(true), 6000);
     return () => window.clearTimeout(timer);
-  }, [shown]);
+  }, []);
 
   // A step is current once its top has passed the middle of the window; the
   // observer is only the trigger, the geometry decides, so landing anywhere —
@@ -280,10 +275,24 @@ export default function MethodScrollPage() {
       threshold: 0,
     });
     nodes.forEach((node) => observer.observe(node));
-    window.addEventListener("resize", resolve);
+
+    // the observer covers ordinary scrolling; this covers the jumps it cannot
+    // see, such as landing on #step-03 or a scroll that skips a whole section
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        resolve();
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", resolve);
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 
@@ -307,7 +316,7 @@ export default function MethodScrollPage() {
     return () => observer.disconnect();
   }, []);
 
-  const fieldVisible = Boolean(step.field) && step.field === shown && !busy;
+  const fieldVisible = Boolean(step.field) && loaded;
 
   const goTo = (index: number) => {
     sectionRefs.current[index]?.scrollIntoView({
@@ -372,7 +381,8 @@ export default function MethodScrollPage() {
             matrix into the forces that cell exerts on it. Nothing here is a
             proxy or a stiffness index: the output is a force, in nanonewtons,
             per cell, in 3D. The four steps below are the whole pipeline, and
-            the figure alongside them is one real dataset moving through it.
+            the figure that stays with them is one real dataset moving through
+            it.
           </p>
           <dl className="grid grid-cols-2 gap-x-6 gap-y-5 self-start text-[13px]">
             {[
@@ -472,7 +482,7 @@ export default function MethodScrollPage() {
                   ))}
                 </div>
                 <p
-                  className="text-[11px] text-[#8b959b]"
+                  className="hidden text-[11px] text-[#8b959b] sm:block"
                   style={MONO}
                   aria-live="polite"
                 >

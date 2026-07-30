@@ -77,6 +77,11 @@ Notes that will save you time:
 
 - Prefer `arrow_span` over `scale`. Fields differ by orders of magnitude
   between datasets and `arrow_span` normalises that automatically.
+- `frame` and `field` are applied in place: changing either redraws the
+  existing scene without re-fetching the bundle or rebuilding the WebGL
+  context. So you can drive an animation or a scroll-linked field change
+  straight through the props. Every *other* prop change remounts the viewer,
+  so change `bundle` via `key` and keep the rest stable.
 - The viewer is WebGL and mounts on the client. It already carries
   `"use client"`, so a server component can render it directly. Add
   `"use client"` to your page only if you need state or effects.
