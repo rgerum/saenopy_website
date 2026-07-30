@@ -98,7 +98,7 @@ const STEPS: Step[] = [
     io: "in: fitted deformations → out: fitted forces, in nN",
     paragraphs: [
       "With the material model fixed, the question inverts: which forces, applied where, must have produced that deformation? Solving it yields a force vector at every node of the mesh — the traction the cell exerts on the network around it, resolved in three dimensions rather than projected onto a plane.",
-      `This fibroblast peaks at ${CELL.peakForce} nN. The same procedure spans roughly 1 nN for a single axon growth cone up to about 10 µN for a mouse intestinal organoid: four orders of magnitude of force and object size, one method.`,
+      `Notice how much emptier the figure is than the deformation fields: a smooth displacement over the whole volume comes back to a handful of concentrated pulls. This fibroblast peaks at ${CELL.peakForce} nN. The same procedure spans roughly 1 nN for a single axon growth cone up to about 10 µN for a mouse intestinal organoid: four orders of magnitude of force and object size, one method.`,
     ],
     readout: [
       { k: "field", v: "fitted forces" },
