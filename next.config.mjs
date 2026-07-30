@@ -7,6 +7,12 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // dev only: without this Next rejects the HMR websocket when the dev server
+  // is reached over the tailnet instead of localhost
+  allowedDevOrigins: [
+    'richard-aspire-a515-55g.tailed9e74.ts.net',
+    '*.ts.net',
+  ],
   typescript: {
     ignoreBuildErrors: true,
   },
