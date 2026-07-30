@@ -1,0 +1,57 @@
+/* Design 03 "The Explorer" — instrument-panel typography and scrollbars.
+   The app never loads a webfont, so the shared --font-mono token resolves to
+   nothing. Everything here is scoped to this design's folder. */
+
+.root {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mono {
+  font-family:
+    ui-monospace,
+    "SFMono-Regular",
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.panel {
+  scrollbar-width: thin;
+  scrollbar-color: #232c37 transparent;
+}
+
+.panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel::-webkit-scrollbar-thumb {
+  background: #232c37;
+  border-radius: 0;
+}
+
+.panel::-webkit-scrollbar-thumb:hover {
+  background: #35d69b;
+}
+
+/* the viewer draws its own colour bar into the bottom-left of its container */
+.viewport :global(div[class*="colorbar"]) {
+  font-size: 11px;
+}

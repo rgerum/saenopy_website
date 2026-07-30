@@ -4,8 +4,11 @@
 Reads a ``.saenopy`` file directly (it is a numpy ``.npz`` archive), so saenopy
 itself does not need to be installed -- only numpy.
 
-The bundle trades a small, bounded amount of visual precision for roughly a
-15x size reduction compared to shipping float32 ``.npy`` arrays in a zip:
+The bundle trades a small, bounded amount of visual precision for a 17-74x size
+reduction compared to shipping float32 ``.npy`` arrays in a zip. Across the
+bundles currently in ``public/data`` the mean arrow error is 0.08-0.39% of the
+field's peak magnitude and the worst single arrow is 1.33%. The savings come
+from:
 
 * node positions are dropped entirely when the mesh is a regular grid and
   rebuilt from ``origin + spacing * index``

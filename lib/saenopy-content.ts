@@ -150,7 +150,7 @@ export const DATASETS: Record<string, Dataset> = {
     peakForce: 0.893,
     peakDeformation: 1.66,
     meshNodes: 24389,
-    transferKB: 102.7,
+    transferKB: 200.7,
     frames: 23,
     frameInterval: 60,
     blurb:

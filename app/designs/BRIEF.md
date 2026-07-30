@@ -44,7 +44,7 @@ All bundles live in `public/data` and are listed in `DATASETS`:
 | `nk92` | NK92 natural killer cell | the immunotherapy hero, bright-field, 0.87 nN peak |
 | `organoid` | intestinal organoid | 61.3 nN peak, two orders up from the immune cell |
 | `cell004` / `cell007` / `cell008` | three fibroblasts | same experiment, 47.7 / 77.2 / 126 nN — good for showing spread |
-| `dynamic` | 23 time points, one per minute | animates; `FORCE_TRACE` and `ENERGY_TRACE` are its per-frame numbers |
+| `dynamic` | 23 time points, one per minute | animates; carries both fitted deformations and fitted forces; `FORCE_TRACE` and `ENERGY_TRACE` are its per-frame numbers |
 
 ## The viewer
 

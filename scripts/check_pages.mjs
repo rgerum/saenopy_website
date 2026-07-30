@@ -71,10 +71,20 @@ sock.onmessage = (e) => {
   }
 };
 
-function send(method, params = {}) {
+function send(method, params = {}, timeoutMs = 20000) {
   const mid = ++id;
   sock.send(JSON.stringify({ id: mid, method, params }));
-  return new Promise((r) => pending.set(mid, r));
+  return new Promise((resolve) => {
+    // a page that never settles must not hang the whole sweep
+    const timer = setTimeout(() => {
+      pending.delete(mid);
+      resolve({ timedOut: true });
+    }, timeoutMs);
+    pending.set(mid, (result) => {
+      clearTimeout(timer);
+      resolve(result);
+    });
+  });
 }
 
 await send("Runtime.enable");
@@ -90,9 +100,13 @@ for (const path of paths) {
   await send("Runtime.evaluate", {
     expression: `(async () => {
       const step = window.innerHeight;
-      for (let y = 0; y < document.body.scrollHeight; y += step) {
+      // capped: a sticky or growing layout can otherwise report a scroll
+      // height that never ends
+      for (let i = 0; i < 20; i++) {
+        const y = i * step;
+        if (y > document.body.scrollHeight) break;
         window.scrollTo(0, y);
-        await new Promise(r => setTimeout(r, 350));
+        await new Promise(r => setTimeout(r, 300));
       }
       window.scrollTo(0, 0);
     })()`,

@@ -172,8 +172,9 @@ export default function Test3DPage() {
           2-byte octahedral direction, and a 1-byte magnitude stored in sqrt space so
           the fine quantisation steps land on the short arrows. Byte planes are stored
           separately so gzip sees long runs, and the file is gunzipped in the browser
-          so the size does not depend on the host&apos;s compression settings. Worst-case
-          arrow error is under 1% of the peak magnitude.
+          so the size does not depend on the host&apos;s compression settings. Across
+          the shipped bundles the mean arrow error is 0.08–0.39% of the field&apos;s
+          peak magnitude, and the worst single arrow is 1.33%.
         </p>
         <p>
           Regenerate with{" "}
