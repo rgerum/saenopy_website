@@ -12,7 +12,7 @@ import {
 } from "./scale";
 
 /* ---- diagram geometry, all in px inside a 1160-wide frame ---- */
-const W = 1160;
+const W = 1112;
 const X_DECADE_LABEL_W = 74;
 const X_AXIS = 96;
 const X_ROW = 148;
@@ -164,7 +164,9 @@ function RailRow({ rung, index }: { rung: Rung; index: number }) {
           {isLimit
             ? "stated limit — no bundle"
             : d
-              ? `${d.meshNodes.toLocaleString("en-GB")} nodes · ${d.peakDeformation} µm peak deformation${d.frames ? ` · ${d.frames} frames` : ""}`
+              ? d.frames
+                ? `${d.peakDeformation} µm peak deformation · ${d.frames} frames`
+                : `${d.meshNodes.toLocaleString("en-GB")} nodes · ${d.peakDeformation} µm peak deformation`
               : ""}
         </div>
       </div>
@@ -223,10 +225,10 @@ function FieldCard({ rung, top }: { rung: Rung; top: number }) {
         <div style={{ background: "#101317", borderRadius: 2, overflow: "hidden" }}>
           <DisplayMesh
             bundle={d.bundle}
-            field="fitted forces"
+            field="fitted deformations"
             height={`${VIEWER_H}px`}
             arrow_span={0.1}
-            zoom={1.15}
+            zoom={2}
             cube="field"
             cube_color={0x3a4250}
             background="transparent"
@@ -242,7 +244,7 @@ function FieldCard({ rung, top }: { rung: Rung; top: number }) {
         className="font-mono flex items-center justify-between px-5 mt-auto pb-3 pt-3"
         style={{ fontSize: 10.5, color: MUTED, letterSpacing: "0.02em" }}
       >
-        <span>fitted forces · arrow_span 0.1 · drag to rotate</span>
+        <span>fitted deformations · arrow_span 0.1 · drag to rotate</span>
         <span>{d.transferKB} kB over the wire</span>
       </div>
     </div>
@@ -365,8 +367,17 @@ export function Ladder() {
           {/* the reading key, sitting in the empty top of the content column */}
           <ReadingKey />
 
-          {/* the empty stretch between the fibroblasts and the immune cells */}
-          <GapNote />
+          {/* the two empty stretches of axis, annotated rather than hidden */}
+          <RailNote
+            top={470}
+            figure="79×"
+            body="of headroom above the strongest cell on this page. The paper's upper endpoint sits that far above our largest measurement — it is the reach of the method, not something we have on file."
+          />
+          <RailNote
+            top={1180}
+            figure="1.7 decades"
+            body="of empty axis between the fibroblasts and the immune cells. Nothing about the measurement changes across the gap: the same solver, the same non-linear material model, the same kind of image stack going in."
+          />
 
           {RUNGS.map((rung, i) => (
             <RailRow key={rung.id} rung={rung} index={i} />
@@ -420,7 +431,7 @@ function ReadingKey() {
           {
             marker: "dot",
             term: "Measured",
-            def: "Peak fitted traction force, read out of a bundle in public/data. Position on the axis is log₁₀ of that number.",
+            def: "Peak fitted traction force, read out of a bundle in public/data. Position on the axis is log₁₀ of that number. The panels show the fitted deformation field the traction was solved from.",
           },
           {
             marker: "diamond",
@@ -490,23 +501,32 @@ function ReadingKey() {
           >
             arrow_span = 0.1
           </code>
-          : the longest arrow is one tenth of the domain, whatever the absolute force. The
-          organoid pulls 70&times; harder than the NK92 cell. Drawn on a shared arrow
-          scale, one of the two would be a blank box — which is the whole reason these
-          specimens are normally not compared at all.
+          : the longest arrow is one tenth of the domain, whatever the absolute magnitude.
+          The organoid deforms its matrix 28&times; further than the NK92 cell, 8.85&nbsp;µm
+          against 0.321&nbsp;µm, and pulls 70&times; harder. On a shared arrow scale one of
+          the two would be a blank box — which is the whole reason these specimens are
+          normally not put side by side.
         </p>
       </div>
     </div>
   );
 }
 
-function GapNote() {
+function RailNote({
+  top,
+  figure,
+  body,
+}: {
+  top: number;
+  figure: string;
+  body: string;
+}) {
   return (
     <div
       className="absolute"
       style={{
         left: X_ROW,
-        top: 1180,
+        top,
         width: ROW_W,
         background: "#F8F7F4",
         paddingTop: 14,
@@ -517,13 +537,9 @@ function GapNote() {
         className="font-mono"
         style={{ fontSize: 22, color: INK, letterSpacing: "-0.01em" }}
       >
-        1.7 decades
+        {figure}
       </div>
-      <p style={{ fontSize: 12.5, color: MUTED, lineHeight: 1.6, marginTop: 6 }}>
-        of empty axis between the fibroblasts and the immune cells. Nothing about the
-        measurement changes across the gap: the same solver, the same non-linear material
-        model, the same kind of image stack going in.
-      </p>
+      <p style={{ fontSize: 12.5, color: MUTED, lineHeight: 1.6, marginTop: 6 }}>{body}</p>
     </div>
   );
 }

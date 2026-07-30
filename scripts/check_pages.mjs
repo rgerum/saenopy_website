@@ -97,8 +97,14 @@ for (const path of paths) {
   await send("Page.navigate", { url: base + path });
   await sleep(9000);
   // scroll through, so lazy sections and scroll-driven viewers actually run
-  await send("Runtime.evaluate", {
-    expression: `(async () => {
+  // Scroll the whole page and remember the most canvases ever mounted at once:
+  // several designs mount their viewers lazily, so counting only at the top
+  // would report zero for a page whose 3D works fine.
+  await send(
+    "Runtime.evaluate",
+    {
+      expression: `(async () => {
+      window.__peakCanvases = document.querySelectorAll('canvas').length;
       const step = window.innerHeight;
       // capped: a sticky or growing layout can otherwise report a scroll
       // height that never ends
@@ -107,22 +113,30 @@ for (const path of paths) {
         if (y > document.body.scrollHeight) break;
         window.scrollTo(0, y);
         await new Promise(r => setTimeout(r, 300));
+        window.__peakCanvases = Math.max(
+          window.__peakCanvases, document.querySelectorAll('canvas').length);
       }
-      window.scrollTo(0, 0);
     })()`,
-    awaitPromise: true,
-  });
+      awaitPromise: true,
+    },
+    40000,
+  );
   await sleep(1500);
 
   const probe = await send("Runtime.evaluate", {
     expression: `JSON.stringify({
-      canvases: document.querySelectorAll('canvas').length,
+      canvases: window.__peakCanvases ?? document.querySelectorAll('canvas').length,
       height: document.body.scrollHeight,
       text: document.body.innerText.length,
       placeholder: /placeholder/i.test(document.body.innerText),
     })`,
     returnByValue: true,
   });
+  if (!probe?.result?.value) {
+    console.log(`FAIL ${path.padEnd(28)} page did not respond to the probe (timed out)`);
+    failures++;
+    continue;
+  }
   const info = JSON.parse(probe.result.value);
 
   const errors = events.filter((e) => e.kind !== "warning");

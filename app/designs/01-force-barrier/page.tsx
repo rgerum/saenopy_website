@@ -271,42 +271,42 @@ export default function ForceBarrierPage() {
       style={{ backgroundColor: INK, color: "#E9E7E4" }}
     >
       {/* ------------------------------ hero ----------------------------- */}
-      <section className="relative h-[100svh] max-h-[900px] min-h-[640px] w-full overflow-hidden">
-        <div className="absolute inset-x-0 top-0 bottom-[116px] lg:left-[32%]">
-          <DisplayMesh
-            bundle={nk92.bundle}
-            field="fitted forces"
-            height="100%"
-            className="h-full w-full"
-            arrow_span={0.15}
-            zoom={1.45}
-            cube="field"
-            cube_color={0x3f4550}
-            background="transparent"
-            logo_width="0px"
-            cmap="turbo"
-            mouse_control
-            show_controls={false}
-            show_colormap
-            animations={[{ type: "rotate", speed: 4 }]}
+      <section className="relative w-full overflow-hidden lg:h-[100svh] lg:max-h-[900px] lg:min-h-[640px]">
+        <div className="pointer-events-none relative z-10 flex flex-col lg:h-full">
+          <div className="order-3 h-[400px] w-full sm:h-[470px] lg:absolute lg:inset-x-0 lg:top-0 lg:bottom-[116px] lg:left-[32%] lg:-z-10 lg:h-auto">
+            <DisplayMesh
+              bundle={nk92.bundle}
+              field="fitted forces"
+              height="100%"
+              className="pointer-events-auto h-full w-full"
+              arrow_span={0.15}
+              zoom={1.32}
+              cube="field"
+              cube_color={0x3f4550}
+              background="transparent"
+              logo_width="0px"
+              cmap="turbo"
+              mouse_control
+              show_controls={false}
+              show_colormap
+              animations={[{ type: "rotate", speed: 4 }]}
+            />
+          </div>
+
+          <div
+            className="hidden lg:absolute lg:inset-0 lg:-z-[5] lg:block"
+            style={{
+              background: `linear-gradient(100deg, ${INK} 0%, ${INK} 26%, rgba(7,8,10,0.82) 44%, rgba(7,8,10,0.15) 66%, rgba(7,8,10,0) 100%)`,
+            }}
           />
-        </div>
+          <div
+            className="hidden lg:absolute lg:inset-x-0 lg:bottom-0 lg:-z-[5] lg:block lg:h-56"
+            style={{
+              background: `linear-gradient(180deg, rgba(7,8,10,0) 0%, ${INK} 88%)`,
+            }}
+          />
 
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `linear-gradient(100deg, ${INK} 0%, ${INK} 26%, rgba(7,8,10,0.82) 44%, rgba(7,8,10,0.15) 66%, rgba(7,8,10,0) 100%)`,
-          }}
-        />
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
-          style={{
-            background: `linear-gradient(180deg, rgba(7,8,10,0) 0%, ${INK} 88%)`,
-          }}
-        />
-
-        <div className="pointer-events-none relative z-10 flex h-full flex-col">
-          <header className="flex items-baseline justify-between px-6 pt-8 md:px-12">
+          <header className="order-1 flex items-baseline justify-between px-6 pt-8 md:px-12">
             <div className="pointer-events-auto flex items-baseline gap-4">
               <span className="font-[family-name:var(--fb-display)] text-2xl tracking-tight">
                 saenopy
@@ -337,7 +337,7 @@ export default function ForceBarrierPage() {
             </nav>
           </header>
 
-          <div className="flex flex-1 items-center px-6 md:px-12">
+          <div className="order-2 flex flex-1 items-center px-6 pt-16 pb-12 md:px-12 lg:py-0">
             <div className="max-w-[46rem]">
               <Mono className="text-[#FF8A6A]">
                 For cell therapy &amp; immuno-oncology
@@ -358,7 +358,7 @@ export default function ForceBarrierPage() {
             </div>
           </div>
 
-          <div className="border-t border-white/10 px-6 py-6 md:px-12">
+          <div className="order-4 border-t border-white/10 px-6 py-6 md:px-12">
             <div className="flex flex-wrap items-end gap-x-12 gap-y-6">
               <Ledger label="Shown above" value={nk92.label} />
               <Ledger label="Peak traction" value={`${nk92.peakForce} nN`} />

@@ -3,7 +3,6 @@
 import * as React from "react";
 import { ArrowUpRight, Mail, Pause, Play, SkipBack, SkipForward } from "lucide-react";
 
-import { DisplayMesh } from "@/components/mesh/display";
 import {
   CLAIMS,
   DATASETS,
@@ -17,6 +16,7 @@ import {
 } from "@/lib/saenopy-content";
 
 import { RangePlot } from "./range-plot";
+import { DisplayMesh } from "@/components/mesh/display";
 import { MEDIAN_WITHOUT_PEAK, TraceFigure } from "./trace-figure";
 import styles from "./styles.module.css";
 
@@ -53,7 +53,7 @@ export default function ForceBurstsPage() {
   }, []);
 
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} min-h-screen`}>
       {/* ---------------------------------------------------------- nav */}
       <header className="border-b border-[var(--rule)]">
         <div className="mx-auto flex max-w-[1180px] items-center justify-between px-6 py-4">
@@ -135,8 +135,11 @@ export default function ForceBurstsPage() {
             </span>
           </figcaption>
 
-          {/* panel A — the reconstructed force field */}
-          <div className={`relative ${styles.stage}`}>
+          {/* panel A — the reconstructed deformation field.
+              The viewer is re-initialised whenever `frame` changes, and its
+              container has no height until it has mounted, so the stage pins
+              440 px itself. Without that the whole page reflows once a second. */}
+          <div className={`relative h-[440px] overflow-hidden ${styles.stage}`}>
             <DisplayMesh
               bundle={DYN.bundle}
               field="fitted deformations"

@@ -120,12 +120,14 @@ const FIBRO_STRAIN: SceneCfg = {
   zoom: 1.05,
 };
 
-const FIBRO_FORCE: SceneCfg = {
+/* cell007's fitted force field is a handful of arrows and reads as empty at
+   full-bleed; its deformation field fills the frame. */
+const FIBRO_STRAIN_2: SceneCfg = {
   bundle: DATASETS.cell007.bundle,
-  field: "fitted forces",
+  field: "fitted deformations",
   cmap: "turbo",
-  arrow_span: 0.14,
-  zoom: 1.05,
+  arrow_span: 0.11,
+  zoom: 1.2,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -135,7 +137,6 @@ const FIBRO_FORCE: SceneCfg = {
 const peakIndex = FORCE_TRACE.indexOf(Math.max(...FORCE_TRACE));
 const peakForce = FORCE_TRACE[peakIndex];
 const dyn = DATASETS.dynamic;
-const minutes = (dyn.frameInterval ?? 60) / 60;
 
 interface Panel {
   id: string;
@@ -186,7 +187,7 @@ const PANELS: Panel[] = [
     eyebrow: "The finding",
     headline: "Bursts, not a steady pull.",
     lead: IMMUNO.finding,
-    note: `${dyn.frames} time points, one per ${minutes} min — peak fitted traction force per frame.`,
+    note: `${dyn.frames} time points, ${dyn.frameInterval} s apart — peak fitted traction force per frame.`,
     readout: {
       label: dyn.label,
       field: DYNAMIC.field,
@@ -224,15 +225,15 @@ const PANELS: Panel[] = [
   {
     id: "stroma",
     nav: "Cell therapy",
-    scene: FIBRO_FORCE,
+    scene: FIBRO_STRAIN_2,
     eyebrow: "Cell therapy",
-    headline: IMMUNO.why[0].title,
+    headline: `${IMMUNO.why[0].title}.`,
     lead: IMMUNO.why[0].body,
     bullets: [IMMUNO.why[1].title, IMMUNO.why[2].title],
     readout: {
       label: DATASETS.cell007.label,
-      field: FIBRO_FORCE.field,
-      value: `${DATASETS.cell007.peakForce} nN`,
+      field: FIBRO_STRAIN_2.field,
+      value: `${DATASETS.cell007.peakDeformation} µm`,
     },
   },
   {

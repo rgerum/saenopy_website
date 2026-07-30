@@ -57,10 +57,17 @@ export interface DisplayMeshProps {
   onStats?: (stats: ViewerStats) => void;
 }
 
+interface LiveParams {
+  frame: number;
+  time_points?: number;
+  bundle_stats?: ViewerStats;
+}
+
 export function DisplayMesh({
   className,
   onStats,
   height = "400px",
+  frame = 0,
   ...options
 }: DisplayMeshProps) {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -69,7 +76,13 @@ export function DisplayMesh({
     onStatsRef.current = onStats;
   }, [onStats]);
 
-  // serialised so a caller passing inline objects does not restart the viewer
+  // the live viewer params and its redraw, so the time point can be changed
+  // without tearing down the WebGL context and re-decoding the bundle
+  const live = React.useRef<{ params: LiveParams; redraw: () => void } | null>(null);
+  const wantedFrame = React.useRef(frame);
+
+  // serialised so a caller passing inline objects does not restart the viewer.
+  // `frame` is deliberately not part of this — it is applied in place below.
   const key = JSON.stringify(options);
 
   React.useEffect(() => {
@@ -78,13 +91,16 @@ export function DisplayMesh({
 
     const controller = new AbortController();
     let dispose: (() => void) | undefined;
+    live.current = null;
 
     init({
       ...JSON.parse(key),
       height,
+      frame: wantedFrame.current,
       dom_node: node,
       signal: controller.signal,
-      on_ready: (params: { bundle_stats?: ViewerStats }) => {
+      on_ready: (params: LiveParams, redraw: () => void) => {
+        live.current = { params, redraw };
         if (params.bundle_stats) onStatsRef.current?.(params.bundle_stats);
       },
     })
@@ -99,9 +115,22 @@ export function DisplayMesh({
     return () => {
       controller.abort();
       dispose?.();
+      live.current = null;
       node.replaceChildren();
     };
   }, [key, height]);
 
-  return <div ref={ref} className={className} />;
+  React.useEffect(() => {
+    wantedFrame.current = frame;
+    const current = live.current;
+    if (!current) return;
+    const count = current.params.time_points ?? 1;
+    if (count < 2 || current.params.frame === frame) return;
+    current.params.frame = ((frame % count) + count) % count;
+    current.redraw();
+  }, [frame]);
+
+  // the height is reserved here as well as inside the viewer, so a figure does
+  // not reflow while its bundle is still loading
+  return <div ref={ref} className={className} style={{ minHeight: height }} />;
 }

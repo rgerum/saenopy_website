@@ -26,11 +26,20 @@ const B_TOP = 202;
 const B_H = 120;
 const B_BOT = B_TOP + B_H;
 
-const F_MAX = 0.95; // nN, headroom over the 0.893 nN burst
-const E_MAX = 62; // fJ, headroom over the 56.76 fJ start
+/* axes are derived from the traces rather than hard-coded, so an update to
+   lib/saenopy-content.ts cannot silently clip a point off the top */
+const headroom = (values: number[], step: number) =>
+  Math.max(step, Math.ceil((Math.max(...values) * 1.07) / (step / 10)) * (step / 10));
+const ticksTo = (max: number, step: number) =>
+  Array.from({ length: Math.floor(max / step) + 1 }, (_, i) => i * step);
 
-const F_TICKS = [0, 0.2, 0.4, 0.6, 0.8];
-const E_TICKS = [0, 20, 40, 60];
+const F_STEP = 0.2;
+const E_STEP = 20;
+const F_MAX = headroom(FORCE_TRACE, F_STEP); // nN
+const E_MAX = headroom(ENERGY_TRACE, E_STEP); // fJ
+
+const F_TICKS = ticksTo(F_MAX, F_STEP);
+const E_TICKS = ticksTo(E_MAX, E_STEP);
 
 const x = (i: number) => LEFT + (i / T_MAX) * PLOT_W;
 const yF = (v: number) => A_BOT - (v / F_MAX) * A_H;
@@ -47,8 +56,19 @@ const PEAK_I = FORCE_TRACE.indexOf(Math.max(...FORCE_TRACE));
 /** median of every frame except the burst, computed rather than asserted */
 export const MEDIAN_WITHOUT_PEAK = (() => {
   const rest = FORCE_TRACE.filter((_, i) => i !== PEAK_I).sort((a, b) => a - b);
-  const m = rest.length / 2;
-  return (rest[m - 1] + rest[m]) / 2;
+  const m = Math.floor(rest.length / 2);
+  return rest.length % 2 ? rest[m] : (rest[m - 1] + rest[m]) / 2;
+})();
+
+/**
+ * Start of the trailing run of frames that sit below half the baseline and
+ * never recover — the end-of-recording collapse, as opposed to the single-frame
+ * fall off the burst. -1 when the trace has no such tail.
+ */
+const DROP_I = (() => {
+  let i = N;
+  while (i > 0 && FORCE_TRACE[i - 1] < MEDIAN_WITHOUT_PEAK / 2) i -= 1;
+  return i > 0 && i < N ? i : -1;
 })();
 
 const GRID = "#16202b";
@@ -129,7 +149,7 @@ export function TraceFigure({ frame }: { frame: number }) {
           strokeWidth={1}
         />
       ))}
-      {Array.from({ length: 12 }, (_, k) => k * 2).map((t) => (
+      {Array.from({ length: Math.floor(T_MAX / 2) + 1 }, (_, k) => k * 2).map((t) => (
         <g key={`major-${t}`}>
           <line x1={x(t)} x2={x(t)} y1={B_BOT} y2={B_BOT + 6} stroke={SPINE} strokeWidth={1} />
           <line x1={x(t)} x2={x(t)} y1={A_BOT} y2={A_BOT + 4} stroke={SPINE} strokeWidth={1} />
@@ -210,22 +230,26 @@ export function TraceFigure({ frame }: { frame: number }) {
       >
         burst — {FORCE_TRACE[PEAK_I]} nN at minute {PEAK_I}
       </text>
-      <line
-        x1={x(21) - 10}
-        x2={x(21) - 4}
-        y1={yF(FORCE_TRACE[21])}
-        y2={yF(FORCE_TRACE[21])}
-        stroke="#7d8d9d"
-        strokeWidth={1}
-      />
-      <text
-        x={x(21) - 15}
-        y={yF(FORCE_TRACE[21]) + 3.6}
-        textAnchor="end"
-        className={styles.note}
-      >
-        collapse after minute 20
-      </text>
+      {DROP_I > 0 ? (
+        <g>
+          <line
+            x1={x(DROP_I) - 10}
+            x2={x(DROP_I) - 4}
+            y1={yF(FORCE_TRACE[DROP_I])}
+            y2={yF(FORCE_TRACE[DROP_I])}
+            stroke="#7d8d9d"
+            strokeWidth={1}
+          />
+          <text
+            x={x(DROP_I) - 15}
+            y={yF(FORCE_TRACE[DROP_I]) + 3.6}
+            textAnchor="end"
+            className={styles.note}
+          >
+            collapse after minute {DROP_I - 1}
+          </text>
+        </g>
+      ) : null}
 
       {/* the marker that tracks the 3D field */}
       <g>

@@ -234,41 +234,57 @@ const FIELDS = [
 
 export default function MethodScrollPage() {
   const [active, setActive] = React.useState(0);
-  const [ready, setReady] = React.useState<Record<string, boolean>>({});
   const sectionRefs = React.useRef<(HTMLElement | null)[]>([]);
 
   const step = STEPS[active];
 
-  // one viewer per field, cross-faded: the camera of all three runs at the same
-  // rotation speed, so a step change reads as the field morphing in place
-  const onReady = React.useMemo(
-    () =>
-      Object.fromEntries(
-        FIELDS.map((name) => [
-          name,
-          () => setReady((prev) => (prev[name] ? prev : { ...prev, [name]: true })),
-        ]),
-      ),
-    [],
-  );
+  // One viewer, one WebGL context. `shown` is the field it currently holds and
+  // `busy` is true while a field is being loaded; a new field is only handed to
+  // the viewer once the previous one has finished, so a fast scroll can never
+  // tear down a load that is still in flight. Step 01 has no field of its own
+  // and simply keeps whatever is loaded behind the schematic.
+  const [shown, setShown] = React.useState<string>(FIELDS[0]);
+  const [busy, setBusy] = React.useState(true);
+  const target = step.field ?? shown;
 
+  React.useEffect(() => {
+    if (busy || shown === target) return;
+    setShown(target);
+    setBusy(true);
+  }, [busy, shown, target]);
+
+  const onReady = React.useCallback(() => setBusy(false), []);
+
+  // a missed callback must not leave the panel dark for good
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => setBusy(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [shown]);
+
+  // A step is current once its top has passed the middle of the window; the
+  // observer is only the trigger, the geometry decides, so landing anywhere —
+  // including a deep link past the last step — resolves to the right step.
   React.useEffect(() => {
     const nodes = sectionRefs.current.filter(Boolean) as HTMLElement[];
     if (!nodes.length) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const index = Number(
-            (entry.target as HTMLElement).dataset.index ?? "0",
-          );
-          setActive(index);
-        }
-      },
-      { rootMargin: "-48% 0px -48% 0px", threshold: 0 },
-    );
+    const resolve = () => {
+      const middle = window.innerHeight / 2;
+      let next = 0;
+      nodes.forEach((node, index) => {
+        if (node.getBoundingClientRect().top <= middle) next = index;
+      });
+      setActive(next);
+    };
+    const observer = new IntersectionObserver(resolve, {
+      rootMargin: "-48% 0px -48% 0px",
+      threshold: 0,
+    });
     nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
+    window.addEventListener("resize", resolve);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", resolve);
+    };
   }, []);
 
   // the time-resolved viewer only mounts once it is nearly in view, so the page
@@ -290,6 +306,8 @@ export default function MethodScrollPage() {
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  const fieldVisible = Boolean(step.field) && step.field === shown && !busy;
 
   const goTo = (index: number) => {
     sectionRefs.current[index]?.scrollIntoView({
@@ -393,41 +411,44 @@ export default function MethodScrollPage() {
                 >
                   <StackSchematic />
                 </div>
-                {FIELDS.map((name) => (
-                  <div
-                    key={name}
-                    aria-hidden={step.field !== name}
-                    className={`absolute inset-0 transition-opacity duration-700 ${
-                      step.field === name && ready[name]
-                        ? "opacity-100"
-                        : "pointer-events-none opacity-0"
-                    }`}
-                  >
-                    <DisplayMesh
-                      bundle={CELL.bundle}
-                      field={name}
-                      height="100%"
-                      className="h-full w-full"
-                      arrow_span={0.09}
-                      zoom={1.15}
-                      cube="field"
-                      cube_color={0x5b6770}
-                      background="transparent"
-                      logo_width="0px"
-                      cmap="turbo"
-                      show_controls={false}
-                      show_colormap
-                      mouse_control
-                      animations={[{ type: "rotate", speed: 5 }]}
-                      onStats={onReady[name]}
-                    />
-                  </div>
-                ))}
+                <div
+                  aria-hidden={!fieldVisible}
+                  className={`absolute inset-0 transition-opacity duration-500 ${
+                    fieldVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                  }`}
+                >
+                  <DisplayMesh
+                    bundle={CELL.bundle}
+                    field={shown}
+                    height="100%"
+                    className="h-full w-full"
+                    arrow_span={0.09}
+                    zoom={1.15}
+                    cube="field"
+                    cube_color={0x5b6770}
+                    background="transparent"
+                    logo_width="0px"
+                    cmap="turbo"
+                    show_controls={false}
+                    show_colormap
+                    mouse_control
+                    animations={[{ type: "rotate", speed: 5 }]}
+                    onStats={onReady}
+                  />
+                </div>
                 <span
                   className="pointer-events-none absolute left-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[#8f9aa1]"
                   style={MONO}
                 >
                   {step.field ?? "schematic"}
+                </span>
+                <span
+                  className={`pointer-events-none absolute right-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[#8f9aa1] transition-opacity duration-300 ${
+                    step.field && !fieldVisible ? "opacity-100" : "opacity-0"
+                  }`}
+                  style={MONO}
+                >
+                  loading field…
                 </span>
               </div>
               <figcaption className="flex flex-wrap items-center justify-between gap-3 border-t border-[#333b41] px-4 py-3">

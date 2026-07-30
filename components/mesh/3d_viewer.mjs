@@ -600,7 +600,9 @@ export async function init(initial_params) {
   }
   add_drop(renderer.domElement.parentElement, params, update_all);
 
-  if (params.on_ready) params.on_ready(params);
+  // hand the caller the live params plus a redraw, so a changing time point
+  // can be applied in place instead of tearing the viewer down
+  if (params.on_ready) params.on_ready(params, update_all);
 
   return function dispose() {
     params.disposed = true;

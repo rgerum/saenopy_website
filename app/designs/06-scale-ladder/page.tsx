@@ -93,7 +93,7 @@ function Trace({
           <text
             key={m}
             x={x(m)}
-            y={134}
+            y={136}
             textAnchor="middle"
             fontSize={10.5}
             fill="#6A6C70"
@@ -102,15 +102,12 @@ function Trace({
             {m}
           </text>
         ))}
-        <text x={466} y={134} textAnchor="end" fontSize={10.5} fill="#9A9890" className={mono.className}>
-          minutes
-        </text>
-        <text x={38} y={12} fontSize={10.5} fill="#6A6C70" className={mono.className}>
-          {unit}
-        </text>
       </svg>
       <figcaption className="mt-2 text-[12.5px] leading-relaxed text-[#6A6C70]">
         <span className="text-[#191A1C]">{caption}</span> {peakNote}
+        <span className="mt-1 block font-mono text-[11px] text-[#9A9890]">
+          y in {unit} · x in minutes
+        </span>
       </figcaption>
     </figure>
   );
@@ -161,7 +158,8 @@ export default function ScaleLadderPage() {
           Four orders of magnitude.
         </h1>
         <p className="mt-4 font-mono text-[15px] tracking-[-0.01em] text-[#6A6C70]">
-          {PAPER_RANGE} &mdash; one method across the whole range.
+          {PAPER_RANGE}
+          {" — "}one method across the whole range.
         </p>
 
         <div className="mt-12 grid gap-12 border-t border-[#E2E1DC] pt-10 md:grid-cols-[1.25fr_1fr]">
@@ -188,7 +186,7 @@ export default function ScaleLadderPage() {
             </a>
           </div>
 
-          <aside className="border border-[#E2E1DC] bg-white p-6">
+          <aside className="self-start border border-[#E2E1DC] bg-white p-6">
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6A6C70]">
               Source
             </div>
@@ -264,7 +262,8 @@ export default function ScaleLadderPage() {
           </div>
           <div className="self-end">
             <p className="max-w-[58ch] text-[15px] leading-[1.65] text-[#6A6C70]">
-              Vertical position is log<sub>10</sub> of the peak fitted traction force in
+              Vertical position is log<sub>10</sub>
+              {" of "}the peak fitted traction force in
               nN, drawn to scale &mdash; every decade is the same 380&nbsp;px. Ticks sit at
               the true value; where a label would not fit there, a leader line shows how
               far it had to move. The two dashed rules are the endpoints quoted in the
@@ -279,7 +278,7 @@ export default function ScaleLadderPage() {
       </section>
 
       {/* ----------------------------------------------------------- time */}
-      <section className="border-t border-[#E2E1DC] bg-white">
+      <section id="time" className="border-t border-[#E2E1DC] bg-white">
         <div className="mx-auto max-w-[1160px] px-6 py-16">
           <div className="grid gap-10 md:grid-cols-[1fr_1.2fr]">
             <div>
@@ -299,14 +298,14 @@ export default function ScaleLadderPage() {
           </div>
 
           <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1fr]">
-            <div className="border border-[#E2E1DC]">
+            <div className="self-start border border-[#E2E1DC]">
               <div className="bg-[#101317]">
                 <DisplayMesh
                   bundle={DATASETS.dynamic.bundle}
                   field="fitted deformations"
                   height="420px"
                   arrow_span={0.1}
-                  zoom={1.15}
+                  zoom={1.5}
                   cube="field"
                   cube_color={0x3a4250}
                   background="transparent"
@@ -357,7 +356,7 @@ export default function ScaleLadderPage() {
       </section>
 
       {/* --------------------------------------------------------- immuno */}
-      <section className="bg-[#14161B] text-[#E8E8E6]">
+      <section id="immuno" className="bg-[#14161B] text-[#E8E8E6]">
         <div className="mx-auto max-w-[1160px] px-6 py-20">
           <div className="grid gap-12 md:grid-cols-[1fr_1.2fr]">
             <div>
@@ -382,6 +381,26 @@ export default function ScaleLadderPage() {
               <p className="mt-3 pl-6 font-mono text-[11px] text-[#8A8D93]">
                 {PAPER.shortAuthors}, {PAPER.journal} {PAPER.year}
               </p>
+              <dl className="mt-10 grid gap-px bg-[#262A31] sm:grid-cols-3">
+                {[
+                  {
+                    v: `${DATASETS.nk92.peakForce} nN`,
+                    k: "peak traction, single NK92 cell in 3D collagen",
+                  },
+                  { v: IMMUNO.speed, k: "migration speed of immune cells through tissue" },
+                  {
+                    v: "no label",
+                    k: "measured from bright-field stacks, no fluorescence needed",
+                  },
+                ].map((s) => (
+                  <div key={s.k} className="bg-[#14161B] px-5 py-4">
+                    <dt className="font-mono text-[16px] tracking-[-0.01em]">{s.v}</dt>
+                    <dd className="mt-1.5 text-[11.5px] leading-[1.5] text-[#8A8D93]">
+                      {s.k}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
 
@@ -390,7 +409,7 @@ export default function ScaleLadderPage() {
               <div key={w.title} className="bg-[#14161B] p-7">
                 <div
                   className="font-mono text-[10.5px]"
-                  style={{ color: colorFor([0.87, 61.3, 10000][i]) }}
+                  style={{ color: ["#7E9CC8", "#C08AB0", "#E0777A"][i] }}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </div>
@@ -405,7 +424,7 @@ export default function ScaleLadderPage() {
       </section>
 
       {/* --------------------------------------------------- placeholders */}
-      <section className="mx-auto max-w-[1160px] px-6 py-20">
+      <section id="placeholders" className="mx-auto max-w-[1160px] px-6 py-20">
         <div className="grid gap-10 md:grid-cols-[1fr_1.2fr]">
           <div>
             <div className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[#6A6C70]">
@@ -458,7 +477,7 @@ export default function ScaleLadderPage() {
               The software is open. The rest is a conversation.
             </h2>
             <p className="mt-5 max-w-[46ch] text-[14.5px] leading-[1.7] text-[#6A6C70]">
-              Saenopy is free and open source. Alongside it, the group offers:
+              Saenopy is free and open source. What the group offers around it:
             </p>
             <a
               href={LINKS.contact}
