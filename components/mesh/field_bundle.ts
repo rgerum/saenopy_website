@@ -18,7 +18,17 @@ export type NpyLike = Float32Array & {
   header: { shape: [number, number]; fortran_order: boolean; descr: string };
 };
 
+export interface BundleFrame {
+  nodes: NpyLike;
+  vectors: NpyLike;
+  /** largest magnitude in this frame, in SI units */
+  max: number;
+}
+
 export interface BundleField {
+  /** every time point; a static field has exactly one */
+  frames: BundleFrame[];
+  /** first frame, for callers that ignore time */
   nodes: NpyLike;
   vectors: NpyLike;
   /** arrows kept in the bundle */
@@ -27,7 +37,7 @@ export interface BundleField {
   total: number;
   unit: string;
   factor: number;
-  /** largest magnitude in SI units */
+  /** magnitude the colour scale runs to, shared across frames, in SI units */
   max: number;
   /** what this field costs as deflated float32 .npy arrays */
   baseline: number;
@@ -35,6 +45,12 @@ export interface BundleField {
 
 export interface Bundle {
   fields: Record<string, BundleField>;
+  /** number of time points, 1 for a static field */
+  timePoints: number;
+  /** seconds between time points, if the result recorded one */
+  timeDelta: number | null;
+  /** per-time-point scalars: total strain energy and peak force, in SI units */
+  series: { strainEnergy: (number | null)[]; peakForce: (number | null)[] };
   /** size of the file as it came over the wire */
   transferBytes: number;
   /** size after decompression */
@@ -49,6 +65,12 @@ interface GridHeader {
   spacing: [number, number, number];
 }
 
+interface FrameHeader {
+  offset: number;
+  length: number;
+  max: number;
+}
+
 interface FieldHeader {
   count: number;
   total: number;
@@ -56,8 +78,7 @@ interface FieldHeader {
   max: number;
   unit: string;
   factor: number;
-  offset: number;
-  length: number;
+  frames: FrameHeader[];
   layout: "grid" | "quantised";
   grid?: number;
   positions?: { origin: [number, number, number]; span: [number, number, number] };
@@ -85,7 +106,12 @@ function decodeDirection(ex: number, ey: number, out: Float32Array, at: number) 
   out[at + 2] = z / len;
 }
 
-function decodeField(bytes: Uint8Array, field: FieldHeader, grids: GridHeader[]): BundleField {
+function decodeFrame(
+  bytes: Uint8Array,
+  field: FieldHeader,
+  frame: FrameHeader,
+  grids: GridHeader[],
+): BundleFrame {
   const n = field.count;
   const positions = new Float32Array(n * 3);
   const vectors = new Float32Array(n * 3);
@@ -137,7 +163,19 @@ function decodeField(bytes: Uint8Array, field: FieldHeader, grids: GridHeader[])
   return {
     nodes: asNpyLike(positions, n),
     vectors: asNpyLike(vectors, n),
-    count: n,
+    max: frame.max,
+  };
+}
+
+function decodeField(body: Uint8Array, field: FieldHeader, grids: GridHeader[]): BundleField {
+  const frames = field.frames.map((frame) =>
+    decodeFrame(body.subarray(frame.offset, frame.offset + frame.length), field, frame, grids),
+  );
+  return {
+    frames,
+    nodes: frames[0].nodes,
+    vectors: frames[0].vectors,
+    count: field.count,
     total: field.total,
     unit: field.unit,
     factor: field.factor,
@@ -174,11 +212,14 @@ export async function loadFieldBundle(url: string): Promise<Bundle> {
 
   const fields: Record<string, BundleField> = {};
   for (const [name, field] of Object.entries(header.fields as Record<string, FieldHeader>)) {
-    fields[name] = decodeField(body.subarray(field.offset, field.offset + field.length), field, header.grids);
+    fields[name] = decodeField(body, field, header.grids);
   }
 
   return {
     fields,
+    timePoints: header.timePoints ?? 1,
+    timeDelta: header.timeDelta ?? null,
+    series: header.series ?? { strainEnergy: [], peakForce: [] },
     transferBytes: compressed.byteLength,
     rawBytes: raw.byteLength,
     baselineBytes: Object.values(fields).reduce((sum, f) => sum + f.baseline, 0),

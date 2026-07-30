@@ -6,9 +6,19 @@ export interface ViewerStats {
   transferBytes: number;
   rawBytes: number;
   baselineBytes: number;
+  timePoints: number;
+  timeDelta: number | null;
+  series: { strainEnergy: (number | null)[]; peakForce: (number | null)[] };
   fields: Record<
     string,
-    { count: number; total: number; unit: string; max: number }
+    {
+      count: number;
+      total: number;
+      unit: string;
+      max: number;
+      /** peak magnitude per time point, in display units */
+      frameMax: number[];
+    }
   >;
 }
 
@@ -18,6 +28,13 @@ export interface DisplayMeshProps {
   /** legacy path to a folder holding data.json plus .npy files */
   path?: string;
   field?: string;
+  /**
+   * Longest arrow as a fraction of the domain size, default 0.1. Prefer this
+   * over `scale`: it looks right on any dataset without retuning, since fields
+   * differ by orders of magnitude between an immune cell and an organoid.
+   */
+  arrow_span?: number;
+  /** fixed arrow scale; only used when arrow_span is explicitly set to 0 */
   scale?: number;
   zoom?: number;
   cmap?: string;
@@ -29,7 +46,13 @@ export interface DisplayMeshProps {
   mouse_control?: boolean;
   show_controls?: boolean;
   show_colormap?: boolean;
-  animations?: { type: string; speed?: number }[];
+  /** starting time point for a multi-frame bundle */
+  frame?: number;
+  /**
+   * "rotate" spins the camera, "time" steps through a multi-frame bundle at
+   * `fps`, "scroll-tilt" ties the camera elevation to the scroll position.
+   */
+  animations?: { type: string; speed?: number; fps?: number }[];
   className?: string;
   onStats?: (stats: ViewerStats) => void;
 }

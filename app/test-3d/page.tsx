@@ -5,31 +5,43 @@ import { DisplayMesh, type ViewerStats } from "@/components/mesh/display";
 
 const BUNDLES = [
   {
-    id: "deformations",
-    label: "Hero — deformations",
-    file: "/data/hero-deformations.sfb.gz",
+    id: "cell",
+    label: "Fibroblast",
+    file: "/data/single-cell-007.sfb.gz",
     description:
-      "Fitted deformation field, 3000 arrows. Smooth and dense, the best-looking option for the landing page.",
+      "Single cell traction force microscopy. Use the controls panel to switch between measured, target and fitted deformations and the fitted forces.",
     field: "fitted deformations",
-    scale: 3,
+    animations: [{ type: "rotate", speed: 6 }],
   },
   {
-    id: "forces",
-    label: "Hero — forces",
-    file: "/data/hero-forces.sfb.gz",
+    id: "nk92",
+    label: "NK92 immune cell",
+    file: "/data/nk92-immune-cell.sfb.gz",
     description:
-      "Traction forces, 1200 arrows, magnitudes saturated at the 92nd percentile. Forces are heavy tailed — without clipping a handful of nodes are thousands of times longer than the rest.",
-    field: "fitted forces",
-    scale: 20,
+      "A natural killer cell measured from bright-field stacks, no fluorescent label. Peak traction is 0.87 nN, roughly a hundredth of the fibroblast.",
+    field: "fitted deformations",
+    animations: [{ type: "rotate", speed: 6 }],
   },
   {
-    id: "full",
-    label: "All fields, unclipped",
-    file: "/data/single-cell-tfm.sfb.gz",
+    id: "organoid",
+    label: "Intestinal organoid",
+    file: "/data/organoid.sfb.gz",
     description:
-      "Measured, target and fitted deformations plus fitted forces, 4000 arrows each and no clipping. Use the controls panel to switch between them.",
+      "A whole organoid contracting the gel around it, two orders of magnitude above a single immune cell.",
     field: "fitted deformations",
-    scale: 3,
+    animations: [{ type: "rotate", speed: 6 }],
+  },
+  {
+    id: "dynamic",
+    label: "Migration, 23 min",
+    file: "/data/dynamic-migration.sfb.gz",
+    description:
+      "23 time points at one minute apart, played back as an animation. Every frame is quantised against one shared magnitude scale so the colours mean the same thing throughout.",
+    field: "fitted deformations",
+    animations: [
+      { type: "rotate", speed: 4 },
+      { type: "time", fps: 4 },
+    ],
   },
 ];
 
@@ -93,7 +105,6 @@ export default function Test3DPage() {
           bundle={bundle.file}
           field={bundle.field}
           height="560px"
-          scale={bundle.scale}
           zoom={1.1}
           cube="field"
           cube_color={0x64748b}
@@ -102,7 +113,7 @@ export default function Test3DPage() {
           mouse_control
           show_controls
           show_colormap
-          animations={[{ type: "rotate", speed: 6 }]}
+          animations={bundle.animations}
           onStats={onStats}
         />
       </div>

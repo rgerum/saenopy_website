@@ -37,12 +37,13 @@ import numpy as np
 
 MAGIC = b"SFB1"
 
-# (field name, nodes key, vectors key, unit, factor from SI to display unit)
+# (field name, nodes key, vectors key, unit, factor from SI to display unit);
+# {t} is the time point index
 FIELDS = [
-    ("measured deformations", "mesh_piv/0/nodes.npy", "mesh_piv/0/displacements_measured.npy", "µm", 1e6),
-    ("target deformations", "solvers/0/mesh/nodes.npy", "solvers/0/mesh/displacements_target.npy", "µm", 1e6),
-    ("fitted deformations", "solvers/0/mesh/nodes.npy", "solvers/0/mesh/displacements.npy", "µm", 1e6),
-    ("fitted forces", "solvers/0/mesh/nodes.npy", "solvers/0/mesh/forces.npy", "nN", 1e9),
+    ("measured deformations", "mesh_piv/{t}/nodes.npy", "mesh_piv/{t}/displacements_measured.npy", "µm", 1e6),
+    ("target deformations", "solvers/{t}/mesh/nodes.npy", "solvers/{t}/mesh/displacements_target.npy", "µm", 1e6),
+    ("fitted deformations", "solvers/{t}/mesh/nodes.npy", "solvers/{t}/mesh/displacements.npy", "µm", 1e6),
+    ("fitted forces", "solvers/{t}/mesh/nodes.npy", "solvers/{t}/mesh/forces.npy", "nN", 1e9),
 ]
 
 
@@ -58,6 +59,15 @@ class Result:
 
     def array(self, key: str) -> np.ndarray:
         return np.load(io.BytesIO(self.zip.read(key)), allow_pickle=False)
+
+    def scalar(self, key: str) -> float | None:
+        """A scalar entry, or None -- saenopy writes missing values as '__NONE__'."""
+        if not self.has(key):
+            return None
+        value = self.array(key)
+        if value.dtype.kind in "US":
+            return None
+        return float(value)
 
 
 def octahedral_encode(vectors: np.ndarray) -> np.ndarray:
@@ -127,51 +137,35 @@ def baseline_size(nodes: np.ndarray, vectors: np.ndarray) -> int:
     return len(zlib.compress(blob, 9))
 
 
-def encode_field(
-    nodes: np.ndarray,
-    vectors: np.ndarray,
-    max_arrows: int,
-    clip: float | None = None,
-    force_quantised: bool = False,
-):
-    """Encode one vector field. Returns (payload bytes, metadata dict)."""
-    vectors = np.nan_to_num(np.asarray(vectors, dtype=np.float64))
-    magnitude = np.linalg.norm(vectors, axis=1)
-    peak = float(magnitude.max())
-    if peak <= 0:
-        return b"", None
+def select_arrows(magnitude: np.ndarray, max_arrows: int) -> np.ndarray:
+    """Indices of the largest arrows, in ascending order."""
+    order = np.argsort(magnitude)[::-1][: min(max_arrows, len(magnitude))]
+    return np.sort(order[magnitude[order] > 0])
 
-    keep = np.argsort(magnitude)[::-1][: min(max_arrows, len(magnitude))]
-    keep = np.sort(keep[magnitude[keep] > 0])
-    kept_vectors = vectors[keep]
-    kept_magnitude = magnitude[keep]
 
-    clipped = 0
-    if clip is not None:
-        # traction force fields are heavy tailed: a handful of nodes can be
-        # thousands of times longer than the rest, which leaves the viewer
-        # showing two huge arrows and nothing else. Saturating at a percentile
-        # is the same thing a colorbar range does.
-        limit = float(np.percentile(kept_magnitude, clip))
-        if limit > 0:
-            over = kept_magnitude > limit
-            clipped = int(over.sum())
-            kept_vectors = np.where(
-                over[:, None], kept_vectors * (limit / np.maximum(kept_magnitude, 1e-300))[:, None], kept_vectors
-            )
-            kept_magnitude = np.minimum(kept_magnitude, limit)
-            peak = limit
+def encode_frame(nodes: np.ndarray, vectors: np.ndarray, keep: np.ndarray, peak: float, force_quantised: bool):
+    """Encode one time point of a field against a shared magnitude scale."""
+    kept_vectors = np.asarray(vectors, dtype=np.float64)[keep]
+    kept_magnitude = np.linalg.norm(kept_vectors, axis=1)
+
+    over = kept_magnitude > peak
+    clipped = int(over.sum())
+    if clipped:
+        kept_vectors = np.where(
+            over[:, None], kept_vectors * (peak / np.maximum(kept_magnitude, 1e-300))[:, None], kept_vectors
+        )
+        kept_magnitude = np.minimum(kept_magnitude, peak)
 
     direction = octahedral_encode(kept_vectors)
     quantised = np.clip(np.round(np.sqrt(kept_magnitude / peak) * 255), 0, 255).astype(np.uint8)
 
     grid = None if force_quantised else detect_grid(nodes)
     parts = []
+    positions = None
     if grid is not None:
         # sorted indices, so consecutive deltas stay small and compress well
         deltas = np.diff(np.concatenate([[0], keep])).astype(np.uint32)
         parts.append(split_bytes(deltas, 2))
-        positions = None
     else:
         lower = nodes.min(axis=0)
         upper = nodes.max(axis=0)
@@ -191,68 +185,156 @@ def encode_field(
 
     meta = {
         "count": int(len(keep)),
-        "total": int(len(magnitude)),
-        "max": peak,
         "clipped": clipped,
         "layout": "grid" if grid is not None else "quantised",
         "error": {"mean": float(error.mean()), "max": float(error.max())},
-        # what the same field costs as deflated float32 .npy arrays, which is
-        # what the viewer used to download
-        "baseline": baseline_size(nodes, vectors),
     }
     if positions is not None:
         meta["positions"] = positions
     return payload, meta
 
 
-def build_bundle(result: Result, max_arrows: int, clip: float | None, only: list[str] | None):
+def load_vectors(result: Result, name: str, vectors_key: str, t: int) -> np.ndarray:
+    vectors = np.nan_to_num(np.asarray(result.array(vectors_key), dtype=np.float64))
+    mask_key = f"solvers/{t}/mesh/regularisation_mask.npy"
+    if name == "fitted forces" and result.has(mask_key):
+        # forces are only meaningful inside the regularisation region, and they
+        # are reported with the opposite sign of what we draw
+        vectors = -vectors * np.asarray(result.array(mask_key), dtype=np.float64)[:, None]
+    return vectors
+
+
+def time_points(result: Result) -> list[int]:
+    """Solver time points present in the result, in order."""
+    found = set()
+    for key in result.names:
+        parts = key.split("/")
+        if len(parts) > 2 and parts[0] == "solvers" and parts[2] == "mesh" and parts[1].isdigit():
+            found.add(int(parts[1]))
+    return sorted(found)
+
+
+def build_bundle(
+    result: Result,
+    max_arrows: int,
+    clip: float | None,
+    only: list[str] | None,
+    frames: int = 1,
+):
     fields = {}
     grids = []
     blocks = []
     offset = 0
     dropped = []
 
-    for name, nodes_key, vectors_key, unit, factor in FIELDS:
+    available = time_points(result) or [0]
+    used_times = available[:frames] if frames > 1 else [available[0]]
+
+    for name, nodes_template, vectors_template, unit, factor in FIELDS:
         if only and name not in only:
             continue
-        if not (result.has(nodes_key) and result.has(vectors_key)):
+        keys = [(nodes_template.format(t=t), vectors_template.format(t=t)) for t in used_times]
+        if not all(result.has(n) and result.has(v) for n, v in keys):
             dropped.append(f"{name} (missing in result file)")
             continue
-        nodes = np.asarray(result.array(nodes_key), dtype=np.float64)
-        vectors = result.array(vectors_key)
-        if name == "fitted forces" and result.has("solvers/0/mesh/regularisation_mask.npy"):
-            # forces are only meaningful inside the regularisation region, and
-            # they are reported with the opposite sign of what we draw
-            mask = result.array("solvers/0/mesh/regularisation_mask.npy")
-            vectors = -np.asarray(vectors, dtype=np.float64) * np.asarray(mask, dtype=np.float64)[:, None]
 
-        payload, meta = encode_field(nodes, vectors, max_arrows, clip)
-        if meta is None:
+        nodes = np.asarray(result.array(keys[0][0]), dtype=np.float64)
+        series = [load_vectors(result, name, v, t) for (_, v), t in zip(keys, used_times)]
+        if any(len(v) != len(nodes) for v in series):
+            dropped.append(f"{name} (mesh changes between time points)")
+            continue
+
+        # one arrow set and one magnitude scale for every frame, so the
+        # animation neither pops nor reshuffles its colours
+        mean_magnitude = np.mean([np.linalg.norm(v, axis=1) for v in series], axis=0)
+        keep = select_arrows(mean_magnitude, max_arrows)
+        if len(keep) == 0:
+            dropped.append(f"{name} (all zero)")
+            continue
+        pooled = np.concatenate([np.linalg.norm(v[keep], axis=1) for v in series])
+        peak = float(np.percentile(pooled, clip)) if clip is not None else float(pooled.max())
+        if peak <= 0:
             dropped.append(f"{name} (all zero)")
             continue
 
-        if meta["layout"] == "grid":
+        force_quantised = False
+        if detect_grid(nodes) is not None:
             shape, origin, spacing = detect_grid(nodes)
             grid = {"shape": shape, "origin": origin, "spacing": spacing}
             if grid not in grids:
                 grids.append(grid)
-            meta["grid"] = grids.index(grid)
+            grid_index = grids.index(grid)
+        else:
+            grid_index = None
 
-        meta.update({"unit": unit, "factor": factor, "offset": offset, "length": len(payload)})
-        fields[name] = meta
-        blocks.append(payload)
-        offset += len(payload)
+        frame_meta = []
+        layout = None
+        positions = None
+        for vectors in series:
+            payload, meta = encode_frame(nodes, vectors, keep, peak, force_quantised)
+            layout = meta["layout"]
+            positions = meta.get("positions", positions)
+            frame_meta.append(
+                {
+                    "offset": offset,
+                    "length": len(payload),
+                    "clipped": meta["clipped"],
+                    "error": meta["error"],
+                    "max": float(np.linalg.norm(vectors[keep], axis=1).max()),
+                }
+            )
+            blocks.append(payload)
+            offset += len(payload)
+
+        field = {
+            "count": int(len(keep)),
+            "total": int(len(nodes)),
+            "max": peak,
+            "unit": unit,
+            "factor": factor,
+            "layout": layout,
+            "frames": frame_meta,
+            "baseline": baseline_size(nodes, series[0]) * len(series),
+        }
+        if grid_index is not None:
+            field["grid"] = grid_index
+        if positions is not None:
+            field["positions"] = positions
+        fields[name] = field
 
     if not fields:
         raise SystemExit("no exportable vector fields found in the result file")
 
-    header = {"version": 1, "grids": grids, "fields": fields}
+    header = {
+        "version": 2,
+        "grids": grids,
+        "fields": fields,
+        "timePoints": len(used_times),
+        "timeDelta": result.scalar("time_delta.npy"),
+        "series": frame_series(result, used_times),
+    }
     header_bytes = json.dumps(header).encode("utf-8")
     padding = (-len(header_bytes)) % 4
     header_bytes += b" " * padding
 
     raw = MAGIC + len(header_bytes).to_bytes(4, "little") + header_bytes + b"".join(blocks)
     return raw, header, dropped
+
+
+def frame_series(result: Result, used_times: list[int]) -> dict:
+    """Scalar quantities per time point, handy for plotting alongside the field."""
+    energy = []
+    peak_force = []
+    for t in used_times:
+        energy_key = f"solvers/{t}/mesh/strain_energy.npy"
+        energy.append(float(np.sum(result.array(energy_key))) if result.has(energy_key) else None)
+        force_key = f"solvers/{t}/mesh/forces.npy"
+        if result.has(force_key):
+            forces = load_vectors(result, "fitted forces", force_key, t)
+            peak_force.append(float(np.linalg.norm(forces, axis=1).max()))
+        else:
+            peak_force.append(None)
+    return {"strainEnergy": energy, "peakForce": peak_force}
 
 
 def main(argv=None):
@@ -272,10 +354,16 @@ def main(argv=None):
         help="saturate magnitudes above this percentile of the kept arrows, so a few extreme\nnodes do not dwarf the rest (e.g. 98)",
     )
     parser.add_argument("--field", action="append", help="export only this field (repeatable)")
+    parser.add_argument(
+        "--frames",
+        type=int,
+        default=1,
+        help="export this many solver time points as animation frames (default: 1)",
+    )
     args = parser.parse_args(argv)
 
     result = Result(args.input)
-    raw, header, dropped = build_bundle(result, args.max_arrows, args.clip, args.field)
+    raw, header, dropped = build_bundle(result, args.max_arrows, args.clip, args.field, args.frames)
     compressed = gzip.compress(raw, 9)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -284,12 +372,19 @@ def main(argv=None):
     print(f"{args.input.name} -> {args.output}")
     for grid in header["grids"]:
         print(f"  grid {grid['shape']} (positions implicit)")
+    if header["timePoints"] > 1:
+        span = header["timePoints"] * (header["timeDelta"] or 0) / 60
+        print(f"  {header['timePoints']} frames" + (f" over {span:.0f} min" if span else ""))
     for name, meta in header["fields"].items():
+        bytes_per_arrow = sum(f["length"] for f in meta["frames"]) / (meta["count"] * len(meta["frames"]))
+        worst = max(f["error"]["max"] for f in meta["frames"])
+        mean = sum(f["error"]["mean"] for f in meta["frames"]) / len(meta["frames"])
+        clipped = sum(f["clipped"] for f in meta["frames"])
         print(
             f"  {name:<24} {meta['count']:>6}/{meta['total']} arrows  max {meta['max'] * meta['factor']:.3g} {meta['unit']}"
-            f"  {meta['length'] / meta['count']:.1f} B/arrow"
-            f"  error {meta['error']['mean'] * 100:.3f}% mean / {meta['error']['max'] * 100:.3f}% peak"
-            + (f"  ({meta['clipped']} clipped)" if meta["clipped"] else "")
+            f"  {bytes_per_arrow:.1f} B/arrow"
+            f"  error {mean * 100:.3f}% mean / {worst * 100:.3f}% peak"
+            + (f"  ({clipped} clipped)" if clipped else "")
         )
     for item in dropped:
         print(f"  skipped {item}")

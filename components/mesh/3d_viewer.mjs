@@ -211,22 +211,30 @@ async function add_test(scene, renderer, params) {
     let max_length = last_field.max_length || 0;
     let needs_update = false;
 
+    const field_def = params.data.fields[params.field];
     if (
       params.path !== last_field.path ||
       params.field !== last_field.field ||
+      params.frame !== last_field.frame ||
       params.data.path !== last_field.data_path
     ) {
       max_length = 0;
       arrows = [];
       last_field.path = params.path;
       last_field.field = params.field;
+      last_field.frame = params.frame;
       last_field.data_path = params.data.path;
       needs_update = true;
-      const field_def = params.data.fields[params.field];
       if (params.field !== "none" && field_def?.preloaded) {
         // bundle fields are already decoded into memory
-        nodes = field_def.preloaded.nodes;
-        vectors = field_def.preloaded.vectors;
+        const preloaded = field_def.preloaded;
+        const frame =
+          preloaded.frames[
+            ((params.frame % preloaded.frames.length) + preloaded.frames.length) %
+              preloaded.frames.length
+          ];
+        nodes = frame.nodes;
+        vectors = frame.vectors;
       } else if (params.field !== "none") {
         try {
           nodes = await loadNpy(
@@ -288,6 +296,12 @@ async function add_test(scene, renderer, params) {
         }
       }
 
+      if (field_def?.preloaded) {
+        // the bundle quantises every frame against one shared peak, so pin the
+        // colour scale to it instead of renormalising each frame
+        max_length = field_def.preloaded.max * (field_def.factor || 1);
+      }
+
       if (nodes) {
         const [min_x, max_x] = get_extend(nodes, 0);
         const [min_y, max_y] = get_extend(nodes, 1);
@@ -297,6 +311,25 @@ async function add_test(scene, renderer, params) {
     }
     last_field.arrows = arrows;
     last_field.max_length = max_length;
+
+    // Fields differ by orders of magnitude between datasets (0.3 µm for an
+    // immune cell, 10 µm for a fibroblast), so a fixed arrow scale has to be
+    // retuned every time. Sizing the longest arrow as a fraction of the domain
+    // instead makes any dataset look right without a magic number.
+    let scale = params.scale;
+    if (params.arrow_span && max_length > 0) {
+      const domain =
+        Math.max(
+          params.extent[1] - params.extent[0],
+          params.extent[3] - params.extent[2],
+          params.extent[5] - params.extent[4],
+        ) * 1e6;
+      scale = (params.arrow_span * domain) / max_length;
+    }
+    if (last_field.effective_scale !== scale) {
+      last_field.effective_scale = scale;
+      needs_update = true;
+    }
 
     const cmap = cmaps[params.cmap];
     if (last_field.cmap !== params.cmap) {
@@ -322,9 +355,9 @@ async function add_test(scene, renderer, params) {
         dummyObject.position.copy(position);
         dummyObject.lookAt(target);
         dummyObject.scale.set(
-          scaleValue * params.scale,
-          scaleValue * params.scale,
-          scaleValue * params.scale,
+          scaleValue * scale,
+          scaleValue * scale,
+          scaleValue * scale,
         ); // Set uniform scale based on the vector's length
         dummyObject.updateMatrix();
 
@@ -389,6 +422,9 @@ export async function init(initial_params) {
   const params = {
     ccs_prefix: "",
     scale: 1,
+    // longest arrow as a fraction of the domain; overrides `scale` when set
+    arrow_span: 0.1,
+    frame: 0,
     cmap: "turbo", // ["turbo", "viridis"]
     field: "fitted deformations", // fitted deformations
     z: 0,
@@ -446,14 +482,24 @@ export async function init(initial_params) {
   }
   if (params.bundle) {
     const bundle = await loadFieldBundle(params.bundle);
+    params.time_points = bundle.timePoints;
     params.bundle_stats = {
       transferBytes: bundle.transferBytes,
       rawBytes: bundle.rawBytes,
       baselineBytes: bundle.baselineBytes,
+      timePoints: bundle.timePoints,
+      timeDelta: bundle.timeDelta,
+      series: bundle.series,
       fields: Object.fromEntries(
         Object.entries(bundle.fields).map(([name, f]) => [
           name,
-          { count: f.count, total: f.total, unit: f.unit, max: f.max * f.factor },
+          {
+            count: f.count,
+            total: f.total,
+            unit: f.unit,
+            max: f.max * f.factor,
+            frameMax: f.frames.map((frame) => frame.max * f.factor),
+          },
         ]),
       ),
     };
@@ -528,9 +574,13 @@ export async function init(initial_params) {
       options.push(name);
     }
     if (options.length > 1) {
-      gui.add(params, "scale", 0, 10).onChange(update_all);
+      if (params.arrow_span)
+        gui.add(params, "arrow_span", 0.01, 0.4).name("arrow size").onChange(update_all);
+      else gui.add(params, "scale", 0, 10).onChange(update_all);
       gui.add(params, "field", options).onChange(update_all);
     }
+    if (params.time_points > 1)
+      gui.add(params, "frame", 0, params.time_points - 1, 1).onChange(update_all);
     if (options.length > 1)
       gui.add(params, "cmap", Object.keys(cmaps)).onChange(update_all);
     const cube_options = ["none"];
@@ -579,6 +629,15 @@ function animate(scene, renderer, camera, params, update_all) {
       animation.z += (animation.speed || 10) * delta_t;
       params.z = Math.floor(animation.z % params.data.stacks.z_slices_count);
       update_all();
+    }
+    if (animation.type === "time" && params.time_points > 1) {
+      animation.elapsed = (animation.elapsed || 0) + delta_t;
+      const step = 1 / (animation.fps || 4);
+      if (animation.elapsed >= step) {
+        animation.elapsed = 0;
+        params.frame = (params.frame + 1) % params.time_points;
+        update_all();
+      }
     }
     if (animation.type === "rotate") {
       const campos = new THREE.Spherical().setFromVector3(camera.position);
