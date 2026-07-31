@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="2.5D Spheroid" href="../2.5d_spheroid/index.html" /><link rel="prev" title="API" href="api.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2024.08.06 -->
-        <title>Read Files with Pyhton - saenopy 1.0.8 documentation</title>
+        <title>Read Files with Python - saenopy 1.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=04c057b233f3c8d71940eee6080f658a04e2027d" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -227,7 +227,7 @@
 </ul>
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="api.html">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Read Files with Pyhton</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Read Files with Python</a></li>
 </ul>
 </li>
 </ul>
@@ -240,22 +240,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../2.5d_spheroid/parameters_force.html">Calculate Forces</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../2.5d_spheroid/api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="../2.5d_spheroid/api.html">API</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../2.5d_orientation/index.html">2.5D Orientation</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of 2.5D Orientation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2.5d_orientation/index.html">2.5D Orientation</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of 2.5D Orientation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../2.5d_orientation/theory.html">Theory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../2.5d_orientation/interface.html">Interface</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../2.5d_orientation/parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../2.5d_orientation/parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../2.5d_orientation/parameters_segmentation.html">Segmentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../2.5d_orientation/parameters_orientation.html">Orientation</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../2.5d_orientation/api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../2.5d_orientation/api.html">API</a></li>
 </ul>
 </li>
 </ul>
@@ -298,8 +294,8 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="read-files-with-pyhton">
-<h1>Read Files with Pyhton<a class="headerlink" href="#read-files-with-pyhton" title="Permalink to this heading">¶</a></h1>
+          <section id="read-files-with-python">
+<h1>Read Files with Python<a class="headerlink" href="#read-files-with-python" title="Permalink to this heading">¶</a></h1>
 <p>This is an example of how to read in and process Saenopy solver files using Python code.</p>
 <p>As an example, we read in a solver file containing a timelapse series of a contractile intestinal organoid embedded in collagen and imaged over several hours.</p>
 <figure class="align-center">
@@ -489,9 +485,7 @@ distance shells around the organoid center. In the lower part, we plot the propa
       
     </aside>
   </div>
-</div><script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>

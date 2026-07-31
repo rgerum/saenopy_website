@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -227,7 +227,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../3d_tfm/api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/ReadInData.html">Read Files with Pyhton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../3d_tfm/ReadInData.html">Read Files with Python</a></li>
 </ul>
 </li>
 </ul>
@@ -240,22 +240,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../2.5d_spheroid/parameters_force.html">Calculate Forces</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../2.5d_spheroid/api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="../2.5d_spheroid/api.html">API</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">2.5D Orientation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of 2.5D Orientation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">2.5D Orientation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of 2.5D Orientation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="theory.html">Theory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interface.html">Interface</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="parameters.html">Parameters</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Parameters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="parameters_segmentation.html">Segmentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parameters_orientation.html">Orientation</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">API</a></li>
 </ul>
 </li>
 </ul>
@@ -292,7 +288,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -300,160 +296,11 @@
         <article role="main" id="furo-main-content">
           <section id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this heading">¶</a></h1>
-<p>TODO</p>
-<p>The API (application programming interface) is described here with the
-documentation of the Solver class and its methods.</p>
-<div class="toctree-wrapper compound">
-</div>
-<dl class="py class">
-<dt class="sig sig-object py" id="saenopy.solver.Solver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">saenopy.solver.</span></span><span class="sig-name descname"><span class="pre">Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.get_max_tet_stiffness">
-<span class="sig-name descname"><span class="pre">get_max_tet_stiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.get_max_tet_stiffness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.get_max_tet_stiffness" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the stiffness matrix K_ij, the force F_i and the energy E of each node.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_beams">
-<span class="sig-name descname"><span class="pre">set_beams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_beams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_beams" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the beams for the calculation over the whole solid angle.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>beams</strong> (<em>int</em><em>, </em><em>ndarray</em>) – Either an integer which defines in how many beams to discretize the whole solid angle or an ndarray providing
-the beams, dimensions Nx3, default 300</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_boundary_condition">
-<span class="sig-name descname"><span class="pre">set_boundary_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_boundary_condition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_boundary_condition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide the boundary condition for the mesh, to be used with <code class="xref py py-meth docutils literal notranslate"><span class="pre">solve_nonregularized()</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>displacements</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – If the displacement of a node is not nan, it is treated as a Dirichlet boundary condition and the
-displacement of this node is kept fixed during solving. Dimensions Nx3</p></li>
-<li><p><strong>forces</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – If the force of a node is not nan, it is treated as a von Neumann boundary condition and the solver tries to
-match the force on the node with the here given force. Dimensions Nx3</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_initial_displacements">
-<span class="sig-name descname"><span class="pre">set_initial_displacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_initial_displacements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_initial_displacements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide initial displacements of the nodes. For fixed nodes these displacements are ignored.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>displacements</strong> (<em>ndarray</em>) – The list of displacements. Dimensions Nx3</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_material_model">
-<span class="sig-name descname"><span class="pre">set_material_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../3d_tfm/material.html#saenopy.materials.Material" title="saenopy.materials.Material"><span class="pre">Material</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_lookup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_material_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_material_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides the material model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>material</strong> (<a class="reference internal" href="../3d_tfm/material.html#saenopy.materials.Material" title="saenopy.materials.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material, must be of a subclass of Material.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_nodes">
-<span class="sig-name descname"><span class="pre">set_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide mesh coordinates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em>) – The coordinates of the vertices. Dimensions Nx3</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_target_displacements">
-<span class="sig-name descname"><span class="pre">set_target_displacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">displacement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_target_displacements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_target_displacements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide the displacements that should be fitted by the regularization.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>displacement</strong> (<em>ndarray</em>) – If the displacement of a node is not nan, it is
-The displacements for each node. Dimensions N x 3</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.set_tetrahedra">
-<span class="sig-name descname"><span class="pre">set_tetrahedra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.set_tetrahedra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.set_tetrahedra" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide mesh connectivity. Nodes have to be connected by tetrahedra. Each tetraherdon consts of the indices of
-the 4 vertices which it connects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em>) – The node indices of the 4 corners. Dimensions Nx4</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.solve_boundarycondition">
-<span class="sig-name descname"><span class="pre">solve_boundarycondition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.066</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_conv_crit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relrecname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.solve_boundarycondition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.solve_boundarycondition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the displacement of the free nodes constraint to the boundary conditions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>step_size</strong> (<em>float</em><em>, </em><em>optional</em>) – How much of the displacement of each conjugate gradient step to apply. Default 0.066</p></li>
-<li><p><strong>max_iterations</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximal number of iterations for the relaxation. Default 300</p></li>
-<li><p><strong>i_min</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimal number of iterations for the relaxation. Minimum value is 6. Default is 12</p></li>
-<li><p><strong>rel_conv_crit</strong> (<em>float</em><em>, </em><em>optional</em>) – If the relative standard deviation of the last 6 energy values is below this threshold, finish the iteration.
-Default 0.01</p></li>
-<li><p><strong>relrecname</strong> (<em>string</em><em>, </em><em>optional</em>) – If a filename is provided, for every iteration the displacement of the conjugate gradient step, the global
-energy and the residuum are stored in this file.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true print status during optimisation</p></li>
-<li><p><strong>callback</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function to call after each iteration (e.g. for a live plot of the convergence)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="saenopy.solver.Solver.solve_regularized">
-<span class="sig-name descname"><span class="pre">solve_regularized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_conv_crit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'huber'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relrecname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cancel_signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/saenopy/solver.html#Solver.solve_regularized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#saenopy.solver.Solver.solve_regularized" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the provided displacements. Displacements can be provided with
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">setTargetDisplacements()</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>step_size</strong> (<em>float</em><em>, </em><em>optional</em>) – How much of the displacement of each conjugate gradient step to apply. Default 0.33</p></li>
-<li><p><strong>solver_precision</strong> (<em>float</em><em>, </em><em>optional</em>) – The tolerance for the conjugate gradient step. Will be multiplied by the number of nodes. Default 1e-18.</p></li>
-<li><p><strong>max_iterations</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximal number of iterations for the regularisation. Default 300</p></li>
-<li><p><strong>i_min</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimal number of iterations for the relaxation. Minimum value is 6. Default is 12.</p></li>
-<li><p><strong>rel_conv_crit</strong> (<em>float</em><em>, </em><em>optional</em>) – If the relative standard deviation of the last 6 energy values is below this threshold, finish the iteration.
-Default 0.01</p></li>
-<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The regularisation parameter. How much to weight the suppression of forces against the fitting of the measured
-displacement. Default 3e9</p></li>
-<li><p><strong>method</strong> (<em>string</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>The regularisation method to use:</dt><dd><p>”huber”
-“bisquare”
-“cauchy”
-“singlepoint”</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>relrecname</strong> (<em>string</em><em>, </em><em>optional</em>) – The filename where to store the output. Default is to not store the output, just to return it.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true print status during optimisation</p></li>
-<li><p><strong>callback</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function to call after each iteration (e.g. for a live plot of the convergence)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p>The orientation module does not have a documented Python API yet — it is
+currently used through the graphical user interface.</p>
+<p>The underlying method is provided by the CompactionAnalyzer package, which can
+be scripted directly: <a class="reference external" href="https://github.com/davidbhr/CompactionAnalyzer">https://github.com/davidbhr/CompactionAnalyzer</a></p>
+<p>For the Python API of the 3D TFM solver, see <a class="reference internal" href="../3d_tfm/api.html"><span class="doc">API</span></a>.</p>
 </section>
 
         </article>
@@ -491,46 +338,13 @@ displacement. Default 3e9</p></li>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">API</a><ul>
-<li><a class="reference internal" href="#saenopy.solver.Solver"><code class="docutils literal notranslate"><span class="pre">Solver</span></code></a><ul>
-<li><a class="reference internal" href="#saenopy.solver.Solver.get_max_tet_stiffness"><code class="docutils literal notranslate"><span class="pre">Solver.get_max_tet_stiffness()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_beams"><code class="docutils literal notranslate"><span class="pre">Solver.set_beams()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_boundary_condition"><code class="docutils literal notranslate"><span class="pre">Solver.set_boundary_condition()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_initial_displacements"><code class="docutils literal notranslate"><span class="pre">Solver.set_initial_displacements()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_material_model"><code class="docutils literal notranslate"><span class="pre">Solver.set_material_model()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_nodes"><code class="docutils literal notranslate"><span class="pre">Solver.set_nodes()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_target_displacements"><code class="docutils literal notranslate"><span class="pre">Solver.set_target_displacements()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.set_tetrahedra"><code class="docutils literal notranslate"><span class="pre">Solver.set_tetrahedra()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.solve_boundarycondition"><code class="docutils literal notranslate"><span class="pre">Solver.solve_boundarycondition()</span></code></a></li>
-<li><a class="reference internal" href="#saenopy.solver.Solver.solve_regularized"><code class="docutils literal notranslate"><span class="pre">Solver.solve_regularized()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script src="../_static/jquery.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
