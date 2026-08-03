@@ -34,6 +34,14 @@ export interface DisplayMeshProps {
    * differ by orders of magnitude between an immune cell and an organoid.
    */
   arrow_span?: number;
+  /**
+   * Pin the colour and length scale to this value, in display units, instead of
+   * the field's own peak. Panels showing the same quantity need this to be
+   * comparable. Equivalent to saenopy's scale_max with autoscale off.
+   */
+  scale_max?: number;
+  /** "log" draws arrow length as log10 of the magnitude, as saenopy does for forces */
+  scale_mode?: "linear" | "log";
   /** fixed arrow scale; only used when arrow_span is explicitly set to 0 */
   scale?: number;
   zoom?: number;

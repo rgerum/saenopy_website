@@ -47,8 +47,11 @@ export function add_colormap_gui(
     add_tick();
   }
 
+  // NaN rather than 0, so that the first update always runs: hiding the bar is
+  // requested by passing max 0, which would otherwise compare equal to the
+  // initial value and leave the bar on screen showing zeroes
   let last_props: { max: number; colormap: string; title: string } = {
-    max: 0,
+    max: NaN,
     colormap: "viridis",
     title: "",
   };

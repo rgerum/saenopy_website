@@ -321,6 +321,14 @@ async function add_test(scene, renderer, params) {
         max_length = field_def.preloaded.max * (field_def.factor || 1);
       }
 
+      // Two panels showing the same quantity are only comparable if they share
+      // a scale; otherwise each normalises to its own peak and a 9.6 µm field
+      // looks identical to a 10.8 µm one. Expressed in display units, like
+      // saenopy's scale_max.
+      if (params.scale_max) {
+        max_length = params.scale_max;
+      }
+
       if (nodes) {
         const [min_x, max_x] = get_extend(nodes, 0);
         const [min_y, max_y] = get_extend(nodes, 1);
