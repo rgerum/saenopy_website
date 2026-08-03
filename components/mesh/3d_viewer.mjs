@@ -421,6 +421,7 @@ async function load_add_field(scene, renderer, params) {
 export async function init(initial_params) {
   const params = {
     ccs_prefix: "",
+    needs_render: true,
     scale: 1,
     // longest arrow as a fraction of the domain; overrides `scale` when set
     arrow_span: 0.1,
@@ -530,6 +531,10 @@ export async function init(initial_params) {
     params,
   );
 
+  window.addEventListener("resize", () => {
+    params.needs_render = true;
+  });
+
   add_logo(renderer.domElement.parentElement, params);
   add_drop_show(renderer.domElement.parentElement, params);
 
@@ -540,6 +545,9 @@ export async function init(initial_params) {
 
   if (params.mouse_control) {
     const controlsCam = new OrbitControls(camera, renderer.domElement);
+    controlsCam.addEventListener("change", () => {
+      params.needs_render = true;
+    });
     controlsCam.update();
     scene.controls = controlsCam;
   }
@@ -559,6 +567,7 @@ export async function init(initial_params) {
     update_image();
     await update_field();
     update_cube();
+    params.needs_render = true;
   }
   // Animation loop
   animate(scene, renderer, camera, params, update_all);
@@ -601,8 +610,16 @@ export async function init(initial_params) {
   add_drop(renderer.domElement.parentElement, params, update_all);
 
   // hand the caller the live params plus a redraw, so a changing time point
-  // can be applied in place instead of tearing the viewer down
-  if (params.on_ready) params.on_ready(params, update_all);
+  // can be applied in place instead of tearing the viewer down. The third
+  // argument exposes the scene objects, which is what lets several viewers
+  // share one camera.
+  if (params.on_ready)
+    params.on_ready(params, update_all, {
+      scene,
+      camera,
+      renderer,
+      controls: scene.controls,
+    });
 
   return function dispose() {
     params.disposed = true;
@@ -682,7 +699,15 @@ function animate(scene, renderer, camera, params, update_all) {
     scene.light.position.setFromSpherical(lightpos);
   }
 
-  renderer.render(scene, camera);
+  // Redrawing a static scene sixty times a second costs a GPU context and a
+  // core for nothing, and several viewers on one page add up to a stalled tab.
+  // Anything that changes the picture sets params.needs_render; an animation
+  // keeps it set for as long as it runs.
+  if (params.animations.length > 0) params.needs_render = true;
+  if (params.needs_render) {
+    params.needs_render = false;
+    renderer.render(scene, camera);
+  }
 }
 
 function add_drop(dropZone, params, update_all) {
