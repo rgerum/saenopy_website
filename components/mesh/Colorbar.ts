@@ -19,7 +19,7 @@ function colormap_to_gradient(colormap: number[]) {
 
 export function add_colormap_gui(
   parentDom: HTMLCanvasElement,
-  params: { cmap: valid_colormaps; ccs_prefix?: string },
+  params: { cmap: valid_colormaps; ccs_prefix?: string; text_color?: string },
 ) {
   const ccs_prefix = "saenopy_" + params.ccs_prefix;
   const colorbar = document.createElement("div");
@@ -81,8 +81,10 @@ export function add_colormap_gui(
             left: 20px;
             width: min(300px, 100% - 40px);
             height: 20px;
-            background-color: white;   
-            color: white;         
+            background-color: transparent;
+            /* white reads on the dark landing pages, but the docs are light,
+               so the caller has to be able to change it */
+            color: ${params.text_color || "white"};
          }
          .${ccs_prefix}colorbar .${ccs_prefix}colorbar_gradient {
             width: 100%;

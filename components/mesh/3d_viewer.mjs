@@ -13,13 +13,32 @@ import { init_scene } from "@/components/mesh/Scene";
 import { inject_style } from "@/components/mesh/inject_style";
 import { loadFieldBundle } from "./field_bundle.ts";
 
+// Proportions of the arrow glyph, as fractions of its total length. These
+// match the arrow pyvista uses by default, so a field drawn here looks like the
+// same field rendered from saenopy itself.
+const TIP_LENGTH = 0.25;
+const TIP_RADIUS = 0.1;
+const SHAFT_RADIUS = 0.05;
+const ARROW_LENGTH = 3; // the unit the instance scale is expressed in
+
 // Arrowhead geometry (cone)
-const arrowheadGeometry = new THREE.ConeGeometry(0.5, 1, 6);
-arrowheadGeometry.translate(0, 0.5, 0); // Translate to align the base of the cone with the origin
+const arrowheadGeometry = new THREE.ConeGeometry(
+  TIP_RADIUS * ARROW_LENGTH,
+  TIP_LENGTH * ARROW_LENGTH,
+  8,
+);
+// align the base of the cone with the origin
+arrowheadGeometry.translate(0, (TIP_LENGTH * ARROW_LENGTH) / 2, 0);
 
 // Shaft geometry (cylinder)
-const shaftGeometry = new THREE.CylinderGeometry(0.2, 0.2, 2, 6);
-shaftGeometry.translate(0, -1, 0); // Translate to align the cylinder correctly with the cone base
+const shaftGeometry = new THREE.CylinderGeometry(
+  SHAFT_RADIUS * ARROW_LENGTH,
+  SHAFT_RADIUS * ARROW_LENGTH,
+  (1 - TIP_LENGTH) * ARROW_LENGTH,
+  8,
+);
+// align the cylinder with the cone base
+shaftGeometry.translate(0, -((1 - TIP_LENGTH) * ARROW_LENGTH) / 2, 0);
 
 // Merge geometries
 const arrowGeometry = mergeGeometries(
@@ -317,17 +336,33 @@ async function add_test(scene, renderer, params) {
     // retuned every time. Sizing the longest arrow as a fraction of the domain
     // instead makes any dataset look right without a magic number.
     let scale = params.scale;
-    if (params.arrow_span && max_length > 0) {
-      const domain =
-        Math.max(
-          params.extent[1] - params.extent[0],
-          params.extent[3] - params.extent[2],
-          params.extent[5] - params.extent[4],
-        ) * 1e6;
-      scale = (params.arrow_span * domain) / max_length;
+    const domain =
+      Math.max(
+        params.extent[1] - params.extent[0],
+        params.extent[3] - params.extent[2],
+        params.extent[5] - params.extent[4],
+      ) * 1e6;
+
+    // Traction forces span orders of magnitude and concentrate on a handful of
+    // nodes, so on a linear length scale everything but the peak collapses to
+    // nothing. saenopy's own renderer draws forces on a log scale by default;
+    // matching that keeps the two pictures comparable.
+    const log_scale = params.scale_mode === "log";
+    const length_of = (magnitude) =>
+      log_scale
+        ? Math.max(0, Math.log10(magnitude / (params.log_floor || 1e-3)))
+        : magnitude;
+    const max_display = length_of(max_length);
+
+    if (params.arrow_span && max_display > 0) {
+      scale = (params.arrow_span * domain) / max_display;
     }
-    if (last_field.effective_scale !== scale) {
+    if (
+      last_field.effective_scale !== scale ||
+      last_field.scale_mode !== params.scale_mode
+    ) {
       last_field.effective_scale = scale;
+      last_field.scale_mode = params.scale_mode;
       needs_update = true;
     }
 
@@ -351,13 +386,14 @@ async function add_test(scene, renderer, params) {
     if (needs_update) {
       for (let i = 0; i < arrows.length; i++) {
         const [position, target, scaleValue] = arrows[i];
+        const displayValue = length_of(scaleValue);
 
         dummyObject.position.copy(position);
         dummyObject.lookAt(target);
         dummyObject.scale.set(
-          scaleValue * scale,
-          scaleValue * scale,
-          scaleValue * scale,
+          displayValue * scale,
+          displayValue * scale,
+          displayValue * scale,
         ); // Set uniform scale based on the vector's length
         dummyObject.updateMatrix();
 
@@ -368,7 +404,10 @@ async function add_test(scene, renderer, params) {
             cmap[
               Math.min(
                 cmap.length - 1,
-                Math.floor((scaleValue / max_length) * (cmap.length - 1)),
+                Math.max(
+                  0,
+                  Math.floor((displayValue / max_display) * (cmap.length - 1)),
+                ),
               )
             ],
           ),

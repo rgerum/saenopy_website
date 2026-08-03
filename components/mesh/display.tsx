@@ -41,6 +41,8 @@ export interface DisplayMeshProps {
   cube?: "none" | "stack" | "field";
   cube_color?: number;
   background?: string;
+  /** colour of the colour bar labels; default white, for dark panels */
+  text_color?: string;
   height?: string;
   logo_width?: string;
   mouse_control?: boolean;
