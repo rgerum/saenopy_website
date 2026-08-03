@@ -21,32 +21,36 @@ const TIP_RADIUS = 0.1;
 const SHAFT_RADIUS = 0.05;
 const ARROW_LENGTH = 3; // the unit the instance scale is expressed in
 
-// Arrowhead geometry (cone)
-const arrowheadGeometry = new THREE.ConeGeometry(
-  TIP_RADIUS * ARROW_LENGTH,
-  TIP_LENGTH * ARROW_LENGTH,
-  8,
-);
-// align the base of the cone with the origin
-arrowheadGeometry.translate(0, (TIP_LENGTH * ARROW_LENGTH) / 2, 0);
+// Built per thickness and cached, so a viewer can be given thinner or fatter
+// arrows without every other viewer on the page changing with it.
+const arrow_geometry_cache = new Map();
+function make_arrow_geometry(thickness = 1) {
+  const key = thickness.toFixed(3);
+  if (arrow_geometry_cache.has(key)) return arrow_geometry_cache.get(key);
 
-// Shaft geometry (cylinder)
-const shaftGeometry = new THREE.CylinderGeometry(
-  SHAFT_RADIUS * ARROW_LENGTH,
-  SHAFT_RADIUS * ARROW_LENGTH,
-  (1 - TIP_LENGTH) * ARROW_LENGTH,
-  8,
-);
-// align the cylinder with the cone base
-shaftGeometry.translate(0, -((1 - TIP_LENGTH) * ARROW_LENGTH) / 2, 0);
+  const arrowheadGeometry = new THREE.ConeGeometry(
+    TIP_RADIUS * ARROW_LENGTH * thickness,
+    TIP_LENGTH * ARROW_LENGTH,
+    8,
+  );
+  // align the base of the cone with the origin
+  arrowheadGeometry.translate(0, (TIP_LENGTH * ARROW_LENGTH) / 2, 0);
 
-// Merge geometries
-const arrowGeometry = mergeGeometries(
-  [arrowheadGeometry, shaftGeometry],
-  false,
-);
-arrowGeometry.rotateX(Math.PI / 2);
-arrowGeometry.translate(0, 0, 2);
+  const shaftGeometry = new THREE.CylinderGeometry(
+    SHAFT_RADIUS * ARROW_LENGTH * thickness,
+    SHAFT_RADIUS * ARROW_LENGTH * thickness,
+    (1 - TIP_LENGTH) * ARROW_LENGTH,
+    8,
+  );
+  // align the cylinder with the cone base
+  shaftGeometry.translate(0, -((1 - TIP_LENGTH) * ARROW_LENGTH) / 2, 0);
+
+  const geometry = mergeGeometries([arrowheadGeometry, shaftGeometry], false);
+  geometry.rotateX(Math.PI / 2);
+  geometry.translate(0, 0, 2);
+  arrow_geometry_cache.set(key, geometry);
+  return geometry;
+}
 
 function add_drop_show(parentDom, params) {
   const dropshow = document.createElement("div");
@@ -204,6 +208,7 @@ async function add_test(scene, renderer, params) {
   let count = 0;
   //const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const material = new THREE.MeshPhongMaterial({ color: 0xdfdfdf });
+  material.transparent = true;
   let mesh = undefined;
   const dummyObject = new THREE.Object3D();
 
@@ -321,14 +326,6 @@ async function add_test(scene, renderer, params) {
         max_length = field_def.preloaded.max * (field_def.factor || 1);
       }
 
-      // Two panels showing the same quantity are only comparable if they share
-      // a scale; otherwise each normalises to its own peak and a 9.6 µm field
-      // looks identical to a 10.8 µm one. Expressed in display units, like
-      // saenopy's scale_max.
-      if (params.scale_max) {
-        max_length = params.scale_max;
-      }
-
       if (nodes) {
         const [min_x, max_x] = get_extend(nodes, 0);
         const [min_y, max_y] = get_extend(nodes, 1);
@@ -338,6 +335,17 @@ async function add_test(scene, renderer, params) {
     }
     last_field.arrows = arrows;
     last_field.max_length = max_length;
+
+    // Two panels showing the same quantity are only comparable if they share a
+    // scale; otherwise each normalises to its own peak and a 9.6 µm field looks
+    // identical to a 10.8 µm one. Expressed in display units, like saenopy's
+    // scale_max. Applied outside the field-change branch so that changing it
+    // takes effect on the next redraw.
+    if (params.scale_max) max_length = params.scale_max;
+    if (last_field.applied_max !== max_length) {
+      last_field.applied_max = max_length;
+      needs_update = true;
+    }
 
     // Fields differ by orders of magnitude between datasets (0.3 µm for an
     // immune cell, 10 µm for a fibroblast), so a fixed arrow scale has to be
@@ -380,12 +388,21 @@ async function add_test(scene, renderer, params) {
       needs_update = true;
     }
 
-    if (arrows.length > count) {
-      count = arrows.length;
+    const thickness = params.arrow_thickness ?? 1;
+    if (arrows.length > count || thickness !== last_field.thickness) {
+      count = Math.max(count, arrows.length);
+      last_field.thickness = thickness;
       if (mesh) scene.remove(mesh);
-      mesh = new THREE.InstancedMesh(arrowGeometry, material, count);
+      mesh = new THREE.InstancedMesh(
+        make_arrow_geometry(thickness),
+        material,
+        count,
+      );
       scene.add(mesh);
+      needs_update = true;
     }
+    const opacity = params.arrow_opacity ?? 1;
+    if (material.opacity !== opacity) material.opacity = opacity;
     if (mesh) mesh.count = arrows.length;
     if (last_field.scale !== params.scale) {
       last_field.scale = params.scale;
