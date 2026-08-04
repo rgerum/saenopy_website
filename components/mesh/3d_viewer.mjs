@@ -66,6 +66,12 @@ function add_floor_image(scene, params) {
     params.needs_render = true;
   });
   texture.colorSpace = THREE.SRGBColorSpace;
+  // Which image axis is x, which is y, and whether either is mirrored is easy
+  // to get wrong and hard to see, so it is expressed here rather than baked
+  // into the exported file. rotate90 swaps the axes; flip_u / flip_v mirror.
+  texture.center.set(0.5, 0.5);
+  if (spec.rotate90) texture.rotation = Math.PI / 2;
+  texture.repeat.set(spec.flip_u ? -1 : 1, spec.flip_v ? -1 : 1);
   const material = new THREE.MeshBasicMaterial({
     map: texture,
     side: THREE.DoubleSide,
