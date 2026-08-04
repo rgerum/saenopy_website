@@ -31,6 +31,11 @@ export function init_scene(dom_elem: HTMLDivElement) {
     canvas: canvas,
     antialias: true,
   });
+  // Without this the drawing buffer is sized in CSS pixels and the browser
+  // upscales it on a high-DPI screen, which no amount of multisampling can
+  // undo -- thin arrows come out ragged. Capped at 2, because the buffer grows
+  // with the square of this and several viewers can share a page.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   //renderer.setSize(window.innerWidth, window.innerHeight);
   //document.body.appendChild(renderer.domElement);
   //scene.renderer = renderer;

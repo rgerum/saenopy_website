@@ -52,6 +52,35 @@ function make_arrow_geometry(thickness = 1) {
   return geometry;
 }
 
+
+/**
+ * A single image slice laid flat at the bottom of the field, the way the
+ * exported figures underlay the cell. Takes a plain URL plus the physical size
+ * of the slice in µm, so it does not need the stack machinery.
+ */
+function add_floor_image(scene, params) {
+  const spec = params.floor_image;
+  if (!spec?.url) return;
+  const geometry = new THREE.PlaneGeometry(spec.width, spec.height);
+  const texture = new THREE.TextureLoader().load(spec.url, () => {
+    params.needs_render = true;
+  });
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.DoubleSide,
+    transparent: spec.opacity !== undefined,
+    opacity: spec.opacity ?? 1,
+  });
+  const plane = new THREE.Mesh(geometry, material);
+  plane.rotation.x = -Math.PI / 2;
+  // params.extent is in metres, the scene in µm; the floor sits at the bottom
+  // of the field unless the caller says otherwise
+  plane.position.y = spec.z !== undefined ? spec.z : params.extent[4] * 1e6;
+  scene.add(plane);
+  return plane;
+}
+
 function add_drop_show(parentDom, params) {
   const dropshow = document.createElement("div");
   const ccs_prefix = "saenopy_" + params.ccs_prefix;
@@ -621,6 +650,7 @@ export async function init(initial_params) {
     ? await load_add_field(scene, renderer, params)
     : () => {};
   const update_cube = add_cube(scene, params);
+  const floor_image = add_floor_image(scene, params);
 
   const radius = params.data.fields
     ? params.extent[1] * 1e6 * 4
@@ -683,6 +713,7 @@ export async function init(initial_params) {
       camera,
       renderer,
       controls: scene.controls,
+      floor_image,
     });
 
   return function dispose() {
