@@ -66,12 +66,16 @@ function add_floor_image(scene, params) {
     params.needs_render = true;
   });
   texture.colorSpace = THREE.SRGBColorSpace;
-  // Which image axis is x, which is y, and whether either is mirrored is easy
-  // to get wrong and hard to see, so it is expressed here rather than baked
-  // into the exported file. rotate90 swaps the axes; flip_u / flip_v mirror.
+  // The plane's own texture mapping runs both axes backwards relative to the
+  // data axes: with no transform, image[0,0] lands at the +x/+y corner. This
+  // was measured by projecting the plane's corners into world space and
+  // reading back their data coordinates. Mirroring both by default therefore
+  // makes the natural reading correct -- a slice indexed [x, y] with both
+  // increasing, which is what saenopy's get_image returns. Callers whose image
+  // follows a different convention override these.
   texture.center.set(0.5, 0.5);
   if (spec.rotate90) texture.rotation = Math.PI / 2;
-  texture.repeat.set(spec.flip_u ? -1 : 1, spec.flip_v ? -1 : 1);
+  texture.repeat.set((spec.flip_u ?? true) ? -1 : 1, (spec.flip_v ?? true) ? -1 : 1);
   const material = new THREE.MeshBasicMaterial({
     map: texture,
     side: THREE.DoubleSide,
