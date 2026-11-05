@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Parameters" href="parameters.html" /><link rel="prev" title="Theory" href="theory.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2024.08.06 -->
-        <title>Interface - saenopy 1.0.8 documentation</title>
+        <title>Interface - saenopy 1.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=04c057b233f3c8d71940eee6080f658a04e2027d" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">saenopy 1.0.8 documentation</div></a>
+      <a href="../index.html"><div class="brand">saenopy 1.0.9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">saenopy 1.0.8 documentation</span>
+  <span class="sidebar-brand-text">saenopy 1.0.9 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -297,7 +297,31 @@
           <section id="interface">
 <h1>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">¶</a></h1>
 <p>Calculate the alignment and intensity of matrix fibers directed toward a cell embedded in a 3D biopolymer, based on 2D images. This measurement serves as an indirect proxy for cell contractility.</p>
-<p>Alternatively, the tool can be used to simply quantify the alignment of cells or other structures relative to the x- or y-axis, by ignoring the cell images (set them to None).</p>
+<p>In the Orientation interface, choose <strong>Relative to Cell</strong>, <strong>Relative to X and Y
+Axes</strong> or <strong>Relative to a Point or Line</strong>. The cell workflow keeps the original
+contractility analysis. The axis workflow uses the fiber channel for the
+structure tensor and can restrict the evaluated region with a mask.
+The point workflow measures radial alignment towards a reference selected by
+one click. The line workflow uses two clicks to define one reference direction
+for the whole image. Select <strong>Point</strong> or <strong>Line</strong> in the import dialog.
+The welcome choice disappears after entering the workflow. All choices remain
+available whenever adding measurements. The axis workflow offers three choices
+side by side in the image dialog:</p>
+<ul class="simple">
+<li><p><strong>Whole image</strong>: select <strong>Orientation Images</strong> only.</p></li>
+<li><p><strong>Mask from the same image</strong>: select <strong>Orientation Images</strong> only; each image
+also supplies its own mask.</p></li>
+<li><p><strong>Mask from a second image</strong>: select <strong>Orientation Images</strong> and matching
+<strong>Mask Images</strong>. The second image only selects the area; orientation is
+calculated exclusively from the orientation image.</p></li>
+</ul>
+<p>The two masked cases share the mask preview, analysis and result tabs. For a
+same-image mask, adjust blur and threshold to select the cell area, rather than
+only thin bright fibers. Inspect the preview; this intensity mask does not
+automatically separate individual cells. The configured edge crop still applies.
+Each measurement retains its own mode. Selecting a measurement updates its
+parameters and tabs. The <strong>Angle</strong> tab appears before <strong>Coherency</strong> in every
+mode, with an X/Y reference switch; line measurements also offer <strong>Line</strong>.</p>
 <figure class="align-default">
 <img alt="../_images/orientation_interface.png" src="../_images/orientation_interface.png" />
 </figure>
@@ -314,13 +338,165 @@ to enable open searches across different folders, allowing them to be read in pa
 </section>
 <section id="loading-an-existing-measurement">
 <h3>Loading an Existing Measurement<a class="headerlink" href="#loading-an-existing-measurement" title="Permalink to this heading">¶</a></h3>
-<p>Here an existing saenopy file can be loaded.</p>
+<p>Load <code class="docutils literal notranslate"><span class="pre">.saenopyOrientation</span></code> files through this tab, or drag files or folders
+into Analyse Measurements. To compare their statistics, drag the same evaluated
+files into Data Analysis, where they are added to the selected group.
+Version 1.0 files remain readable as cell-relative measurements. The newer
+files additionally store the axis mode, mask and histogram. Changing the image
+labels to Orientation Images and Mask Images does not require a format change.
+Keep the image folders with portable result files. The <code class="docutils literal notranslate"><span class="pre">.saenopy</span></code> extension
+belongs to 3D TFM; do not rename orientation results to that extension.</p>
+<p>The Orientation window can be resized down to 900 × 600 pixels. Drag the
+dividers to adjust group lists, plots and help. The <strong>Help</strong> button hides or
+restores the description, whose colors follow the active Qt theme.</p>
 </section>
 <section id="loading-an-example-measurement">
 <h3>Loading an Example Measurement<a class="headerlink" href="#loading-an-example-measurement" title="Permalink to this heading">¶</a></h3>
-<p>This tab provided example files that can be downloaded to showcase and test various applications of saenopy. Files will
+<p>This tab provides example files that can be downloaded to showcase and test various applications of saenopy. Files will
 be downloaded to a user directory and directly opened in saenopy.</p>
+<p><strong>Whole image: collagen</strong> (<code class="docutils literal notranslate"><span class="pre">EmptyCollagen</span></code>) contains two empty collagen fields
+at 0.249 µm/pixel, analyzed without a mask or artificial cell center.
+<strong>Same-image mask: phalloidin</strong> (<code class="docutils literal notranslate"><span class="pre">FibroblastActin</span></code>) contains two fibroblast fields
+at 0.48 µm/pixel, analyzed within masks derived from those same images.
+For either example, <strong>Open</strong> creates two measurements with preset parameters;
+run <strong>find orientations</strong> to calculate them. <strong>Open (evaluated)</strong> opens the two
+prepared results directly, including maps and histograms.</p>
+<p><strong>Second-image mask: alpha-actinin</strong> selects cardiomyocytes in a culture with
+fibroblasts. Orientation is measured from phalloidin-labeled actin within the
+alpha-actinin mask (0.156 µm/pixel). <strong>CellFibers</strong> provides the original
+cell-relative collagen example.</p>
+<p>The <strong>Spheroid center</strong> and <strong>Cardiomyocyte line</strong> examples show alignment to
+a selected point or line. Use <strong>Open (evaluated)</strong> to inspect their results,
+or change the reference and run <strong>find orientations</strong> again.</p>
+<p>The phalloidin image is used both for fiber analysis and to select stained
+regions. This is an intensity mask, not an independent cell-outline stain or
+individual-cell segmentation. Inspect the mask preview. The phalloidin package
+also includes whole-image controls in <code class="docutils literal notranslate"><span class="pre">example_output/whole_image</span></code> for a
+comparison through <strong>Existing Measurement</strong>. These paired variants are not
+independent biological samples.</p>
+<p>Downloaded examples include input images and prepared result files. Keep the
+image folders with the results when moving them. Use <strong>Open (evaluated)</strong> or
+load the <code class="docutils literal notranslate"><span class="pre">.saenopyOrientation</span></code> files through <strong>Existing Measurement</strong>.</p>
 </section>
+</section>
+<section id="axis-measurements">
+<h2>Axis measurements<a class="headerlink" href="#axis-measurements" title="Permalink to this heading">¶</a></h2>
+<p>For a second-image mask, the image must be registered to the fiber image, with the same dimensions,
+position, and z slice or MAX projection. Lists are paired in sorted filename
+order; check their pairing before analyzing a batch. The mask retains all
+selected regions, without a largest-cell rule. The fiber image is never masked
+before the tensor calculation, avoiding artificial orientations at mask edges.</p>
+<p>Use <strong>preview mask</strong> to inspect the mask blur and threshold. Changing
+the preview does not change an existing analysis; use <strong>find orientations</strong>
+again to recompute its validity mask, summary and plots. Cell-specific radial,
+sector and shell controls are hidden in axis mode. Old saved measurements load
+in cell mode, regardless of the choice for new measurements.</p>
+<p>The <strong>Angle</strong> tab has an X/Y reference switch and uses degrees in [-90, 90).
+The <strong>Axis alignment</strong> tab has the same switch and a fixed -1 to +1 color scale.
+The <strong>Segmentation / mask</strong> tab shows a transparent red fill and outline over
+selected regions, including preview masks. These display choices do not alter
+the saved angle maps or validity masks.</p>
+<p>x is horizontal and y is vertical;
+positive x angles slope upwards to the right. The minimum tensor eigenvector
+already gives the fiber direction. The alignment tab uses +1 for parallel,
+0 at 45 degrees and -1 for perpendicular. x and y alignment are opposite.
+Histograms are shown only in Data Analysis. Histograms and per-image means
+count each finite selected pixel equally.</p>
+<p>The <strong>save plots</strong> and <strong>save NumPy arrays + CSV</strong> checkboxes are independent.
+Axis plots include x/y angle overlays and an angle histogram; masked mode adds
+side-by-side channels and a mask check. NumPy export includes raw angles and
+vectors, coherency, the fiber crop and x/y alignment. Masked mode also saves
+<code class="docutils literal notranslate"><span class="pre">ValidityMask.npy</span></code>; its alignment arrays have NaN outside that mask. Raw angle
+arrays are unchanged, so apply the validity mask when reading them directly.
+<code class="docutils literal notranslate"><span class="pre">results_axis.csv</span></code> includes unweighted and explicitly named weighted means;
+<code class="docutils literal notranslate"><span class="pre">histogram_axis.csv</span></code> contains bin edges and counts. No cell-distance tables
+are generated. The <code class="docutils literal notranslate"><span class="pre">.saenopyOrientation</span></code> result is always saved, including
+the mode, analyzed mask and statistics. Use separate output folders for modes.</p>
+<p>Data Analysis offers <strong>Alignment to X axis</strong>, <strong>Alignment to Y axis</strong>,
+<strong>Angular deviation to X axis</strong> and <strong>Angular deviation to Y axis</strong> group plots.
+Metrics are greyed out when the checked images and groups do not provide values
+for them. Mixed selections can enable both cell-relative and image-axis metrics;
+each plot uses only the relevant measurements. Alignment plots keep a fixed
+-1 to +1 y-axis in the GUI and exported Python code. Angular deviations range from
+0 degrees (parallel to the reference axis) to 90 degrees (perpendicular).
+They average absolute axial deviations, not signed angles across the -90/+90 wrap.
+Each image contributes one equal-pixel mean, and group means weight images equally.
+<strong>Coherency</strong> is available in all measurement modes, with a fixed 0 to 1 axis in
+the GUI and exported plots. It averages local directional consistency within
+each image’s analyzed region, independently of the X/Y or cell-center direction.
+A value of 0 is isotropic and 1 is strongly directional within the tensor window;
+different regions of an image can still point in different directions.
+Masked measurements include only the saved mask. Existing axis results use their
+saved coherency maps, so no new orientation calculation is required. Empty or
+missing coherency data are excluded rather than treated as zero.
+<strong>Angle histogram x/y</strong> first normalizes the histogram of each nonempty image,
+then plots group means with SEM across images, expressed as <strong>Probability</strong>.
+Each bin is the fraction of valid pixels within that angular interval, between
+0 and 1. Each image’s bins sum to 1; the plotted y-axis is scaled to the distribution.
+These are probabilities per bin, not probability densities per degree.
+The CSV fraction column and exported plotting script use the same normalization.
+Raw pixel counts are not pooled;
+larger images or masks do not receive extra weight. Empty histograms are excluded.
+For cell analyses, <strong>mean cell-relative deviation</strong> complements the original
+orientation and distance plots. <strong>Export</strong> saves a runnable Python plotting
+script with an embedded table or a separate CSV, including grouped histograms.
+Cell-relative and axis-relative values are different measurements; unavailable
+metrics are left empty, not replaced by zero. Do not treat z slices and their
+own MAX projection as independent samples.</p>
+<p>Export code reproduces the active measurement’s mode and parameter settings.
+The original screenshots above illustrate the cell workflow.</p>
+</section>
+<section id="orientation-towards-a-point">
+<h2>Orientation towards a point<a class="headerlink" href="#orientation-towards-a-point" title="Permalink to this heading">¶</a></h2>
+<p>Choose <strong>Relative to a Point or Line</strong>, select <strong>Point</strong>, and load an orientation
+image. Optionally select a mask from the same image or a second image.
+In the <strong>Reference point</strong> tab, click <strong>Choose reference point</strong> and
+then click the image. The yellow marker uses original image coordinates
+(X to the right, Y downwards). Set a separate reference for each image.
+Run <strong>find orientations</strong> to calculate and save the results.</p>
+<p>The radial geometry is the same as in the cell-center analysis. Alignment is
++1 radial, 0 at 45 degrees and -1 tangential. The reference pixel itself has no
+radial direction and is excluded from point-relative means. The result map marks the
+analyzed reference; moving the point in the first tab creates a pending change
+until the analysis is run again.</p>
+<p>Data Analysis provides <strong>Alignment towards point</strong> and <strong>Angular deviation to
+point</strong>, with fixed -1 to +1 and 0 to 90 degree scales. X/Y alignment, angular
+deviation, angle histograms and coherency remain available. Exported Python
+analysis code includes the selected point.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">shell_width</span></code> to compare alignment, angular deviation and coherency in
+concentric rings around the point. <strong>Data Analysis</strong> provides these distance
+profiles in pixels or µm, restricted to the selected mask when one is used.</p>
+</section>
+<section id="orientation-relative-to-a-line">
+<h2>Orientation relative to a line<a class="headerlink" href="#orientation-relative-to-a-line" title="Permalink to this heading">¶</a></h2>
+<p>In the point/line category, select <strong>Line</strong> when adding a measurement. Load
+one orientation image, optionally with a mask from the same or a second image,
+then click <strong>Choose reference line</strong> in the first tab.
+Click two distinct points. The preview follows the cursor after the first
+click; Esc, right-click or the button cancels. Zooming and panning preserve
+the original pixel coordinates. Each measurement has its own line.</p>
+<p>The line defines a fixed axis throughout the image. Its position, length and
+endpoint order do not select a region or change the reference direction.
+After <strong>find orientations</strong>, the <strong>Angle</strong> and <strong>Alignment (line)</strong> tabs offer
+a <strong>Line / X / Y</strong> switch. Alignment is +1 parallel, 0 at 45 degrees and −1
+perpendicular. Signed line angles are in [-90, 90); angular deviation uses
+their absolute values. Result overlays show the line used in that calculation,
+even while a different line is pending in the input tab.</p>
+<p>Data Analysis offers <strong>Alignment to reference line</strong>, <strong>Angular deviation to
+reference line</strong>, and <strong>Angle histogram: reference line</strong>, alongside X/Y and
+coherency. Each image’s histogram is normalized to sum to 1 before group means
+and SEM are calculated. Both points and the reference angle are saved in
+<code class="docutils literal notranslate"><span class="pre">.saenopyOrientation</span></code> files and included in exported analysis code. Line-angle
+maps are derived from the saved X-angle map without an extra stored array.</p>
+</section>
+<section id="x-y-statistics-for-cell-measurements">
+<h2>X/Y statistics for cell measurements<a class="headerlink" href="#x-y-statistics-for-cell-measurements" title="Permalink to this heading">¶</a></h2>
+<p>Cell-relative measurements also provide X/Y alignment, angular deviation and
+angle histograms from the analyzed region outside the cell, respecting the
+edge crop and distance limit. Loading an existing result computes these
+statistics from its saved maps and segmentation, without rerunning the tensor
+or modifying the file. If an older file lacks the cell mask and a saved analysis
+region, these extra metrics stay greyed out until that measurement is rerun.</p>
 </section>
 </section>
 
@@ -386,6 +562,10 @@ be downloaded to a user directory and directly opened in saenopy.</p>
 <li><a class="reference internal" href="#loading-an-example-measurement">Loading an Example Measurement</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#axis-measurements">Axis measurements</a></li>
+<li><a class="reference internal" href="#orientation-towards-a-point">Orientation towards a point</a></li>
+<li><a class="reference internal" href="#orientation-relative-to-a-line">Orientation relative to a line</a></li>
+<li><a class="reference internal" href="#x-y-statistics-for-cell-measurements">X/Y statistics for cell measurements</a></li>
 </ul>
 </li>
 </ul>

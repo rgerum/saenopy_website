@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="API" href="api.html" /><link rel="prev" title="Segmentation" href="parameters_segmentation.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2024.08.06 -->
-        <title>Orientation - saenopy 1.0.8 documentation</title>
+        <title>Orientation - saenopy 1.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=04c057b233f3c8d71940eee6080f658a04e2027d" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">saenopy 1.0.8 documentation</div></a>
+      <a href="../index.html"><div class="brand">saenopy 1.0.9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">saenopy 1.0.8 documentation</span>
+  <span class="sidebar-brand-text">saenopy 1.0.9 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -303,7 +303,7 @@ Should be in the range of the underlying structure and can be optimised per setu
 </section>
 <section id="edge">
 <h2>edge<a class="headerlink" href="#edge" title="Permalink to this heading">¶</a></h2>
-<p>Pixel width of the edges left blank because alignment cannot be calculated there. Default is 20 px.</p>
+<p>Pixel width of the edges left blank because alignment cannot be calculated there. The GUI default is 40 px. In axis mode, zero keeps the whole image.</p>
 </section>
 <section id="max-dist">
 <h2>max_dist<a class="headerlink" href="#max-dist" title="Permalink to this heading">¶</a></h2>
@@ -312,7 +312,7 @@ Should be in the range of the underlying structure and can be optimised per setu
 <section id="ignore-cell-outline">
 <h2>ignore_cell_outline<a class="headerlink" href="#ignore-cell-outline" title="Permalink to this heading">¶</a></h2>
 <p>By default, the cell-occupied area is excluded, and matrix alignment is calculated only in the remaining area.
-To analyze alignment across the entire field of view (e.g., relative to the x- or y-axis), set this parameter to True. Default is False.</p>
+This option belongs to cell-relative analysis and retains its cell-center reference. For pure axis orientation, choose the axis workflow and optionally use the whole image instead. Default is False.</p>
 </section>
 <section id="sigma-first-blur">
 <h2>sigma_first_blur<a class="headerlink" href="#sigma-first-blur" title="Permalink to this heading">¶</a></h2>
@@ -325,6 +325,24 @@ To analyze alignment across the entire field of view (e.g., relative to the x- o
 <section id="shell-width">
 <h2>shell_width<a class="headerlink" href="#shell-width" title="Permalink to this heading">¶</a></h2>
 <p>Distance shells around the cell for analyzing intensity and orientation propagation over distance. Default is 5 µm.</p>
+</section>
+<section id="validity-mask">
+<h2>Validity mask<a class="headerlink" href="#validity-mask" title="Permalink to this heading">¶</a></h2>
+<p>These controls apply to masked axis, point and line measurements. They are independent
+of the full workflow’s cell-segmentation parameters.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_sigma</span></code>: Gaussian blur of the raw, edge-cropped second channel, in
+pixels (default 5).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_threshold</span></code>: factor inside <code class="docutils literal notranslate"><span class="pre">threshold_otsu(filtered</span> <span class="pre">*</span> <span class="pre">factor)</span></code>
+(default 0.5). Select pixels with <code class="docutils literal notranslate"><span class="pre">filtered</span> <span class="pre">&gt;</span> <span class="pre">threshold</span></code>. This retains the
+original actinin-reader calculation, including histogram discretization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_invert</span></code>: select the complement (dark regions), default False.</p></li>
+</ul>
+<p>All selected regions are retained. There is no dilation, hole filling or
+largest-cell selection. Undefined fiber directions are excluded even inside
+the mask. An empty selection gives NaN alignment means and zero histogram
+counts. Alignment is the mean of <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">abs(angle_degrees)/45</span></code> over valid pixels,
+not the arithmetic mean of signed angles and not a cosine-based order parameter.</p>
 </section>
 </section>
 
@@ -391,6 +409,7 @@ To analyze alignment across the entire field of view (e.g., relative to the x- o
 <li><a class="reference internal" href="#sigma-first-blur">sigma_first_blur</a></li>
 <li><a class="reference internal" href="#angle-sections">angle_sections</a></li>
 <li><a class="reference internal" href="#shell-width">shell_width</a></li>
+<li><a class="reference internal" href="#validity-mask">Validity mask</a></li>
 </ul>
 </li>
 </ul>
