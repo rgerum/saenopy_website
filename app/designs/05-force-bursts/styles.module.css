@@ -1,0 +1,117 @@
+/* Design 05 — Force Bursts. Local styles only; nothing here leaks out of the
+   folder. Fonts are declared explicitly because the global --font-geist-*
+   variables are not bound in this app's layout. */
+
+.root {
+  --ink: #e7eef5;
+  --ink-dim: #93a3b3;
+  --ink-faint: #62717f;
+  --bg: #05070a;
+  --panel: #0b1015;
+  --panel-2: #0e141b;
+  --rule: #1a232d;
+  --force: #ff9d4d;
+  --energy: #5cb8ff;
+
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* time scrubber -------------------------------------------------------- */
+
+.scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.scrub::-webkit-slider-runnable-track {
+  height: 2px;
+  background: #253242;
+}
+
+.scrub::-moz-range-track {
+  height: 2px;
+  background: #253242;
+}
+
+.scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -5px;
+  border-radius: 2px;
+  background: var(--force);
+  border: 0;
+}
+
+.scrub::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--force);
+  border: 0;
+}
+
+.scrub:focus-visible {
+  outline: 2px solid var(--force);
+  outline-offset: 4px;
+}
+
+/* the 3D viewer canvas sits on its own dark plate so the field reads
+   light-on-dark and a reload between time points shows nothing brighter
+   than the plate itself */
+.stage {
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(92, 184, 255, 0.06),
+      transparent 70%
+    ),
+    #070b0f;
+}
+
+.tick {
+  fill: #8494a4;
+  font-size: 11px;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.axisTitle {
+  fill: #c3cfdb;
+  font-size: 10.5px;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+}
+
+.note {
+  fill: #7d8d9d;
+  font-size: 10.5px;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.readout {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}

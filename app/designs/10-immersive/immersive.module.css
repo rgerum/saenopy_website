@@ -1,0 +1,616 @@
+/* Design 10 — "Immersive".
+   One continuous 3D scene, typography on top. Every rule here is scoped to
+   this page through CSS-module hashing; nothing leaks to the other designs. */
+
+.page {
+  --ink: #f2f5fb;
+  --ink-dim: rgba(219, 227, 242, 0.76);
+  --ink-faint: rgba(180, 194, 219, 0.55);
+  --void: 4, 6, 13;
+  --accent: #f9a03f;
+
+  --sans:
+    var(--font-immersive-display), ui-sans-serif, system-ui, "Helvetica Neue",
+    sans-serif;
+  --mono: var(--font-immersive-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  position: relative;
+  min-height: 100svh;
+  background: rgb(var(--void));
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page :is(.eyebrow, .note, .hud, .btn, .cue, .sparkCaption, .placeholderTag),
+.page .bullets span {
+  font-family: var(--mono);
+}
+
+/* ---------------------------------------------------------------- the field */
+
+/* Push the rotating field off the type: down the frame on narrow viewports,
+   sideways on wide ones. A transform keeps the canvas at full resolution. */
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transform: translateY(20%);
+}
+
+@media (min-width: 1024px) {
+  .scene {
+    transform: translateX(13%);
+  }
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1100ms ease;
+}
+
+.layerOn {
+  opacity: 1;
+}
+
+/* The viewer always injects its colour bar; with show_colormap off it never
+   gets a max to hide itself with. The HUD renders an equivalent legend. */
+.scene :global(.saenopy_colorbar) {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------- the scrim */
+
+/* Three stacked jobs: darken the type column, vignette the frame, and hold
+   the top and bottom HUD rails. Without this the copy sits on live arrows. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--void), 0.96) 0%,
+      rgba(var(--void), 0.94) 30%,
+      rgba(var(--void), 0.68) 46%,
+      rgba(var(--void), 0.28) 60%,
+      rgba(var(--void), 0) 76%
+    ),
+    linear-gradient(
+      to top,
+      rgba(var(--void), 0.9) 0%,
+      rgba(var(--void), 0) 24%
+    ),
+    radial-gradient(
+      125% 90% at 50% 66%,
+      rgba(var(--void), 0) 24%,
+      rgba(var(--void), 0.42) 62%,
+      rgba(var(--void), 0.9) 100%
+    ),
+    linear-gradient(rgba(var(--void), 0.5), rgba(var(--void), 0.5));
+}
+
+@media (min-width: 1024px) {
+  .scrim {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(var(--void), 0.85) 0%,
+        rgba(var(--void), 0) 16%
+      ),
+      linear-gradient(
+        to top,
+        rgba(var(--void), 0.85) 0%,
+        rgba(var(--void), 0) 20%
+      ),
+      radial-gradient(
+        110% 90% at 66% 48%,
+        rgba(var(--void), 0) 26%,
+        rgba(var(--void), 0.4) 62%,
+        rgba(var(--void), 0.9) 100%
+      ),
+      linear-gradient(
+        96deg,
+        rgba(var(--void), 0.96) 0%,
+        rgba(var(--void), 0.93) 24%,
+        rgba(var(--void), 0.78) 38%,
+        rgba(var(--void), 0.34) 52%,
+        rgba(var(--void), 0.06) 66%,
+        rgba(var(--void), 0) 78%
+      );
+  }
+}
+
+/* ------------------------------------------------------------------ the HUD */
+
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.hudTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 2.6vw, 2rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.mark {
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hudNav {
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 1.75rem);
+  pointer-events: auto;
+}
+
+.hudNav a {
+  color: var(--ink-faint);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.hudNav a:hover {
+  color: var(--accent);
+}
+
+/* live instrument read-out + colour scale, bottom right */
+.readout {
+  position: absolute;
+  right: clamp(1.25rem, 4vw, 3rem);
+  bottom: clamp(1.1rem, 3vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+  max-width: min(70vw, 24rem);
+}
+
+.readoutLabel {
+  color: var(--ink);
+}
+
+.readoutField {
+  color: var(--ink-faint);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.legendBar {
+  display: block;
+  width: clamp(90px, 14vw, 150px);
+  height: 4px;
+}
+
+/* units carry a µ and a lower-case n; never uppercase this */
+.legendMax {
+  text-transform: none;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.legendMin {
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.rail {
+  position: absolute;
+  right: clamp(1.25rem, 2.4vw, 1.6rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+@media (min-width: 1024px) {
+  .rail {
+    display: flex;
+  }
+}
+
+.railTick {
+  display: block;
+  width: 14px;
+  height: 2px;
+  border: 0;
+  padding: 0;
+  background: rgba(203, 213, 225, 0.28);
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    width 320ms ease,
+    background 320ms ease;
+}
+
+.railTickOn {
+  width: 30px;
+  background: var(--accent);
+}
+
+/* --------------------------------------------------------------- the panels */
+
+.panels {
+  position: relative;
+  z-index: 2;
+}
+
+/* narrow: type in the top half, field below it */
+.panel {
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-start;
+  padding: 15vh clamp(1.25rem, 4vw, 3rem) clamp(6rem, 14vh, 9rem);
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    align-items: center;
+    padding-top: clamp(5.5rem, 12vh, 8rem);
+  }
+}
+
+.panelBody {
+  width: 100%;
+  max-width: 34rem;
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(5px);
+  transition:
+    opacity 850ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    transform 850ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    filter 850ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+/* Narrow viewports cannot move the type sideways out of the field, so the
+   copy carries its own full-bleed scrim that fades out above and below it. */
+@media (max-width: 1023px) {
+  .panelBody {
+    padding: 1.25rem;
+    margin: -1.25rem;
+    width: calc(100% + 2.5rem);
+    max-width: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--void), 0) 0%,
+      rgba(var(--void), 0.78) 10%,
+      rgba(var(--void), 0.78) 84%,
+      rgba(var(--void), 0) 100%
+    );
+  }
+}
+
+@media (min-width: 1024px) {
+  .panelBody {
+    max-width: 40rem;
+    margin-left: clamp(0rem, 3vw, 3.5rem);
+  }
+}
+
+.panelBodyOn {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelBody,
+  .layer {
+    transition: none;
+  }
+  .panelBody {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: clamp(1.25rem, 3vh, 2rem);
+}
+
+.eyebrow::before {
+  content: "";
+  width: clamp(1.5rem, 4vw, 2.75rem);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+  flex: none;
+}
+
+.headline {
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5.6vw, 5.1rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  margin: 0;
+  text-wrap: balance;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 10px 44px rgba(0, 0, 0, 0.75);
+}
+
+.mega {
+  font-size: clamp(3.2rem, 10.5vw, 9.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.05em;
+}
+
+.wordmark {
+  font-size: clamp(3.6rem, 12.5vw, 11rem);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+
+.lead {
+  margin: clamp(1.4rem, 3.2vh, 2.1rem) 0 0;
+  font-size: clamp(1.02rem, 1.15vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--ink-dim);
+  max-width: 44ch;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.85);
+}
+
+/* holds unit strings, so deliberately not uppercased */
+.note {
+  margin-top: clamp(1.1rem, 2.4vh, 1.6rem);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  line-height: 1.75;
+  color: var(--ink-faint);
+  max-width: 46ch;
+}
+
+.bullets {
+  list-style: none;
+  margin: clamp(1.5rem, 3vh, 2.2rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  max-width: 40ch;
+}
+
+.bullets li {
+  display: flex;
+  gap: 0.85rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
+
+.bullets span {
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding-top: 0.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the FORCE_TRACE sparkline */
+.spark {
+  margin-top: clamp(1.4rem, 3vh, 2rem);
+  width: min(100%, 22rem);
+  height: 62px;
+  display: block;
+  overflow: visible;
+}
+
+.sparkAxis {
+  stroke: rgba(148, 163, 184, 0.3);
+  stroke-width: 1;
+}
+
+.sparkLine {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.sparkDot {
+  fill: var(--accent);
+}
+
+.sparkCaption {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  width: min(100%, 22rem);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------------ closing */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 3.5vh, 2.5rem);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.5rem;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(203, 213, 225, 0.28);
+  color: var(--ink);
+  background: rgba(var(--void), 0.6);
+  backdrop-filter: blur(6px);
+  transition:
+    border-color 200ms ease,
+    background 200ms ease,
+    color 200ms ease;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btnPrimary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #100c05;
+  font-weight: 600;
+}
+
+.btnPrimary:hover {
+  background: #ffb968;
+  border-color: #ffb968;
+  color: #100c05;
+}
+
+.services {
+  margin: clamp(1.5rem, 3vh, 2rem) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-dim);
+  max-width: 42ch;
+}
+
+.services li::before {
+  content: "— ";
+  color: var(--ink-faint);
+}
+
+.placeholder {
+  margin-top: clamp(1.75rem, 3.5vh, 2.5rem);
+  border-left: 2px solid rgba(249, 160, 63, 0.5);
+  padding-left: 1rem;
+  max-width: 42ch;
+}
+
+.placeholderTag {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(249, 160, 63, 0.45);
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.placeholderList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  line-height: 1.75;
+  color: var(--ink-faint);
+}
+
+.cite {
+  margin-top: clamp(2rem, 4vh, 3rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(203, 213, 225, 0.16);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--ink-faint);
+  max-width: 52ch;
+}
+
+.cite a {
+  color: var(--ink-dim);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(203, 213, 225, 0.3);
+}
+
+.cite a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.citeTitle {
+  color: var(--ink-dim);
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------- scroll cue */
+
+.cue {
+  margin-top: clamp(2rem, 5vh, 3.25rem);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.cueLine {
+  display: block;
+  width: 46px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(249, 160, 63, 0.9),
+    rgba(249, 160, 63, 0)
+  );
+  animation: cueSlide 2.6s ease-in-out infinite;
+}
+
+@keyframes cueSlide {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cueLine {
+    animation: none;
+  }
+}

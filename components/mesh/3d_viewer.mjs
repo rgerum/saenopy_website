@@ -11,6 +11,7 @@ import { get_file_from_zip } from "./get_file_from_zip.ts";
 import { add_logo } from "./Logo.ts";
 import { init_scene } from "@/components/mesh/Scene";
 import { inject_style } from "@/components/mesh/inject_style";
+import { loadFieldBundle } from "./field_bundle.ts";
 
 // Arrowhead geometry (cone)
 const arrowheadGeometry = new THREE.ConeGeometry(0.5, 1, 6);
@@ -210,19 +211,31 @@ async function add_test(scene, renderer, params) {
     let max_length = last_field.max_length || 0;
     let needs_update = false;
 
+    const field_def = params.data.fields[params.field];
     if (
       params.path !== last_field.path ||
       params.field !== last_field.field ||
+      params.frame !== last_field.frame ||
       params.data.path !== last_field.data_path
     ) {
       max_length = 0;
       arrows = [];
       last_field.path = params.path;
       last_field.field = params.field;
+      last_field.frame = params.frame;
       last_field.data_path = params.data.path;
       needs_update = true;
-      if (params.field !== "none") {
-        console.log(params.data.path, params.data.fields[params.field].nodes);
+      if (params.field !== "none" && field_def?.preloaded) {
+        // bundle fields are already decoded into memory
+        const preloaded = field_def.preloaded;
+        const frame =
+          preloaded.frames[
+            ((params.frame % preloaded.frames.length) + preloaded.frames.length) %
+              preloaded.frames.length
+          ];
+        nodes = frame.nodes;
+        vectors = frame.vectors;
+      } else if (params.field !== "none") {
         try {
           nodes = await loadNpy(
             await get_file_from_zip(
@@ -238,7 +251,6 @@ async function add_test(scene, renderer, params) {
               "blob",
             ),
           );
-          console.log("nodes", nodes, "vectors", vectors);
         } catch (e) {
           nodes = await loadNpy(
             params.data.path + "/" + params.data.fields[params.field].nodes,
@@ -246,7 +258,7 @@ async function add_test(scene, renderer, params) {
           vectors = await loadNpy(
             params.data.path + "/" + params.data.fields[params.field].vectors,
           );
-          console.log("could not load", e);
+          console.error("could not load field from zip", e);
         }
       }
 
@@ -284,6 +296,12 @@ async function add_test(scene, renderer, params) {
         }
       }
 
+      if (field_def?.preloaded) {
+        // the bundle quantises every frame against one shared peak, so pin the
+        // colour scale to it instead of renormalising each frame
+        max_length = field_def.preloaded.max * (field_def.factor || 1);
+      }
+
       if (nodes) {
         const [min_x, max_x] = get_extend(nodes, 0);
         const [min_y, max_y] = get_extend(nodes, 1);
@@ -293,6 +311,25 @@ async function add_test(scene, renderer, params) {
     }
     last_field.arrows = arrows;
     last_field.max_length = max_length;
+
+    // Fields differ by orders of magnitude between datasets (0.3 µm for an
+    // immune cell, 10 µm for a fibroblast), so a fixed arrow scale has to be
+    // retuned every time. Sizing the longest arrow as a fraction of the domain
+    // instead makes any dataset look right without a magic number.
+    let scale = params.scale;
+    if (params.arrow_span && max_length > 0) {
+      const domain =
+        Math.max(
+          params.extent[1] - params.extent[0],
+          params.extent[3] - params.extent[2],
+          params.extent[5] - params.extent[4],
+        ) * 1e6;
+      scale = (params.arrow_span * domain) / max_length;
+    }
+    if (last_field.effective_scale !== scale) {
+      last_field.effective_scale = scale;
+      needs_update = true;
+    }
 
     const cmap = cmaps[params.cmap];
     if (last_field.cmap !== params.cmap) {
@@ -318,9 +355,9 @@ async function add_test(scene, renderer, params) {
         dummyObject.position.copy(position);
         dummyObject.lookAt(target);
         dummyObject.scale.set(
-          scaleValue * params.scale,
-          scaleValue * params.scale,
-          scaleValue * params.scale,
+          scaleValue * scale,
+          scaleValue * scale,
+          scaleValue * scale,
         ); // Set uniform scale based on the vector's length
         dummyObject.updateMatrix();
 
@@ -382,9 +419,12 @@ async function load_add_field(scene, renderer, params) {
 }
 
 export async function init(initial_params) {
-  console.log("init", initial_params);
   const params = {
+    ccs_prefix: "",
     scale: 1,
+    // longest arrow as a fraction of the domain; overrides `scale` when set
+    arrow_span: 0.1,
+    frame: 0,
     cmap: "turbo", // ["turbo", "viridis"]
     field: "fitted deformations", // fitted deformations
     z: 0,
@@ -440,15 +480,49 @@ export async function init(initial_params) {
     initial_params.dom_node.style.minHeight = params.height;
     initial_params.dom_node.style.width = params.width;
   }
-  console.log("load data", params.data === undefined);
-
-  if (1) {
+  if (params.bundle) {
+    const bundle = await loadFieldBundle(params.bundle);
+    params.time_points = bundle.timePoints;
+    params.bundle_stats = {
+      transferBytes: bundle.transferBytes,
+      rawBytes: bundle.rawBytes,
+      baselineBytes: bundle.baselineBytes,
+      timePoints: bundle.timePoints,
+      timeDelta: bundle.timeDelta,
+      series: bundle.series,
+      fields: Object.fromEntries(
+        Object.entries(bundle.fields).map(([name, f]) => [
+          name,
+          {
+            count: f.count,
+            total: f.total,
+            unit: f.unit,
+            max: f.max * f.factor,
+            frameMax: f.frames.map((frame) => frame.max * f.factor),
+          },
+        ]),
+      ),
+    };
+    params.data = {
+      path: params.bundle,
+      fields: Object.fromEntries(
+        Object.entries(bundle.fields).map(([name, f]) => [
+          name,
+          { unit: f.unit, factor: f.factor, preloaded: f },
+        ]),
+      ),
+    };
+    if (!params.data.fields[params.field]) {
+      params.field = Object.keys(params.data.fields)[0];
+    }
+  } else {
     const data = await (await fetch(initial_params.path + "/data.json")).json();
-    console.log("data", data);
     params.data = data;
     params.data.path = initial_params.path;
   }
-  console.log("params", params);
+
+  // the caller may have unmounted while the field data was still loading
+  if (params.signal?.aborted) return () => {};
 
   // Scene setup
   const { scene, renderer, camera } = init_scene(
@@ -464,9 +538,7 @@ export async function init(initial_params) {
       ? await add_image(scene, params)
       : () => {};
 
-  console.log("mouse", params.mouse_control);
   if (params.mouse_control) {
-    console.log("mouse control");
     const controlsCam = new OrbitControls(camera, renderer.domElement);
     controlsCam.update();
     scene.controls = controlsCam;
@@ -478,7 +550,7 @@ export async function init(initial_params) {
     : () => {};
   const update_cube = add_cube(scene, params);
 
-  const radius = params.extent[0]
+  const radius = params.data.fields
     ? params.extent[1] * 1e6 * 4
     : params.data.stacks.im_shape[0] * params.data.stacks.voxel_size[0] * 2;
   set_camera(scene, camera, (radius / params.zoom) * 5, 30, 60);
@@ -502,9 +574,13 @@ export async function init(initial_params) {
       options.push(name);
     }
     if (options.length > 1) {
-      gui.add(params, "scale", 0, 10).onChange(update_all);
+      if (params.arrow_span)
+        gui.add(params, "arrow_span", 0.01, 0.4).name("arrow size").onChange(update_all);
+      else gui.add(params, "scale", 0, 10).onChange(update_all);
       gui.add(params, "field", options).onChange(update_all);
     }
+    if (params.time_points > 1)
+      gui.add(params, "frame", 0, params.time_points - 1, 1).onChange(update_all);
     if (options.length > 1)
       gui.add(params, "cmap", Object.keys(cmaps)).onChange(update_all);
     const cube_options = ["none"];
@@ -523,10 +599,23 @@ export async function init(initial_params) {
     gui.close();
   }
   add_drop(renderer.domElement.parentElement, params, update_all);
+
+  // hand the caller the live params plus a redraw, so a changing time point
+  // can be applied in place instead of tearing the viewer down
+  if (params.on_ready) params.on_ready(params, update_all);
+
+  return function dispose() {
+    params.disposed = true;
+    scene.controls?.dispose();
+    renderer.dispose();
+    const container = initial_params.dom_node;
+    if (container) container.replaceChildren();
+  };
 }
 
 let animation_time = new Date();
 function animate(scene, renderer, camera, params, update_all) {
+  if (params.disposed || params.signal?.aborted) return;
   requestAnimationFrame(() =>
     animate(scene, renderer, camera, params, update_all),
   );
@@ -542,6 +631,15 @@ function animate(scene, renderer, camera, params, update_all) {
       animation.z += (animation.speed || 10) * delta_t;
       params.z = Math.floor(animation.z % params.data.stacks.z_slices_count);
       update_all();
+    }
+    if (animation.type === "time" && params.time_points > 1) {
+      animation.elapsed = (animation.elapsed || 0) + delta_t;
+      const step = 1 / (animation.fps || 4);
+      if (animation.elapsed >= step) {
+        animation.elapsed = 0;
+        params.frame = (params.frame + 1) % params.time_points;
+        update_all();
+      }
     }
     if (animation.type === "rotate") {
       const campos = new THREE.Spherical().setFromVector3(camera.position);
@@ -588,6 +686,7 @@ function animate(scene, renderer, camera, params, update_all) {
 }
 
 function add_drop(dropZone, params, update_all) {
+  const ccs_prefix = "saenopy_" + params.ccs_prefix;
   // Prevent default drag behaviors
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropZone.addEventListener(eventName, preventDefaults, false);
@@ -632,7 +731,6 @@ function add_drop(dropZone, params, update_all) {
   }
 
   function loadFile(file) {
-    console.log("loadFile", file);
     params.data.path = file;
     update_all();
     return;

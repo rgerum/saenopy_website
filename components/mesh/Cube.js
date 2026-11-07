@@ -4,7 +4,6 @@ export function add_cube(scene, params) {
   // Cube setup
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   const wireframe = new THREE.EdgesGeometry(geometry);
-  console.log("cube", params.cube_color);
   const material = new THREE.LineBasicMaterial({
     color: params.cube_color,
   });
