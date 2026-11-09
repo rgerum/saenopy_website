@@ -7,6 +7,16 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Dev only: Next blocks cross-origin requests to its dev resources, which
+  // fails the HMR websocket whenever the dev server is reached as anything
+  // other than localhost. Cover every name this machine answers to — the
+  // MagicDNS short name, the full tailnet name, and mDNS.
+  allowedDevOrigins: [
+    'richard-aspire-a515-55g',
+    'richard-aspire-a515-55g.tailed9e74.ts.net',
+    'richard-aspire-a515-55g.local',
+    '*.ts.net',
+  ],
   typescript: {
     ignoreBuildErrors: true,
   },
